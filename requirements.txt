@@ -10,3 +10,4 @@ python-dotenv==0.20.0
 SQLAlchemy==1.4.37
 webassets==2.0
 Werkzeug==2.1.2
+gunicorn
