@@ -28,7 +28,7 @@ def create_app():
         app.register_blueprint(analysis.analysis_bp, url_prefic="/analysis")
 
         # Make sure that table no longer exists if you want to update columns
-        # db.create_all()
+        db.create_all()
 
         # compile_static_assets(assets)
 
