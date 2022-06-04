@@ -17,6 +17,7 @@ def qrScanner():
 @retrieval_bp.route('/detectScan', methods=['POST'])
 def test():
     QRData = request.form['data'].split(',')
+    print(QRData)
     existing_match = matchEntry.query.filter(matchEntry.team == QRData[0] or matchEntry.matchNumber == QRData[1]).first()
     if not existing_match:
         match = matchEntry(
@@ -35,4 +36,5 @@ def test():
         )
         db.session.add(match)
         db.session.commit()
+        print("hello world!!!")
     return render_template('QRScanner.html')
