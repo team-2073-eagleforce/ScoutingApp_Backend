@@ -2,21 +2,23 @@
 
 {% block head %}
 <script src="https://rawgit.com/sitepoint-editors/jsqrcode/master/src/qr_packed.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 {% endblock %}
 
 {% block body %}
+
 <div id="container">
     <h1>QR Code Scanner</h1>
-
-    <a id="btn-scan-qr">
-        <img src="/retrieval/static/barcode_image.png"/>
-    </a>
 
     <canvas hidden="" id="qr-canvas"></canvas>
 
     <div id="qr-result" hidden="">
         <b>Data:</b> <span id="outputData"></span>
     </div>
+
+    <a id="btn-scan-qr">
+        <img src="/retrieval/static/barcode_image.png"/>
+    </a>
 
 </div>
 <script type="text/javascript" src="/retrieval/static/qrCodeScanner.js"></script>
