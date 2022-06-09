@@ -44,7 +44,7 @@ analysis_bp = Blueprint(
     static_folder='static'
 )
 
-engine = create_engine(os.getenv("DATABASE_URL"))
+engine = create_engine(os.getenv("SQLALCHEMY_DATABASE_URI"))
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 
