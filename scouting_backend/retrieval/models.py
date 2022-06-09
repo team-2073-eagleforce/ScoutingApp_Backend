@@ -3,7 +3,8 @@ from scouting_backend import db
 
 class matchEntry(db.Model):
     __tablename__ = 'scouting'
-
+    __table_args__ = {'extend_existing': True}
+    
     team = db.Column(db.Integer, primary_key=True)
     matchNumber = db.Column(db.Integer)
     autoCrossing = db.Column(db.Integer)
