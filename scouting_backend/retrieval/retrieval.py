@@ -1,4 +1,6 @@
-from flask import render_template, Blueprint, request
+from flask import render_template, Blueprint, request, session, jsonify
+from .sheet import edit_sheet, create_new_sheet
+from .tba import get_match_team
 
 from .models import db, matchEntry
 
@@ -36,5 +38,21 @@ def test():
         )
         db.session.add(match)
         db.session.commit()
-        print("hello world!!!")
+
+        edit_sheet(session, int(QRData[0]), )
     return render_template('QRScanner.html')
+
+
+@retrieval_bp.route("/thebluealliance")
+def get_match_schedule():
+    t = []
+
+    teams = get_match_team("2022cafr")
+    for team in teams:
+        t.append(int(team["team_number"]))    
+    
+    t.sort(reverse=True)
+
+    create_new_sheet(session, t)
+
+    return "Success maybe"

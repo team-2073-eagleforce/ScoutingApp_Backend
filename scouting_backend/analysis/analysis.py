@@ -22,7 +22,7 @@ client_config = {
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+    "client_secret": "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",
     "redirect_uris": [
       "https://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
       "http://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
@@ -44,7 +44,7 @@ analysis_bp = Blueprint(
     static_folder='static'
 )
 
-engine = create_engine(os.getenv("SQLALCHEMY_DATABASE_URI"))
+engine = create_engine("postgresql://iovoclgutwvauo:96baff9ff4b4e43005ef48d270eea03a98ff3ab03a1917c35e853e92589bccc4@ec2-52-204-195-41.compute-1.amazonaws.com:5432/d2csu45r67sphs")
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 
@@ -88,7 +88,7 @@ def edit_sheet():
     spreadsheet_id = '1cb7u43r9qbQg_tKyF8XVTSyu6CxLUnQPwCCTI1JAzCQ'  # TODO: Update placeholder value.
   
   # The A1 notation of the values to retrieve.
-    range_ = 'B1'  # TODO: Update placeholder value.
+    range_ = 'Sheet2!B1'  # TODO: Update placeholder value.
   
   # How values should be represented in the output.
   # The default render option is ValueRenderOption.FORMATTED_VALUE.
@@ -125,7 +125,7 @@ def edit_sheet():
             ]
         ]
     }
-  
+
     request = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=range_, valueInputOption=value_input_option, body=value_range_body)
     response = request.execute()
   
@@ -188,3 +188,4 @@ def credentials_to_dict(credentials):
           'client_id': credentials.client_id,
           'client_secret': credentials.client_secret,
           'scopes': credentials.scopes}
+
