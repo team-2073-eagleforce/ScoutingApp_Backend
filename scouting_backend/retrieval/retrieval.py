@@ -1,6 +1,7 @@
+from click import edit
 from flask import render_template, Blueprint, request, session, jsonify
-from .sheet import edit_sheet, create_new_sheet
-from .tba import get_match_team
+from sheet import create_new_sheet, edit_sheet, get_all_sheets
+from tba import get_match_team
 
 from .models import db, matchEntry
 
@@ -39,7 +40,6 @@ def test():
         db.session.add(match)
         db.session.commit()
 
-        edit_sheet(session, int(QRData[0]), )
     return render_template('QRScanner.html')
 
 
@@ -53,6 +53,29 @@ def get_match_schedule():
     
     t.sort(reverse=True)
 
-    create_new_sheet(session, t)
+    names = []
+
+    for _ in t:
+        names["Team" + _]
+
+    # create_new_sheet(session, t)
 
     return "Success maybe"
+
+@retrieval_bp.route("/testing-sheet-api")
+def testing_sheet_api():
+    sheets = get_all_sheets(session)
+    return jsonify(sheets)
+
+def upload_data_to_sheet(session, data):
+    """
+    session: flask.session
+    data: The qr scanner result, refer to models.py for schema
+    """
+
+    sheets = get_all_sheets(session)
+
+    return edit_sheet(session, "Sheet1!A1:A12", data)
+
+
+    

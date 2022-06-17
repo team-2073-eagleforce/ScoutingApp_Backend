@@ -1,9 +1,10 @@
-from re import T
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from googleapiclient import discovery
 
-def edit_sheet(session, team, cell, data):
+SPREADSHEET_ID = '1cb7u43r9qbQg_tKyF8XVTSyu6CxLUnQPwCCTI1JAzCQ'
+
+def edit_sheet(session, cell, data):
     credentials = google.oauth2.credentials.Credentials(
       **session['credentials'])
 
@@ -13,7 +14,7 @@ def edit_sheet(session, team, cell, data):
     spreadsheet_id = '1cb7u43r9qbQg_tKyF8XVTSyu6CxLUnQPwCCTI1JAzCQ'  # TODO: Update placeholder value.
   
   # The A1 notation of the values to retrieve.
-    range_ = cell  # TODO: Update placeholder value.
+    range_ = cell 
   
   # How values should be represented in the output.
   # The default render option is ValueRenderOption.FORMATTED_VALUE.
@@ -54,6 +55,8 @@ def edit_sheet(session, team, cell, data):
     request = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=range_, valueInputOption=value_input_option, body=value_range_body)
     response = request.execute()
 
+    return response
+
 def credentials_to_dict(credentials):
   return {'token': credentials.token,
           'refresh_token': credentials.refresh_token,
@@ -89,11 +92,6 @@ def create_new_sheet(session, titles):
 
   batch_update_values_request_body = {
     'requests': requests
-    # [
-    #   {
-    #     "addSheet": sheet_properties(t)
-    #   }
-    # ]
   }
 
   request = service.spreadsheets().batchUpdate(spreadsheetId=spreadsheet_id, body=batch_update_values_request_body).execute()
@@ -101,3 +99,17 @@ def create_new_sheet(session, titles):
 
   # TODO: Change code below to process the `response` dict:
   return response
+
+def get_all_sheets(session):
+  credentials = google.oauth2.credentials.Credentials(
+      **session['credentials'])
+  sheets_name = []
+
+  service = discovery.build('sheets', 'v4', credentials=credentials)
+  sheets_meta = service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
+  sheets = sheets_meta.get("sheets", "")
+
+  for s in sheets:
+    sheets_name.append(s["title"])
+
+  return sheets_name
