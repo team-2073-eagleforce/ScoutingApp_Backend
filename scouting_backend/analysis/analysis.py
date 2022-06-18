@@ -55,10 +55,8 @@ def matchSchedule():
 
 @analysis_bp.route("/team/<int:team>", methods=["GET"])
 def view_team_data(team):
-    results = db.execute("SELECT * FROM scouting WHERE team=:team", {"team": team})
-    for r in results:
-        print(r)
-    return "LOL"
+    matches = db.execute("SELECT * FROM scouting WHERE team=:team", {"team": team})
+    return render_template("team.html", matches=matches, team=team)
 
 @analysis_bp.route("/sheet")
 def google_sheet_rendering():
