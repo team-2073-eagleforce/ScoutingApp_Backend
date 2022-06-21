@@ -17,7 +17,7 @@ class matchEntry(db.Model):
     driverPerf = db.Column(db.Integer)
     defensePerf = db.Column(db.Integer)
     name = db.Column(db.String(32))
-    comment = db.Column(db.String(64))
+    comment = db.Column(db.Text())
 
     def __repr__(self):
         return '<{team}-{match}>'.format(team=self.team, match=self.matchNumber)
