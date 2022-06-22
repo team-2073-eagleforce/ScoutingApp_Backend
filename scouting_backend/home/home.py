@@ -30,4 +30,4 @@ def logout():
 
 @home_bp.route("/dashBoard", methods=["GET", "POST"])
 def dashBoard():
-    return render_template("dashBoard.html")
+    return render_template("dashboard/dashboard.html")
