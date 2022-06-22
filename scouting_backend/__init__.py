@@ -25,10 +25,10 @@ def create_app():
 
         app.register_blueprint(home.home_bp)
         app.register_blueprint(retrieval.retrieval_bp, url_prefix="/retrieval")
-        app.register_blueprint(analysis.analysis_bp, url_prefic="/analysis")
+        app.register_blueprint(analysis.analysis_bp, url_prefix="/analysis")
 
         # Make sure that table no longer exists if you want to update columns
-        db.create_all()
+        # db.create_all()
 
         # compile_static_assets(assets)
 

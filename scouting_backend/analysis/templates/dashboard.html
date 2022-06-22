@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Team {{ team }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+        <h1>Dashboard</h1>
+
+        <form>
+            <input type="text" id="comp" placeholder="Comp code">
+            <input type="text" id="match" placeholder="Match">
+            <button type="button" id="button">Submit</button>
+        </form>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+
+        <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Team</th>
+                <th scope="col">Climb</th>
+                <th scope="col">Teleop Upper</th>
+                <th scope="col">Teleop Lower</th>
+                <th scope="col">Auto Upper</th>
+                <th scope="col">Auto Lower</th>
+                <th scope="col">Total Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Red 1</th>
+                <td id="red1-team"></td>
+                <td id="red1-climb"></td>
+                <td id="red1-tu"></td>
+                <td id="red1-tl"></td>
+                <td id="red1-au"></td>
+                <td id="red1-al"></td>
+                <td id="red1-tp"></td>
+            </tr>
+            <tr>
+                <th scope="row">Red 2</th>
+                <td id="red2-team"></td>
+                <td id="red2-climb"></td>
+                <td id="red2-tu"></td>
+                <td id="red2-tl"></td>
+                <td id="red2-au"></td>
+                <td id="red2-al"></td>
+                <td id="red2-tp"></td>
+            </tr>
+            <tr>
+                <th scope="row">Red 3</th>
+                <td id="red3-team"></td>
+                <td id="red3-climb"></td>
+                <td id="red3-tu"></td>
+                <td id="red3-tl"></td>
+                <td id="red3-au"></td>
+                <td id="red3-al"></td>
+                <td id="red3-tp"></td>
+            </tr>
+            <tr>
+                <th scope="row">Blue 1</th>
+                <td id="blue1-team"></td>
+                <td id="blue1-climb"></td>
+                <td id="blue1-tu"></td>
+                <td id="blue1-tl"></td>
+                <td id="blue1-au"></td>
+                <td id="blue1-al"></td>
+                <td id="blue1-tp"></td>
+            </tr>
+            <tr>
+                <th scope="row">Blue 2</th>
+                <td id="blue2-team"></td>
+                <td id="blue2-climb"></td>
+                <td id="blue2-tu"></td>
+                <td id="blue2-tl"></td>
+                <td id="blue2-au"></td>
+                <td id="blue2-al"></td>
+                <td id="blue2-tp"></td>
+            </tr>
+            <tr>
+                <th scope="row">Blue 3</th>
+                <td id="blue3-team"></td>
+                <td id="blue3-climb"></td>
+                <td id="blue3-tu"></td>
+                <td id="blue3-tl"></td>
+                <td id="blue3-au"></td>
+                <td id="blue3-al"></td>
+                <td id="blue3-tp"></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script> -->
+    <script type="text/javascript" src="/analysis/static/dashboard.js"></script>
+</body>
+</html>

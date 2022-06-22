@@ -1,10 +1,12 @@
 from flask import jsonify, render_template, Blueprint, request, session, redirect, url_for
+from matplotlib.pyplot import get
 from sqlalchemy import create_engine
 from retrieval.models import matchEntry
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 import os
+from scouting_backend.tba import get_match_schedule
 
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -136,3 +138,24 @@ def credentials_to_dict(credentials):
           'client_secret': credentials.client_secret,
           'scopes': credentials.scopes}
 
+
+@analysis_bp.route("/api/get_match_schedule/<string:event_key>/<string:match_num>")
+def api_get_match_schedule(event_key, match_num):
+    """
+    {"red": ["frc1", "frc2", "frc3"], "blue": ...}
+    """
+    data = get_match_schedule(event_key, int(match_num))
+    for alliance in data:
+        for team in alliance:
+            calculate_averages(team.split("frc")[1])
+    return jsonify(data)
+
+def calculate_averages(team):
+    matches = db.execute("SELECT * FROM scouting WHERE team=:team", {"team": team})
+    for match in matches:
+
+
+
+@analysis_bp.route("/dashboard")
+def analysis_dashboard():
+    return render_template("dashboard.html")
