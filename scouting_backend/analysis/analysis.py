@@ -160,8 +160,7 @@ def api_get_match_schedule(event_key, match_num):
 
 def calculate_averages(teams):
     matches_for_team = db.execute("""SELECT * FROM scouting WHERE team IN {teams}""".format(teams=teams)).fetchall()
-    print(matches_for_team)
-    dic_matches_for_team = dict(zip(teams, (([0] * 8) for _ in range(len(teams)))))
+    dic_matches_for_team = dict(zip(teams, ([int(teams[team])] + [0] * 7 for team in range(len(teams)))))
 
     for match in matches_for_team:
         team_sum = dic_matches_for_team[str(match[1])]
@@ -173,7 +172,6 @@ def calculate_averages(teams):
         auto_upper_points = match[4] * 4
         auto_cross_points = CONST_AUTO_CROSS[match[3]]
 
-        team_sum[0] += match[1]
         team_sum[1] += match[4]
         team_sum[2] += match[5]
         team_sum[3] += match[6]
@@ -184,13 +182,12 @@ def calculate_averages(teams):
 
     all_averages = []
     for averages in dic_matches_for_team.values():
-        average_div = []
-        for data_val in averages[:-1]:
+        average_div = [averages[0]]
+        for data_val in averages[1:-1]:
             if averages[-1] == 0:
                 averages[-1] = 1
             average_div.append(round(data_val/averages[-1], 2))
         all_averages.append(average_div)
-    print(all_averages)
     return all_averages
 
 
