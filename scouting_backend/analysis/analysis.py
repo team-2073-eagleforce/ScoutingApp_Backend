@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 import os
-from scouting_backend.tba import get_match_schedule
+from scouting_backend.tba import get_match_schedule, get_comps
 
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -49,9 +49,9 @@ engine = create_engine(
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 
-# Dummy data has more climb levels thus adding 1s
 CONST_CLIMB_POINTS = [0, 4, 6, 10, 15]
 CONST_AUTO_CROSS = [0, 2]
+CONST_HOME_TEAM = 2073
 
 
 @analysis_bp.route("/matchSchedule", methods=["GET", "POST"])
@@ -196,5 +196,5 @@ def calculate_averages(teams):
 
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 def analysis_dashboard():
-    return render_template("dashboard/dashboard.html")
-
+    comps = get_comps(CONST_HOME_TEAM, 2022)
+    return render_template("dashboard/dashboard.html", comps=comps)

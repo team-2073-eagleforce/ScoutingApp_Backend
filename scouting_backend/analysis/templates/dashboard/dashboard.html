@@ -11,7 +11,12 @@
     <h1>Dashboard</h1>
 
     <form>
-        <input id="comp" placeholder="Comp code" type="text">
+        <select class="form-select" aria-label="Default select example" id="comp">
+            <option selected>Choose a competition</option>
+            {% for c in comps.keys() %}
+                <option value="{{ c }}">{{ comps[c] }}</option>
+            {% endfor %}
+        </select>
         <input id="match" placeholder="Match" type="text">
         <button id="button" type="button">Submit</button>
     </form>
