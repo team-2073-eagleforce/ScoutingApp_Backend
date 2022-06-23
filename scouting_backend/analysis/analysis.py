@@ -10,7 +10,6 @@ import google_auth_oauthlib.flow
 from googleapiclient import discovery
 from scouting_backend import sheet
 
-
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
@@ -50,7 +49,10 @@ engine = create_engine(
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 
-CONST_CLIMB_POINTS = [0, 4, 6, 10, 15, 1, 1, 1, 1, 1, 1]
+# Dummy data has more climb levels thus adding 1s
+CONST_CLIMB_POINTS = [0, 4, 6, 10, 15]
+CONST_AUTO_CROSS = [0, 2]
+
 
 @analysis_bp.route("/matchSchedule", methods=["GET", "POST"])
 def matchSchedule():
@@ -116,7 +118,7 @@ def authorize():
 @analysis_bp.route("/oauth2callback")
 def oauth2callback():
     # Specify the state when creating the flow in the callback so that it can
-    # verified in the authorization server response.
+    # verify in the authorization server response.
     state = session['state']
 
     flow = google_auth_oauthlib.flow.Flow.from_client_config(
@@ -148,37 +150,51 @@ def credentials_to_dict(credentials):
 
 @analysis_bp.route("/api/get_match_schedule/<string:event_key>/<string:match_num>")
 def api_get_match_schedule(event_key, match_num):
-    # {"red": ["frc1", "frc2", "frc3"], "blue": ...}
+    # {"red": ["frc1", "frc2", "frc3"], "blue": ["frc4", "frc5", "frc6"]}
     teams_in_match = get_match_schedule(event_key, int(match_num))
-
-    averages_for_teams_in_match = {}
-    for alliance in teams_in_match.items():
-        for position, team in enumerate(alliance[1]):
-            averages_for_teams_in_match[alliance[0]+str(position+1)] = calculate_averages(team.split('frc')[-1])
+    positions = ['red1', 'red2', 'red3', 'blue1', 'blue2', 'blue3']
+    averages_for_teams_in_match = dict(zip(positions, calculate_averages(tuple(pos.split('frc')[1] for pos in teams_in_match['red'] + teams_in_match['blue']))))
 
     return jsonify(averages_for_teams_in_match)
 
 
-def calculate_averages(team):
-    matches_for_team = db.execute("SELECT * FROM scouting WHERE team=:team", {"team": team}).fetchall()
-    num_matches = len(matches_for_team)
-    avg_score = [team] + [0] * 6
-    for match in matches_for_team:
-        climb_points = CONST_CLIMB_POINTS[match[8]]
-        tele_upper_points = match[7]*2
-        tele_lower_points = match[6]
-        auto_upper_points = match[5]*4
-        auto_lower_points = match[4]*2
+def calculate_averages(teams):
+    matches_for_team = db.execute("""SELECT * FROM scouting WHERE team IN {teams}""".format(teams=teams)).fetchall()
+    print(matches_for_team)
+    dic_matches_for_team = dict(zip(teams, (([0] * 8) for _ in range(len(teams)))))
 
-        avg_score[1] += round(match[8] / num_matches, 2)
-        avg_score[2] += round(match[7] / num_matches, 2)
-        avg_score[3] += round(match[6] / num_matches, 2)
-        avg_score[4] += round(match[5] / num_matches, 2)
-        avg_score[5] += round(match[4] / num_matches, 2)
-        avg_score[6] += round((climb_points + tele_upper_points + tele_lower_points + auto_upper_points + auto_lower_points) / num_matches, 2)
-    return avg_score
+    for match in matches_for_team:
+        team_sum = dic_matches_for_team[str(match[1])]
+
+        climb_points = CONST_CLIMB_POINTS[match[8]]
+        tele_lower_points = match[7]
+        tele_upper_points = match[6] * 2
+        auto_lower_points = match[5] * 2
+        auto_upper_points = match[4] * 4
+        auto_cross_points = CONST_AUTO_CROSS[match[3]]
+
+        team_sum[0] += match[1]
+        team_sum[1] += match[4]
+        team_sum[2] += match[5]
+        team_sum[3] += match[6]
+        team_sum[4] += match[7]
+        team_sum[5] += match[8]
+        team_sum[6] += climb_points + tele_upper_points + tele_lower_points + auto_upper_points + auto_lower_points + auto_cross_points
+        team_sum[7] += 1
+
+    all_averages = []
+    for averages in dic_matches_for_team.values():
+        average_div = []
+        for data_val in averages[:-1]:
+            if averages[-1] == 0:
+                averages[-1] = 1
+            average_div.append(round(data_val/averages[-1], 2))
+        all_averages.append(average_div)
+    print(all_averages)
+    return all_averages
 
 
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 def analysis_dashboard():
     return render_template("dashboard/dashboard.html")
+
