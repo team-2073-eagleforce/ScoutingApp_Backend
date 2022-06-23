@@ -1,10 +1,9 @@
 from flask import jsonify, render_template, Blueprint, request, session, redirect, url_for
 from sqlalchemy import create_engine
-from retrieval.models import matchEntry
-from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 import os
+from scouting_backend.tba import get_match_schedule
 
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -17,26 +16,26 @@ os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 client_config = {
-  "web": {
-    "client_id": "351274848173-0eepc6g5hc4ri03l67rql056p7e6g8nv.apps.googleusercontent.com",
-    "project_id": "scouting-excel-test",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_secret": "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",
-    "redirect_uris": [
-      "https://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
-      "http://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
-      "https://team2073-scouting.herokuapp.com/oauth2callback",
-      "http://team2073-scouting.herokuapp.com",
-      "http://127.0.0.1:5001/oauth2callback"
-    ],
-    "javascript_origins": [
-      "https://google-sheet-interaction.boyuan12.repl.co",
-      "https://team2073-scouting.herokuapp.com",
-      "http://127.0.0.1:5001"
-    ]
-  }
+    "web": {
+        "client_id": "351274848173-0eepc6g5hc4ri03l67rql056p7e6g8nv.apps.googleusercontent.com",
+        "project_id": "scouting-excel-test",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "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",
+        "redirect_uris": [
+            "https://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
+            "http://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
+            "https://team2073-scouting.herokuapp.com/oauth2callback",
+            "http://team2073-scouting.herokuapp.com",
+            "http://127.0.0.1:5001/oauth2callback"
+        ],
+        "javascript_origins": [
+            "https://google-sheet-interaction.boyuan12.repl.co",
+            "https://team2073-scouting.herokuapp.com",
+            "http://127.0.0.1:5001"
+        ]
+    }
 }
 
 analysis_bp = Blueprint(
@@ -45,22 +44,31 @@ analysis_bp = Blueprint(
     static_folder='static'
 )
 
-engine = create_engine("postgresql://iovoclgutwvauo:96baff9ff4b4e43005ef48d270eea03a98ff3ab03a1917c35e853e92589bccc4@ec2-52-204-195-41.compute-1.amazonaws.com:5432/d2csu45r67sphs")
+engine = create_engine(
+    "postgresql://iovoclgutwvauo:96baff9ff4b4e43005ef48d270eea03a98ff3ab03a1917c35e853e92589bccc4@ec2-52-204-195-41.compute-1.amazonaws.com:5432/d2csu45r67sphs")
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 
+# Dummy data has more climb levels thus adding 1s
+CONST_CLIMB_POINTS = [0, 4, 6, 10, 15]
+CONST_AUTO_CROSS = [0, 2]
+
+
 @analysis_bp.route("/matchSchedule", methods=["GET", "POST"])
 def matchSchedule():
-    return render_template("matchSchedule.html")
+    return render_template("dashboard/matchSchedule.html")
+
 
 @analysis_bp.route("/team/<int:team>", methods=["GET"])
 def view_team_data(team):
     matches = db.execute("SELECT * FROM scouting WHERE team=:team", {"team": team})
     return render_template("team.html", matches=matches, team=team)
 
+
 @analysis_bp.route("/sheet")
 def google_sheet_rendering():
     return render_template("sheet.html")
+
 
 @analysis_bp.route("/edit-sheet")
 def edit_sheet():
@@ -81,12 +89,13 @@ def edit_sheet():
 
     return jsonify(**response)
 
+
 @analysis_bp.route("/authorize")
 def authorize():
     # Create flow instance to manage the OAuth 2.0 Authorization Grant Flow steps.
     flow = google_auth_oauthlib.flow.Flow.from_client_config(
         client_config=client_config, scopes=SCOPES)
-    
+
     # The URI created here must exactly match one of the authorized redirect URIs
     # for the OAuth 2.0 client, which you configured in the API Console. If this
     # value doesn't match an authorized URI, you will get a 'redirect_uri_mismatch'
@@ -105,10 +114,11 @@ def authorize():
 
     return redirect(authorization_url)
 
+
 @analysis_bp.route("/oauth2callback")
 def oauth2callback():
     # Specify the state when creating the flow in the callback so that it can
-    # verified in the authorization server response.
+    # verify in the authorization server response.
     state = session['state']
 
     flow = google_auth_oauthlib.flow.Flow.from_client_config(
@@ -128,11 +138,63 @@ def oauth2callback():
 
     return redirect(url_for('analysis_bp.google_sheet_rendering'))
 
+
 def credentials_to_dict(credentials):
-  return {'token': credentials.token,
-          'refresh_token': credentials.refresh_token,
-          'token_uri': credentials.token_uri,
-          'client_id': credentials.client_id,
-          'client_secret': credentials.client_secret,
-          'scopes': credentials.scopes}
+    return {'token': credentials.token,
+            'refresh_token': credentials.refresh_token,
+            'token_uri': credentials.token_uri,
+            'client_id': credentials.client_id,
+            'client_secret': credentials.client_secret,
+            'scopes': credentials.scopes}
+
+
+@analysis_bp.route("/api/get_match_schedule/<string:event_key>/<string:match_num>")
+def api_get_match_schedule(event_key, match_num):
+    # {"red": ["frc1", "frc2", "frc3"], "blue": ["frc4", "frc5", "frc6"]}
+    teams_in_match = get_match_schedule(event_key, int(match_num))
+    positions = ['red1', 'red2', 'red3', 'blue1', 'blue2', 'blue3']
+    averages_for_teams_in_match = dict(zip(positions, calculate_averages(tuple(pos.split('frc')[1] for pos in teams_in_match['red'] + teams_in_match['blue']))))
+
+    return jsonify(averages_for_teams_in_match)
+
+
+def calculate_averages(teams):
+    matches_for_team = db.execute("""SELECT * FROM scouting WHERE team IN {teams}""".format(teams=teams)).fetchall()
+    print(matches_for_team)
+    dic_matches_for_team = dict(zip(teams, (([0] * 8) for _ in range(len(teams)))))
+
+    for match in matches_for_team:
+        team_sum = dic_matches_for_team[str(match[1])]
+
+        climb_points = CONST_CLIMB_POINTS[match[8]]
+        tele_lower_points = match[7]
+        tele_upper_points = match[6] * 2
+        auto_lower_points = match[5] * 2
+        auto_upper_points = match[4] * 4
+        auto_cross_points = CONST_AUTO_CROSS[match[3]]
+
+        team_sum[0] += match[1]
+        team_sum[1] += match[4]
+        team_sum[2] += match[5]
+        team_sum[3] += match[6]
+        team_sum[4] += match[7]
+        team_sum[5] += match[8]
+        team_sum[6] += climb_points + tele_upper_points + tele_lower_points + auto_upper_points + auto_lower_points + auto_cross_points
+        team_sum[7] += 1
+
+    all_averages = []
+    for averages in dic_matches_for_team.values():
+        average_div = []
+        for data_val in averages[:-1]:
+            if averages[-1] == 0:
+                averages[-1] = 1
+            average_div.append(round(data_val/averages[-1], 2))
+        all_averages.append(average_div)
+    print(all_averages)
+    return all_averages
+
+
+@analysis_bp.route("/dashboard", methods=['GET', 'POST'])
+def analysis_dashboard():
+    return render_template("dashboard/dashboard.html")
 

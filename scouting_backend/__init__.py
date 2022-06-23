@@ -22,13 +22,17 @@ def create_app():
         from .home import home
         from .retrieval import retrieval
         from .analysis import analysis
+        from .api import api
+        from .google import google
 
         app.register_blueprint(home.home_bp)
         app.register_blueprint(retrieval.retrieval_bp, url_prefix="/retrieval")
-        app.register_blueprint(analysis.analysis_bp, url_prefic="/analysis")
+        app.register_blueprint(analysis.analysis_bp, url_prefix="/analysis")
+        app.register_blueprint(api.api_bp, url_prefix="/api")
+        app.register_blueprint(google.google_bp, url_prefix="/google")
 
         # Make sure that table no longer exists if you want to update columns
-        db.create_all()
+        # db.create_all()
 
         # compile_static_assets(assets)
 
