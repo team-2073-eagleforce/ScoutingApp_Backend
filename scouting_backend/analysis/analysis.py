@@ -9,7 +9,6 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from googleapiclient import discovery
 from scouting_backend import sheet
-from tba import get_match_team
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
@@ -63,7 +62,18 @@ def matchSchedule():
 @analysis_bp.route("/team/<int:team>", methods=["GET"])
 def view_team_data(team):
     matches = db.execute("SELECT * FROM scouting WHERE team=:team", {"team": team})
-    return render_template("team.html", matches=matches, team=team)
+    matches_with_calculated_scores = []
+
+    for match_num, match in enumerate(matches):
+        convert_match_to_list = list(match)
+        points_per_section = calculate_points(match)
+        convert_match_to_list.insert(6, points_per_section[0])
+        convert_match_to_list.insert(9, points_per_section[1])
+        convert_match_to_list.insert(11, points_per_section[2])
+        convert_match_to_list.insert(12, points_per_section[3])
+
+        matches_with_calculated_scores.append(convert_match_to_list)
+    return render_template("team.html", matches=matches_with_calculated_scores, team=team)
 
 
 @analysis_bp.route("/sheet")
@@ -181,14 +191,14 @@ def calculate_averages(teams):
     for match in matches_for_team:
         team_sum = dic_matches_for_team[str(match[1])]
 
-        points_per_section = calculate_points(match)
+        calculated_points_per_section = calculate_points(match)
 
         team_sum[1] += match[4]
         team_sum[2] += match[5]
         team_sum[3] += match[6]
         team_sum[4] += match[7]
         team_sum[5] += match[8]
-        team_sum[6] += points_per_section[0] + points_per_section[1] + points_per_section[2]
+        team_sum[6] += calculated_points_per_section[3]
         team_sum[7] += 1
 
     all_averages = []
@@ -215,5 +225,6 @@ def calculate_points(match):
     points_per_section.append(auto_cross_points + auto_upper_points + auto_lower_points)
     points_per_section.append(tele_upper_points + tele_lower_points)
     points_per_section.append(climb_points)
+    points_per_section.append(sum(points_per_section))
 
     return points_per_section
