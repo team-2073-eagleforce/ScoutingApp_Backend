@@ -1,25 +1,148 @@
-{% extends "layout.html" %}
-
-{% block head %}
-<script src="https://rawgit.com/sitepoint-editors/jsqrcode/master/src/qr_packed.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-{% endblock %}
-
-{% block body %}
-
-<div id="container">
-    <h1>QR Code Scanner</h1>
-
-    <canvas hidden="" id="qr-canvas"></canvas>
-
-    <div id="qr-result" hidden="">
-        <b>Data:</b> <span id="outputData"></span>
-    </div>
-
-    <a id="btn-scan-qr">
-        <img src="/retrieval/static/barcode_image.png"/>
-    </a>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Scanner Demo</title>
+</head>
+<body>
+<h1>Scan from WebCam:</h1>
+<div id="video-container">
+    <video id="qr-video"></video>
 </div>
-<script type="text/javascript" src="/retrieval/static/qrCodeScanner.js"></script>
-{% endblock %}
+<br>
+<b>Detected QR code: </b>
+<span id="cam-qr-result">None</span>
+
+<button id="start-button">Start</button>
+<button id="stop-button">Stop</button>
+<hr>
+
+<h1>Scan from File:</h1>
+<input type="file" id="file-selector">
+<b>Detected QR code: </b>
+<span id="file-qr-result">None</span>
+
+<!-- <script src="https://raw.githubusercontent.com/nimiq/qr-scanner/master/qr-scanner.umd.min.js"></script> -->
+<!-- <script src="https://raw.githubusercontent.com/nimiq/qr-scanner/master/qr-scanner.legacy.min.js"></script> -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script src="https://raw.githubusercontent.com/nimiq/qr-scanner/master/qr-scanner.umd.min.js"></script>
+<script type="module">
+    import QrScanner from "/retrieval/static/qrScannerV2.js"
+    const video = document.getElementById('qr-video');
+    const videoContainer = document.getElementById('video-container');
+    const camHasCamera = document.getElementById('cam-has-camera');
+    const camList = document.getElementById('cam-list');
+    const camHasFlash = document.getElementById('cam-has-flash');
+    const flashToggle = document.getElementById('flash-toggle');
+    const flashState = document.getElementById('flash-state');
+    const camQrResult = document.getElementById('cam-qr-result');
+    const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
+    const fileSelector = document.getElementById('file-selector');
+    const fileQrResult = document.getElementById('file-qr-result');
+    var prevResult = ""
+
+    function setResult(label, result) {
+        if (result.data != prevResult) {
+            console.log(result.data);
+            label.textContent = result.data;
+            label.style.color = 'teal';
+            clearTimeout(label.highlightTimeout);
+            label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 3000);
+            $.post("/retrieval/detectScan", {
+                data: result.data
+            });
+            prevResult = result.data
+        }
+    }
+
+    // ####### Web Cam Scanning #######
+
+    const scanner = new QrScanner(video, result => setResult(camQrResult, result), {
+        onDecodeError: error => {
+            camQrResult.textContent = error;
+            camQrResult.style.color = 'inherit';
+        },
+        highlightScanRegion: true,
+        highlightCodeOutline: true,
+    });
+
+    scanner.start().then(() => {
+        // List cameras after the scanner started to avoid listCamera's stream and the scanner's stream being requested
+        // at the same time which can result in listCamera's unconstrained stream also being offered to the scanner.
+        // Note that we can also start the scanner after listCameras, we just have it this way around in the demo to
+        // start the scanner earlier.
+        QrScanner.listCameras(true).then(cameras => cameras.forEach(camera => {
+            const option = document.createElement('option');
+            option.value = camera.id;
+            option.text = camera.label;
+        }));
+    });
+
+    document.getElementById('start-button').addEventListener('click', () => {
+        scanner.start();
+    });
+
+    document.getElementById('stop-button').addEventListener('click', () => {
+        scanner.stop();
+    });
+
+    // ####### File Scanning #######
+
+    fileSelector.addEventListener('change', event => {
+        const file = fileSelector.files[0];
+        if (!file) {
+            return;
+        }
+        QrScanner.scanImage(file, { returnDetailedScanResult: true })
+            .then(result => setResult(fileQrResult, result))
+            .catch(e => setResult(fileQrResult, { data: e || 'No QR code found.' }));
+    });
+</script>
+
+<style>
+    div {
+        margin-bottom: 16px;
+    }
+
+    #video-container {
+        line-height: 0;
+    }
+
+    #video-container.example-style-1 .scan-region-highlight-svg,
+    #video-container.example-style-1 .code-outline-highlight {
+        stroke: #64a2f3 !important;
+    }
+
+    #video-container.example-style-2 {
+        position: relative;
+        width: max-content;
+        height: max-content;
+        overflow: hidden;
+    }
+    #video-container.example-style-2 .scan-region-highlight {
+        border-radius: 30px;
+        outline: rgba(0, 0, 0, .25) solid 50vmax;
+    }
+    #video-container.example-style-2 .scan-region-highlight-svg {
+        display: none;
+    }
+    #video-container.example-style-2 .code-outline-highlight {
+        stroke: rgba(255, 255, 255, .5) !important;
+        stroke-width: 15 !important;
+        stroke-dasharray: none !important;
+    }
+
+    #flash-toggle {
+        display: none;
+    }
+
+    hr {
+        margin-top: 32px;
+    }
+    input[type="file"] {
+        display: block;
+        margin-bottom: 16px;
+    }
+</style>
+</body>
+</html>

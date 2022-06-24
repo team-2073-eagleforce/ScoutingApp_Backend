@@ -96,10 +96,6 @@ def testing_sheet_api():
     sheets = get_all_sheets(session)
     return jsonify(sheets)
 
-@retrieval_bp.route("/qrScannerV2")
-def qrScannerV2():
-    return render_template("QRScannerV2.html")
-
 def upload_data_to_sheet(session, data):
     """
     session: flask.session
