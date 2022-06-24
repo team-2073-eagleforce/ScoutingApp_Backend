@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Rankings</h1>
+
+    <form>
+        <button id="by_auto" type="button">By Autos</button>
+        <button id="by_teleop" type="button">By Teleop</button>
+        <button id="by_climb" type="button">By Climb</button>
+        <button id="by_total" type="button">By Total Points</button>
+    </form>
+
+    <script>
+        document.getElementById("by_auto").onclick = () => {
+            selecter("by_auto")
+        }
+        document.getElementById("by_teleop").onclick = () => {
+            selecter("by_teleop")
+        }
+        document.getElementById("by_climb").onclick = () => {
+            selecter("by_climb")
+        }
+        document.getElementById("by_total").onclick = () => {
+            selecter("by_total")
+        }
+
+        function selecter(sortby) {
+            const buttons = ['by_auto', 'by_teleop', 'by_climb', 'by_total']
+            for (const button of buttons) {
+                if (button !== sortby) {
+                    document.getElementById(button).style = ""
+                }
+            }
+            document.getElementById(sortby).style = "background-color: red;"
+            $.post("/analysis/sorter", {
+                button_selected: sortby
+            });
+        }
+    </script>
+</div>
+{% endblock %}

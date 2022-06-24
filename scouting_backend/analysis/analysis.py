@@ -9,6 +9,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from googleapiclient import discovery
 from scouting_backend import sheet
+from tba import get_match_team
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
@@ -56,7 +57,7 @@ CONST_AUTO_CROSS = [0, 2]
 
 @analysis_bp.route("/matchSchedule", methods=["GET", "POST"])
 def matchSchedule():
-    return render_template("dashboard/matchSchedule.html")
+    return render_template("dashboard/templates/matchSchedule.html")
 
 
 @analysis_bp.route("/team/<int:team>", methods=["GET"])
@@ -148,6 +149,11 @@ def credentials_to_dict(credentials):
             'scopes': credentials.scopes}
 
 
+@analysis_bp.route("/dashboard", methods=['GET', 'POST'])
+def analysis_dashboard():
+    return render_template("dashboard/dashboard.html")
+
+
 @analysis_bp.route("/api/get_match_schedule/<string:event_key>/<string:match_num>")
 def api_get_match_schedule(event_key, match_num):
     # {"red": ["frc1", "frc2", "frc3"], "blue": ["frc4", "frc5", "frc6"]}
@@ -158,6 +164,16 @@ def api_get_match_schedule(event_key, match_num):
     return jsonify(averages_for_teams_in_match)
 
 
+@analysis_bp.route("/rankings", methods=['GET', 'POST'])
+def rankings_list():
+    return render_template("rankings.html")
+
+
+@analysis_bp.route("/sorter", methods=['GET', 'POST'])
+def sorter():
+    sort_by = request.form['button_selected']
+
+
 def calculate_averages(teams):
     matches_for_team = db.execute("""SELECT * FROM scouting WHERE team IN {teams}""".format(teams=teams)).fetchall()
     dic_matches_for_team = dict(zip(teams, ([int(teams[team])] + [0] * 7 for team in range(len(teams)))))
@@ -165,19 +181,14 @@ def calculate_averages(teams):
     for match in matches_for_team:
         team_sum = dic_matches_for_team[str(match[1])]
 
-        climb_points = CONST_CLIMB_POINTS[match[8]]
-        tele_lower_points = match[7]
-        tele_upper_points = match[6] * 2
-        auto_lower_points = match[5] * 2
-        auto_upper_points = match[4] * 4
-        auto_cross_points = CONST_AUTO_CROSS[match[3]]
+        points_per_section = calculate_points(match)
 
         team_sum[1] += match[4]
         team_sum[2] += match[5]
         team_sum[3] += match[6]
         team_sum[4] += match[7]
         team_sum[5] += match[8]
-        team_sum[6] += climb_points + tele_upper_points + tele_lower_points + auto_upper_points + auto_lower_points + auto_cross_points
+        team_sum[6] += points_per_section[0] + points_per_section[1] + points_per_section[2]
         team_sum[7] += 1
 
     all_averages = []
@@ -191,7 +202,18 @@ def calculate_averages(teams):
     return all_averages
 
 
-@analysis_bp.route("/dashboard", methods=['GET', 'POST'])
-def analysis_dashboard():
-    return render_template("dashboard/dashboard.html")
+def calculate_points(match):
+    points_per_section = []
 
+    auto_cross_points = CONST_AUTO_CROSS[match[3]]
+    auto_upper_points = match[4] * 4
+    auto_lower_points = match[5] * 2
+    tele_upper_points = match[6] * 2
+    tele_lower_points = match[7]
+    climb_points = CONST_CLIMB_POINTS[match[8]]
+
+    points_per_section.append(auto_cross_points + auto_upper_points + auto_lower_points)
+    points_per_section.append(tele_upper_points + tele_lower_points)
+    points_per_section.append(climb_points)
+
+    return points_per_section
