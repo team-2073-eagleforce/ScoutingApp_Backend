@@ -105,6 +105,3 @@ def upload_data_to_sheet(session, data):
     sheets = get_all_sheets(session)
 
     return edit_sheet(session, "Sheet1!A1:A12", data)
-
-
-    
