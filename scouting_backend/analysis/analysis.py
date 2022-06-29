@@ -1,4 +1,5 @@
 from flask import jsonify, render_template, Blueprint, request, session, redirect, url_for
+import requests
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -10,10 +11,13 @@ import google_auth_oauthlib.flow
 from googleapiclient import discovery
 from scouting_backend import sheet
 
+from scouting_backend.constants import AUTHORIZED_EMAIL
+from helpers import login_required
+
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email']
 
 client_config = {
     "web": {
@@ -26,9 +30,9 @@ client_config = {
         "redirect_uris": [
             "https://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
             "http://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
-            "https://team2073-scouting.herokuapp.com/oauth2callback",
+            "https://team2073-scouting.herokuapp.com/analysis/oauth2callback",
             "http://team2073-scouting.herokuapp.com",
-            "http://127.0.0.1:5001/oauth2callback"
+            "http://127.0.0.1:5001/analysis/oauth2callback"
         ],
         "javascript_origins": [
             "https://google-sheet-interaction.boyuan12.repl.co",
@@ -53,23 +57,23 @@ CONST_CLIMB_POINTS = [0, 4, 6, 10, 15]
 CONST_AUTO_CROSS = [0, 2]
 CONST_HOME_TEAM = 2073
 
-
+@login_required
 @analysis_bp.route("/matchSchedule", methods=["GET", "POST"])
 def matchSchedule():
     return render_template("dashboard/matchSchedule.html")
 
-
+@login_required
 @analysis_bp.route("/team/<int:team>", methods=["GET"])
 def view_team_data(team):
     matches = db.execute("SELECT * FROM scouting WHERE team=:team", {"team": team})
     return render_template("team.html", matches=matches, team=team)
 
-
+@login_required
 @analysis_bp.route("/sheet")
 def google_sheet_rendering():
     return render_template("sheet.html")
 
-
+@login_required
 @analysis_bp.route("/edit-sheet")
 def edit_sheet():
     """
@@ -133,8 +137,19 @@ def oauth2callback():
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     credentials = flow.credentials
-    print(credentials_to_dict(credentials))
-    session['credentials'] = credentials_to_dict(credentials)
+    cred = credentials_to_dict(credentials)
+    session['credentials'] = cred
+
+    r = requests.get(f'https://www.googleapis.com/oauth2/v2/userinfo?access_token={cred["token"]}').json()
+    
+    print(r)
+
+    session["name"] = r["given_name"]
+
+    if r["email"] not in AUTHORIZED_EMAIL:
+        return "405 UNAUTHORIZED"
+
+    session["email"] = r["email"]
 
     return redirect(url_for('analysis_bp.google_sheet_rendering'))
 
@@ -190,8 +205,8 @@ def calculate_averages(teams):
         all_averages.append(average_div)
     return all_averages
 
-
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
+@login_required
 def analysis_dashboard():
     comps = get_comps(CONST_HOME_TEAM, 2022)
     return render_template("dashboard/dashboard.html", comps=comps)

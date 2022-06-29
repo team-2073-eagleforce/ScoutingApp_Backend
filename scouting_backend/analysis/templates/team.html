@@ -1,51 +1,44 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Team {{ team }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="container">
-        <h1>Team {{ team }}'s Data</h1>
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Match Number</th>
-                <th>Auto Cross</th>
-                <th>Auto Upper</th>
-                <th>Auto Bottom</th>
-                <th>Teleop Upper</th>
-                <th>Teleop Bottom</th>
-                <th>Climb Level</th>
-                <th>Driver Performance</th>
-                <th>Defense Performance</th>
-                <th>Name</th>
-                <th>Comments</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for m in matches %}
-                <tr>
-                    <th scope="row">{{ m[2] }}</th>
-                    <td>{{ m[3] }}</td>
-                    <td>{{ m[4] }}</td>
-                    <td>{{ m[5] }}</td>
-                    <td>{{ m[6] }}</td>
-                    <td>{{ m[7] }}</td>
-                    <td>{{ m[8] }}</td>
-                    <td>{{ m[9] }}</td>
-                    <td>{{ m[10] }}</td>
-                    <td>{{ m[11] }}</td>
-                    <td>{{ m[12] }}</td>
-                </tr>
-              {% endfor %}
-    
-            </tbody>
-        </table>
-    </div>
+{% extends "layout.html" %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-  </body>
-</html>
+{% block head %}
+  <title>Team {{ team }}</title>
+{% endblock %}
+
+{% block body %}
+  <h1>Team {{ team }}'s Data</h1>
+  <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Match Number</th>
+          <th>Auto Cross</th>
+          <th>Auto Upper</th>
+          <th>Auto Bottom</th>
+          <th>Teleop Upper</th>
+          <th>Teleop Bottom</th>
+          <th>Climb Level</th>
+          <th>Driver Performance</th>
+          <th>Defense Performance</th>
+          <th>Name</th>
+          <th>Comments</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in matches %}
+          <tr>
+              <th scope="row">{{ m[2] }}</th>
+              <td>{{ m[3] }}</td>
+              <td>{{ m[4] }}</td>
+              <td>{{ m[5] }}</td>
+              <td>{{ m[6] }}</td>
+              <td>{{ m[7] }}</td>
+              <td>{{ m[8] }}</td>
+              <td>{{ m[9] }}</td>
+              <td>{{ m[10] }}</td>
+              <td>{{ m[11] }}</td>
+              <td>{{ m[12] }}</td>
+          </tr>
+        {% endfor %}
+
+      </tbody>
+  </table>
+{% endblock %}
