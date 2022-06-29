@@ -1,23 +1,30 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div style="text-align:center">
-<h1>Scouting App Login</h1>
-      {% if error %}
-         <p><strong>Error:</strong> {{ error }}
-      {% endif %}
+   <div style="text-align:center">
+   <h1>Scouting App Login</h1>
+   <html>
+      <body>
+         <div id="buttonDiv"></div>
+          <script src="https://accounts.google.com/gsi/client" async defer></script>
+          <script>
+            function handleCredentialResponse(response) {
+              console.log("Encoded JWT ID token: " + response.credential);
+            }
+            window.onload = function () {
+              google.accounts.id.initialize({
+                client_id: "351274848173-0eepc6g5hc4ri03l67rql056p7e6g8nv.apps.googleusercontent.com",
+                callback: handleCredentialResponse
+              });
+              google.accounts.id.renderButton(
+                document.getElementById("buttonDiv"),
+                { theme: "outline", size: "large" }  // customization attributes
+              );
+              google.accounts.id.prompt(); // also display the One Tap dialog
+            }
+        </script>
+        <div id="buttonDiv"></div> 
+      </body>
+    </html>
 
-      <form action = "" method = post>
-         <dl>
-            <dt>Username:</dt>
-            <dd>
-               <input type = text name = username
-                  value = "{{request.form.username }}">
-            </dd>
-            <dt>Password:</dt>
-            <dd><input type = password name = password></dd>
-         </dl>
-         <p><input type = submit value = Login></p>
-      </form>
-    </div>
 {% endblock %}

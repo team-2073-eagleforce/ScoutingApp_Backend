@@ -25,6 +25,7 @@ def login():
 @home_bp.route('/logout')
 def logout():
     session.pop('username', None)
+    session.clear()
     return redirect(url_for('home_bp.login'))
 
 
