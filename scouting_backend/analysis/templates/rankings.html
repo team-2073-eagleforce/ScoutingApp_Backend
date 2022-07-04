@@ -15,28 +15,28 @@
         <button id="by_total" type="button">By Total Points</button>
     </form>
 
-    <table id="auto">
+    <table id="auto" class="table">
         <tr>
             <th>Team</th>
             <th>Auto Points</th>
         </tr>
     </table>
 
-    <table id="teleop">
+    <table id="teleop" class="table">
         <tr>
-            <th>Team</th>
-            <th>Teleop Points</th>
+            <th scope="col">Team</th>
+            <th scope="col">Teleop Points</th>
         </tr>
     </table>
 
-    <table id="climb">
+    <table id="climb" class="table">
         <tr>
             <th>Team</th>
             <th>Climb Points</th>
         </tr>
     </table>
 
-    <table id="total">
+    <table id="total" class="table">
         <tr>
             <th>Team</th>
             <th>Total Points</th>
@@ -95,6 +95,7 @@
                         var scoreTd = document.createElement("TD");
                         teamTd.innerText = Object.keys(data)[i];
                         scoreTd.innerText = data[Object.keys(data)[i]];
+                        teamTd.setAttribute("scope", "row")
                         tr.appendChild(teamTd)
                         tr.appendChild(scoreTd)
                         tr.setAttribute("class", "generated")

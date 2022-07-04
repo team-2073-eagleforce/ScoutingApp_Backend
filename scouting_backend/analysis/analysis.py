@@ -178,9 +178,9 @@ def credentials_to_dict(credentials):
             'scopes': credentials.scopes}
 
 
-@analysis_bp.route("/dashboard", methods=['GET', 'POST'])
-def analysis_dashboard():
-    return render_template("dashboard/dashboard.html")
+# @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
+# def analysis_dashboard():
+#     return render_template("dashboard/dashboard.html")
 
 
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
