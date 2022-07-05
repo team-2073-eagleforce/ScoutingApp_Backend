@@ -195,8 +195,8 @@ def sorter():
 
 
 def fetch_sql_for_rankings(all_teams, sort_by):
-    a = {'by_auto': '"team", "autoCrossing", "autoUpper", "autoBottom"', 'by_teleop': '"team", "teleUpper", "teleBottom"',
-         'by_climb': '"team", "level"', 'by_total': '"team", "autoCrossing", "autoUpper", "autoBottom", "teleUpper", "teleBottom", "level"'}
+    a = {'by_auto': '"team", "autocrossing", "autoupper", "autobottom"', 'by_teleop': '"team", "teleupper", "telebottom"',
+         'by_climb': '"team", "level"', 'by_total': '"team", "autocrossing", "autoupper", "autobottom", "teleupper", "telebottom", "level"'}
 
     team_with_selected_data_values = db.execute("""SELECT {sort_by} FROM scouting WHERE team IN {teams}""".format(sort_by=a[sort_by], teams=all_teams)).fetchall()
     dic_team_with_average = dict(zip(all_teams, ([0] * 2 for team in range(len(all_teams)))))
