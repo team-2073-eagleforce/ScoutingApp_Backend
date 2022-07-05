@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <title>Pit Analysis</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Pit Analysis</h1>
+    <table id="results" class="table">
+        <tr>
+            <th scope="col">Team number</th>
+            <th scope="col">Competition Code</th>
+            <th scope="col">Drive train</th>
+            <th scope="col">Robot type</th>
+            <th scope="col">Prefer Scoring Position</th>
+            <th scope="col">Auto</th>
+            <th scope="col">Able to shoot ... Hub</th>
+            <th scope="col">Climb</th>
+            <th scope="col">Comments</th>
+            <th scope="col">Submitted By</th>
+            <th scope="col">Robot Image</th>
+        </tr>
+        {% for d in entries %}
+            <tr>
+                <td>{{ d[1] }}</td>
+                <td>{{ d[2] }}</td>
+                <td>{{ d[3] }}</td>
+                <td>{{ d[4] }}</td>
+                <td>{{ d[5] }}</td>
+                <td>{{ d[6] }}</td>
+                <td>{{ d[7] }}</td>
+                <td>{{ d[8] }}</td>
+                <td>{{ d[9] }}</td>
+                <td>{{ d[10] }}</td>
+                <td><img src="{{ d[11] }}" width="100px" height="100px"></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock  %}

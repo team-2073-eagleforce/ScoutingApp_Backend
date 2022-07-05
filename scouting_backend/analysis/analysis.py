@@ -159,7 +159,7 @@ def oauth2callback():
     
     print(r)
 
-    session["name"] = r["given_name"]
+    session["name"] = r["given_name"] + " " + r["family_name"]
 
     if r["email"] not in AUTHORIZED_EMAIL:
         return "405 UNAUTHORIZED"
