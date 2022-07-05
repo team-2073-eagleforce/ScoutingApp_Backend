@@ -168,7 +168,6 @@ def oauth2callback():
 
     return redirect(url_for('analysis_bp.google_sheet_rendering'))
 
-
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
             'refresh_token': credentials.refresh_token,

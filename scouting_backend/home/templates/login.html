@@ -3,7 +3,7 @@
 {% block body %}
    <div style="text-align:center">
    <h1>Scouting App Login</h1>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- <script src="https://accounts.google.com/gsi/client" async defer></script>
     <div id="g_id_onload"
         data-client_id="351274848173-0eepc6g5hc4ri03l67rql056p7e6g8nv.apps.googleusercontent.com"
         data-login_uri="https://team2073-scouting.herokuapp.com/analysis/oauth2callback"
@@ -16,8 +16,17 @@
         data-text="sign_in_with"
         data-shape="rectangular"
         data-logo_alignment="left">
-    </div>
-
+    </div> -->
+    {% if not session.get("name") %}
+      <form class="d-flex" role="search">
+      <button class="btn btn-outline-primary" type="button" onclick="location.assign('/analysis/authorize')">Login with Google</button>
+      </form>
+    {% else %}
+      <form class="d-flex" role="search">
+          Hello, {{ session.get("name") }}
+      </form>
+    {% endif %}
+  </div>
 
 
 {% endblock %}
