@@ -3,28 +3,21 @@
 {% block body %}
    <div style="text-align:center">
    <h1>Scouting App Login</h1>
-   <html>
-      <body>
-         <div id="buttonDiv"></div>
-          <script src="https://accounts.google.com/gsi/client" async defer></script>
-          <script>
-            function handleCredentialResponse(response) {
-              console.log("Encoded JWT ID token: " + response.credential);
-            }
-            window.onload = function () {
-              google.accounts.id.initialize({
-                client_id: "351274848173-0eepc6g5hc4ri03l67rql056p7e6g8nv.apps.googleusercontent.com",
-                callback: handleCredentialResponse
-              });
-              google.accounts.id.renderButton(
-                document.getElementById("buttonDiv"),
-                { theme: "outline", size: "large" }  // customization attributes
-              );
-              google.accounts.id.prompt(); // also display the One Tap dialog
-            }
-        </script>
-        <div id="buttonDiv"></div> 
-      </body>
-    </html>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div id="g_id_onload"
+        data-client_id="351274848173-0eepc6g5hc4ri03l67rql056p7e6g8nv.apps.googleusercontent.com"
+        data-login_uri="https://team2073-scouting.herokuapp.com/analysis/authorize"
+        data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+    </div>
+
+
 
 {% endblock %}
