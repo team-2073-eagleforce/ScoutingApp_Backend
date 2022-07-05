@@ -31,7 +31,7 @@ def qrScanner():
 def test():
     QRData = request.form['data'].split(',')
     print(QRData)
-    existing_match = db.execute('SELECT * FROM scouting WHERE team=:team AND "matchNumber"=:matchNumber', {"team": QRData[0], "matchNumber": QRData[1]}).fetchall()
+    existing_match = db.execute('SELECT * FROM scouting WHERE team=:team AND "scouting.matchNumber"=:matchNumber', {"team": QRData[0], "matchNumber": QRData[1]}).fetchall()
 
     if len(existing_match) == 0:
         c.execute('INSERT INTO scouting (team, "matchNumber", "autoCrossing", "autoUpper", "autoBottom", "teleUpper", "teleBottom", "level", "driverPerf", "defensePerf", "name", "comment") VALUES (:t, :m, :ac, :au, :ab, :tu, :tb, :l, :dp, :dep, :name, :co)', {
