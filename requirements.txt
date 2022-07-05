@@ -37,3 +37,4 @@ numpy
 webassets==2.0
 Werkzeug==2.1.2
 sentry-sdk[flask]
+cloudinary
