@@ -1,0 +1,200 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <title>Pit Scouting</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Pit Scouting Form</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="team" class="form-label">Team Number</label>
+            <input type="number" class="form-control" id="team" name="team">
+        </div>
+        <div class="mb-3">
+            <label for="comp" class="form-label">Choose a competition</label>
+            <select class="form-select" aria-label="Default select example" id="comp" name="comp">
+                <option selected>Choose a competition</option>
+                {% for c in comps.keys() %}
+                    <option value="{{ c }}" id="{{ c }}">{{ comps[c] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="pic" class="form-label">Robot Picture</label>
+            <input type="file" class="form-control" id="pic" name="pic" onchange="loadPreview(this)">
+            <div>
+                <img id="preview">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label>Drivetrain</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="swerve" value="Swerve">
+                <label class="form-check-label" for="swerve">
+                    Swerve
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="west-coast" value="West Coast">
+                <label class="form-check-label" for="west-coast">
+                    West Coast
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="omni" value="Omni">
+                <label class="form-check-label" for="omni">
+                    Omni
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="mechanum" value="Mechanum">
+                <label class="form-check-label" for="mechanum">
+                    Mechanum
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="tank-tread" value="Tank Tread">
+                <label class="form-check-label" for="tank-tread">
+                    Tank Tread
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="other">
+                <label class="form-check-label" for="other">
+                    <input type="text" id="other-drivetrain" disabled>
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="type" class="form-label">Offense or Defensive</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="type" id="offensive" value="Offensive">
+                <label class="form-check-label" for="offensive">
+                    Offensive
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="type" id="defensive" value="Defensive">
+                <label class="form-check-label" for="Defensive">
+                    Defensive
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="scoring" class="form-label">Prefered Scoring Location</label>
+            <input type="text" name="score" id="score" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="place">Upper Hub or Lower Hub?</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="place" id="upper" value="Upper">
+                <label class="form-check-label" for="upper">
+                    Upper
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="place" id="lower" value="Lower">
+                <label class="form-check-label" for="lower">
+                    Lower
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="place" id="both" value="Both">
+                <label class="form-check-label" for="both">
+                    Both
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="auto" class="form-label">Auto?</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Drive off the tarmac" id="tarmac" name="auto">
+                <label class="form-check-label" for="tarmac">
+                  Drive off the tarmac
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Score 1-2 balls" id="onetotwo" name="auto">
+                <label class="form-check-label" for="onetotwo">
+                    Score 1-2 balls
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Score 3-5 balls" id="threetofive" name="auto">
+                <label class="form-check-label" for="threetofive">
+                    Score 3-5 balls
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="climb" class="form-label">Climb</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="climb" id="noclimb" value="No climb">
+                <label class="form-check-label" for="noclimb">
+                    No Climb
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="climb" id="lower" value="Lower">
+                <label class="form-check-label" for="lower">
+                    Lower
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="climb" id="mid" value="Mid">
+                <label class="form-check-label" for="Mid">
+                    Mid
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="climb" id="high" value="High">
+                <label class="form-check-label" for="high">
+                    High
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="climb" id="transversal" value="Transversal">
+                <label class="form-check-label" for="transversal">
+                    Transversal
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="comment" class="form-label">Anything else?</label>
+            <textarea class="form-control" id="comment" rows="3" name="comment"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <script>
+        const DRIVETRAIN_ID = ["swerve", "omni", "west-coast", "mechanum", "tank-tread"]
+        function loadPreview(input) {
+            var file = input.files[0]
+            var fileReader = new FileReader()
+            // var preview = fileReader.readAsDataURL(file);
+            // console.log(preview)
+            fileReader.addEventListener("load", function () {
+                // convert image to base64 encoded string
+                document.getElementById("preview").setAttribute("src", this.result);
+            });
+            fileReader.readAsDataURL(file)
+        }
+        
+        document.getElementById("other").onclick = () => {
+            document.getElementById("other-drivetrain").disabled = false
+        }
+        
+        document.getElementById("other-drivetrain").onblur = () => {
+            document.getElementById("other").setAttribute("value", document.getElementById("other-drivetrain").value)
+        }
+    
+        for (let i=0; i<DRIVETRAIN_ID.length; i++) {
+            document.getElementById(DRIVETRAIN_ID[i]).onclick = () => {
+                document.getElementById("other-drivetrain").disabled = true
+                document.getElementById("other-drivetrain").value = ""
+            }
+        }
+        
+    </script>
+{% endblock %}

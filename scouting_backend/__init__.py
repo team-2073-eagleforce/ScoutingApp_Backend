@@ -24,15 +24,18 @@ def create_app():
         from .analysis import analysis
         from .api import api
         from .google import google
+        from .pit import pit
 
         app.register_blueprint(home.home_bp)
         app.register_blueprint(retrieval.retrieval_bp, url_prefix="/retrieval")
         app.register_blueprint(analysis.analysis_bp, url_prefix="/analysis")
         app.register_blueprint(api.api_bp, url_prefix="/api")
         app.register_blueprint(google.google_bp, url_prefix="/google")
+        app.register_blueprint(pit.pit_bp, url_prefix="/pit")
 
         # Make sure that table no longer exists if you want to update columns
         # db.create_all()
+        print("database created maybe?")
 
         # compile_static_assets(assets)
 
