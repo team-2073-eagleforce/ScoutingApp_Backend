@@ -5,6 +5,8 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+import os
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -15,9 +17,9 @@ def login_required(f):
     return decorated_function
 
 cloudinary.config(
-    cloud_name = "boyuan12",
-    api_key = "893778436618783",
-    api_secret = "X4LufXPHxvv4hROS3VZWYyR3tIE"
+    cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key = os.getenv("CLOUDINARY_API_KEY"),
+    api_secret = os.getenv("CLOUDINARY_API_SECRET")
 )
 
 def upload_image(file):

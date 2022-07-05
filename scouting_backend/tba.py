@@ -1,6 +1,7 @@
+import os
 import requests
 
-X_TBA_Auth_Key = "OfVisf5XygZ2368Z4ynIyVmYCUz2ktv4cJ7v3ttWyzIo4Uf3YnVnr21iDrY95rwj"
+X_TBA_Auth_Key = os.getenv("TBA_AUTH_KEY")
 
 
 def get_match_team(event_key):

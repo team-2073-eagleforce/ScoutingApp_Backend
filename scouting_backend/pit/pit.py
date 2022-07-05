@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, render_template, request, session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -7,7 +8,7 @@ from scouting_backend.helpers import upload_image
 from .models import PitEntry, db
 from scouting_backend.tba import get_comps
 
-engine = create_engine("postgresql://iovoclgutwvauo:96baff9ff4b4e43005ef48d270eea03a98ff3ab03a1917c35e853e92589bccc4@ec2-52-204-195-41.compute-1.amazonaws.com:5432/d2csu45r67sphs")
+engine = create_engine("postgresql://" + os.getenv("DATABASE_URL").split("://")[1])
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 c = conn

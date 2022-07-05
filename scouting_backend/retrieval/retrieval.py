@@ -1,3 +1,4 @@
+import os
 from click import edit
 from flask import render_template, Blueprint, request, session, jsonify
 from sheet import create_new_sheet, edit_sheet, get_all_sheets
@@ -15,7 +16,7 @@ retrieval_bp = Blueprint(
     static_folder='static'
 )
 
-engine = create_engine("postgresql://iovoclgutwvauo:96baff9ff4b4e43005ef48d270eea03a98ff3ab03a1917c35e853e92589bccc4@ec2-52-204-195-41.compute-1.amazonaws.com:5432/d2csu45r67sphs")
+engine = create_engine("postgresql://" + os.getenv("DATABASE_URL").split("://")[1])
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 c = conn

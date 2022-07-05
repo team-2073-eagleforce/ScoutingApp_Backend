@@ -30,7 +30,7 @@ client_config = {
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_secret": "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",
+        "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
         "redirect_uris": [
             "https://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
             "http://google-sheet-interaction.boyuan12.repl.co/oauth2callback",
@@ -52,8 +52,7 @@ analysis_bp = Blueprint(
     static_folder='static'
 )
 
-engine = create_engine(
-    "postgresql://iovoclgutwvauo:96baff9ff4b4e43005ef48d270eea03a98ff3ab03a1917c35e853e92589bccc4@ec2-52-204-195-41.compute-1.amazonaws.com:5432/d2csu45r67sphs")
+engine = create_engine("postgresql://" + os.getenv("DATABASE_URL").split("://")[1])
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 

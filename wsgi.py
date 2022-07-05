@@ -1,9 +1,10 @@
 from scouting_backend import create_app
 from sentry_sdk.integrations.flask import FlaskIntegration
 import sentry_sdk
+import os
 
 sentry_sdk.init(
-    dsn="https://0b0ef98bffd640ed9f69d8d97542e12e@o1301284.ingest.sentry.io/6537155",
+    dsn=os.getenv("SENTRY_DSN"),
     integrations=[
         FlaskIntegration(),
     ],
