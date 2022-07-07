@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_assets import Environment
 import os, sys
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
@@ -14,11 +13,7 @@ def create_app():
 
     db.init_app(app)
 
-    # assets = Environment()
-    # assets.init_app(app)
-
     with app.app_context():
-        # from .assets import compile_static_assets
         from .home import home
         from .retrieval import retrieval
         from .analysis import analysis

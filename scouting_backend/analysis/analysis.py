@@ -183,12 +183,6 @@ def credentials_to_dict(credentials):
             'client_secret': credentials.client_secret,
             'scopes': credentials.scopes}
 
-
-# @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
-# def analysis_dashboard():
-#     return render_template("dashboard/dashboard.html")
-
-
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
 def rankings_list():
     return render_template("rankings.html")
@@ -295,4 +289,4 @@ def calculate_points(match):
 @login_required
 def analysis_dashboard():
     comps = get_comps(CONST_HOME_TEAM, 2022)
-    return render_template("dashboard/dashboard.html", comps=comps)
+    return render_template("dashboard.html", comps=comps)
