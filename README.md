@@ -13,6 +13,9 @@ Create a file named .env and add the following variables directly under the Scou
 - ```SECRET_KEY```=Randomly generated string of characters used to encrypt your app's data.
 - ```SQLALCHEMY_DATABASE_URI```=mysql+pymysql://[USER]:[PASSWORD]@[HOST]:[PORT]/[DATABASE_NAME]
 - ```ASSETS_DEBUG (optional)```=False
+- ```CLOUDINARY_CLOUD_NAME=
+- ```CLOUDINARY_API_KEY=
+- ```CLOUDINARY_API_SECRET=
 
 _Remember never to commit secrets saved in .env files to Github._
 ## Installing Dependencies 
