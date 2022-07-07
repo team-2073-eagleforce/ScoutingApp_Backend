@@ -1,5 +1,5 @@
 document.getElementById("button").onclick = () => {
-    var comp = document.getElementById("comp").value
+    var comp = localStorage.getItem("comp")
     var match = document.getElementById("match").value
     fetch(`/analysis/api/get_match_schedule/${comp}/${match}`)
         .then(response => response.json())

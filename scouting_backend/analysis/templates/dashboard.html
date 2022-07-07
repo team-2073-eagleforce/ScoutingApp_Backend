@@ -11,12 +11,6 @@
     <h1>Dashboard</h1>
 
     <form>
-        <select class="form-select" aria-label="Default select example" id="comp">
-            <option selected>Choose a competition</option>
-            {% for c in comps.keys() %}
-                <option value="{{ c }}" id="{{ c }}">{{ comps[c] }}</option>
-            {% endfor %}
-        </select>
         <input id="match" placeholder="Match" type="text">
         <button id="button" type="button">Submit</button>
     </form>
@@ -106,15 +100,4 @@
 
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script> -->
 <script src="/analysis/static/dashboard.js" type="text/javascript"></script>
-
-<script>
-    document.getElementById("comp").onchange = () => {
-        localStorage.setItem("comp", document.getElementById("comp").value)
-    }
-
-    var prevComp = localStorage.getItem("comp")
-    if (prevComp != undefined) {
-        document.getElementById(prevComp).setAttribute("selected", "true")
-    }
-</script>
 {% endblock %}

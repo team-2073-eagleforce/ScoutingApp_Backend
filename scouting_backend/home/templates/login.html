@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
 {% block body %}
-   <div style="text-align:center">
-   <h1>Scouting App Login</h1>
+<div style="text-align:center">
+    <h1>Scouting App Login</h1>
     <!-- <script src="https://accounts.google.com/gsi/client" async defer></script>
     <div id="g_id_onload"
         data-client_id="351274848173-0eepc6g5hc4ri03l67rql056p7e6g8nv.apps.googleusercontent.com"
@@ -17,16 +17,24 @@
         data-shape="rectangular"
         data-logo_alignment="left">
     </div> -->
-    {% if not session.get("name") %}
-      <form class="d-flex" role="search">
-      <button class="btn btn-outline-primary" type="button" onclick="location.assign('/analysis/authorize')">Login with Google</button>
-      </form>
-    {% else %}
-      <form class="d-flex" role="search">
-          Hello, {{ session.get("name") }}
-      </form>
-    {% endif %}
-  </div>
+    <select aria-label="Default select example" class="form-select" id="comp">
+        <option selected>Choose a competition</option>
+        {% for c in comps.keys() %}
+        <option id="{{ c }}" value="{{ c }}">{{ comps[c] }}</option>
+        {% endfor %}
+    </select>
+
+</div>
+<script>
+    document.getElementById("comp").onchange = () => {
+        localStorage.setItem("comp", document.getElementById("comp").value)
+    }
+
+    var prevComp = localStorage.getItem("comp")
+    if (prevComp != undefined) {
+        document.getElementById(prevComp).setAttribute("selected", "true")
+    }
+</script>
 
 
 {% endblock %}
