@@ -35,8 +35,5 @@ def create_app():
 
         # Make sure that table no longer exists if you want to update columns
         # db.create_all()
-        print("database created maybe?")
-
-        # compile_static_assets(assets)
 
         return app
