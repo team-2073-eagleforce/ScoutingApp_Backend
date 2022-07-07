@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, request, session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from scouting_backend.analysis.analysis import CONST_HOME_TEAM
+from scouting_backend.home.home import CONST_HOME_TEAM
 from scouting_backend.helpers import upload_image
 
 from .models import PitEntry, db

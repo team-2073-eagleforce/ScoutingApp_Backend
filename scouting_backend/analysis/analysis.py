@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 import os
-from scouting_backend.tba import get_match_schedule, get_match_team, get_comps
+from scouting_backend.tba import get_match_schedule, get_match_team
 
 
 import google.oauth2.credentials
@@ -58,7 +58,6 @@ conn = db()
 
 CONST_CLIMB_POINTS = [0, 4, 6, 10, 15]
 CONST_AUTO_CROSS = [0, 2]
-CONST_HOME_TEAM = 2073
 
 
 def get_teams_at_event(event):
@@ -69,8 +68,6 @@ def get_teams_at_event(event):
 def team_navigation():
     all_teams = get_teams_at_event("2022cafr")
     team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams}""".format(teams=all_teams)).fetchall()
-    for i in team_and_image:
-        print(i)
     return render_template("teams_navigation.html", teams=team_and_image)
 
 @login_required
@@ -288,5 +285,4 @@ def calculate_points(match):
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def analysis_dashboard():
-    comps = get_comps(CONST_HOME_TEAM, 2022)
-    return render_template("dashboard.html", comps=comps)
+    return render_template("dashboard.html")
