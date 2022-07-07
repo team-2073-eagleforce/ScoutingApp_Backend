@@ -170,7 +170,7 @@ def oauth2callback():
 
     session["email"] = r["email"]
 
-    return redirect(url_for('analysis_bp.google_sheet_rendering'))
+    return redirect('/')
 
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
