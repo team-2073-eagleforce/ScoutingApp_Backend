@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<title>Teams</title>
+{% endblock %}
+
+
+{% block body %}
+<table id="display_teams" class="table">
+    <thead>
+    <tr>
+        <th scope="col">Team</th>
+        <th scope="col">Image</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for team in teams %}
+        <tr>
+            <td>
+                <a href="/analysis/team/{{team[0]}}">
+                    <div>
+                        {{team[0]}}
+                    </div>
+                </a>
+            </td>
+            <td>
+                <img src="{{team[1]}}" alt="{{team[0]}} Image" style="width:10%; height:10%">
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<script src="/analysis/static/teams_navigation.js"> </script>
+{% endblock %}

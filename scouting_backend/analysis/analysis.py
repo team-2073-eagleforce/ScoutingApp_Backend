@@ -16,7 +16,7 @@ import json
 
 import numpy as np
 from scouting_backend.constants import AUTHORIZED_EMAIL
-from helpers import login_required
+from scouting_backend.helpers import login_required
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
@@ -60,10 +60,18 @@ CONST_CLIMB_POINTS = [0, 4, 6, 10, 15]
 CONST_AUTO_CROSS = [0, 2]
 CONST_HOME_TEAM = 2073
 
+
+def get_teams_at_event(event):
+    return tuple(int(team['team_number']) for team in get_match_team(event))
+
 @login_required
-@analysis_bp.route("/matchSchedule", methods=["GET", "POST"])
-def matchSchedule():
-    return render_template("dashboard/templates/matchSchedule.html")
+@analysis_bp.route("/team")
+def team_navigation():
+    all_teams = get_teams_at_event("2022cafr")
+    team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams}""".format(teams=all_teams)).fetchall()
+    for i in team_and_image:
+        print(i)
+    return render_template("teams_navigation.html", teams=team_and_image)
 
 @login_required
 @analysis_bp.route("/team/<int:team>", methods=["GET"])
@@ -189,20 +197,19 @@ def rankings_list():
 @analysis_bp.route("/sorter", methods=['GET', 'POST'])
 def sorter():
     sort_by = request.form['button_selected']
-    all_teams = tuple(int(team['team_number']) for team in get_match_team('2022cafr'))
+    all_teams = get_teams_at_event("2022cafr")
     team_data_for_selected = dict(zip(all_teams, fetch_sql_for_rankings(all_teams, sort_by)))
     return jsonify(team_data_for_selected)
 
 
 def fetch_sql_for_rankings(all_teams, sort_by):
-    a = {'by_auto': '"team", "autocrossing", "autoupper", "autobottom"', 'by_teleop': '"team", "teleupper", "telebottom"',
+    corresponding_data_fields = {'by_auto': '"team", "autocrossing", "autoupper", "autobottom"', 'by_teleop': '"team", "teleupper", "telebottom"',
          'by_climb': '"team", "level"', 'by_total': '"team", "autocrossing", "autoupper", "autobottom", "teleupper", "telebottom", "level"'}
 
-    team_with_selected_data_values = db.execute("""SELECT {sort_by} FROM scouting WHERE team IN {teams}""".format(sort_by=a[sort_by], teams=all_teams)).fetchall()
+    team_with_selected_data_values = db.execute("""SELECT {sort_by} FROM scouting WHERE team IN {teams}""".format(sort_by=corresponding_data_fields[sort_by], teams=all_teams)).fetchall()
     dic_team_with_average = dict(zip(all_teams, ([0] * 2 for team in range(len(all_teams)))))
 
     for match in team_with_selected_data_values:
-        print(match)
         score_points = [[0, 2, 4, 2], [0, 2, 1], [0, 2, 4, 2, 2, 1, 0]]
         team_score_for_datatype = dic_team_with_average[match[0]]
 
