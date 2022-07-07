@@ -17,16 +17,6 @@
         data-shape="rectangular"
         data-logo_alignment="left">
     </div> -->
-    {% if not session.get("name") %}
-    <form class="d-flex" role="search">
-        <button class="btn btn-outline-primary" onclick="location.assign('/analysis/authorize')" type="button">Login with Google
-        </button>
-    </form>
-    {% else %}
-    <form class="d-flex" role="search">
-        Hello, {{ session.get("name") }}
-    </form>
-    {% endif %}
     <select aria-label="Default select example" class="form-select" id="comp">
         <option selected>Choose a competition</option>
         {% for c in comps.keys() %}
