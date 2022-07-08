@@ -1,44 +1,52 @@
 {% extends "layout.html" %}
 
 {% block head %}
-  <title>Team {{ team }}</title>
+<title>Team {{ team }}</title>
 {% endblock %}
 
 {% block body %}
-  <h1>Team {{ team }}'s Data</h1>
-  <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Match Number</th>
-          <th>Auto Cross</th>
-          <th>Auto Upper</th>
-          <th>Auto Bottom</th>
-          <th>Teleop Upper</th>
-          <th>Teleop Bottom</th>
-          <th>Climb Level</th>
-          <th>Driver Performance</th>
-          <th>Defense Performance</th>
-          <th>Name</th>
-          <th>Comments</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for m in matches %}
-          <tr>
-              <th scope="row">{{ m[2] }}</th>
-              <td>{{ m[3] }}</td>
-              <td>{{ m[4] }}</td>
-              <td>{{ m[5] }}</td>
-              <td>{{ m[6] }}</td>
-              <td>{{ m[7] }}</td>
-              <td>{{ m[8] }}</td>
-              <td>{{ m[9] }}</td>
-              <td>{{ m[10] }}</td>
-              <td>{{ m[11] }}</td>
-              <td>{{ m[12] }}</td>
-          </tr>
-        {% endfor %}
+<h1>Team {{ team }}'s Data</h1>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Match</th>
+        <th>Cross</th>
+        <th>Auto Upper</th>
+        <th>Auto Bottom</th>
+        <th>Total Auto</th>
+        <th>Teleop Upper</th>
+        <th>Teleop Bottom</th>
+        <th>Total Teleop</th>
+        <th>Climb Level</th>
+        <th>Total Climb</th>
+        <th>Total Points</th>
+        <th>Driver</th>
+        <th>Defense</th>
+        <th>Name</th>
+        <th>Comments</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for m in matches %}
+    <tr>
+        <th scope="row">{{ m[2] }}</th>
+        <td>{{ m[3] }}</td>
+        <td>{{ m[4] }}</td>
+        <td>{{ m[5] }}</td>
+        <td>{{ m[6] }}</td>
+        <td>{{ m[7] }}</td>
+        <td>{{ m[8] }}</td>
+        <td>{{ m[9] }}</td>
+        <td>{{ m[10] }}</td>
+        <td>{{ m[11] }}</td>
+        <td>{{ m[12] }}</td>
+        <td>{{ m[13] }}</td>
+        <td>{{ m[14] }}</td>
+        <td>{{ m[15] }}</td>
+        <td>{{ m[16] }}</td>
+    </tr>
+    {% endfor %}
 
-      </tbody>
-  </table>
+    </tbody>
+</table>
 {% endblock %}
