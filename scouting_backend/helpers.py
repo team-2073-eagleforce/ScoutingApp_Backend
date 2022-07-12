@@ -12,7 +12,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         print(session.get('email'))
         if session.get("email") is None:
-            return redirect("/analysis/authorize")
+            return redirect("/google/authorize")
         return f(*args, **kwargs)
     return decorated_function
 
