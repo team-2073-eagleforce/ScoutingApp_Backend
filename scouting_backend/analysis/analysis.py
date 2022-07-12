@@ -66,8 +66,15 @@ def get_teams_at_event(event):
 @login_required
 @analysis_bp.route("/team")
 def team_navigation():
-    all_teams = get_teams_at_event("2022cafr")
-    team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams}""".format(teams=all_teams)).fetchall()
+    comp = request.args.get("code")
+
+    # In case someone visited /team directly, which requires a query string code, for error catching
+    if comp == None:
+        all_teams = []
+        team_and_image = []
+    else:
+        all_teams = get_teams_at_event(comp)
+        team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams}""".format(teams=all_teams)).fetchall()
     return render_template("teams_navigation.html", teams=team_and_image)
 
 @login_required

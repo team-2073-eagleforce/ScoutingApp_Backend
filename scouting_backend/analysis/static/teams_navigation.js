@@ -1,3 +1,8 @@
+var params = new URLSearchParams(window.location.search)
+if (params.get("code") == null) {
+    window.location.replace(`/analysis/team?code=${localStorage.getItem('comp')}`)
+}
+
 sortTable("display_teams")
 
 function sortTable(table_to_sort){
