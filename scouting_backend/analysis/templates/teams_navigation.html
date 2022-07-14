@@ -6,6 +6,7 @@
 
 
 {% block body %}
+<!--Don't use another div-->
 <table id="display_teams" class="table">
     <thead>
     <tr>
@@ -14,17 +15,19 @@
     </tr>
     </thead>
     <tbody>
-    {% for team in teams %}
+    {% for team in all_teams %}
         <tr>
             <td>
-                <a href="/analysis/team/{{team[0]}}">
+                <a href="/analysis/team/{{team}}">
                     <div>
-                        {{team[0]}}
+                        {{team}}
                     </div>
                 </a>
             </td>
             <td>
-                <img src="{{team[1]}}" alt="{{team[0]}} Image" style="width:10%; height:10%">
+                {% if team in teams %}
+                <img src="{{teams[team]}}" alt="{{team[team]}} Image" style="width:10%; height:10%">
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

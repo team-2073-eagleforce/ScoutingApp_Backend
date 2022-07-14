@@ -6,7 +6,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from scouting_backend.helpers import login_required
-from scouting_backend.tba import get_match_schedule, get_match_team
+from scouting_backend.tba import get_match_schedule, get_match_team, get_comps
+from scouting_backend.constants import CONST_HOME_TEAM, CONST_YEAR
 
 analysis_bp = Blueprint(
     'analysis_bp', __name__,
@@ -21,6 +22,7 @@ conn = db()
 CONST_CLIMB_POINTS = [0, 4, 6, 10, 15]
 CONST_AUTO_CROSS = [0, 2]
 
+comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
 def get_teams_at_event(event):
     return tuple(int(team['team_number']) for team in get_match_team(event))
@@ -37,7 +39,9 @@ def team_navigation():
     else:
         all_teams = get_teams_at_event(comp)
         team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams}""".format(teams=all_teams)).fetchall()
-    return render_template("teams_navigation.html", teams=team_and_image)
+        results = {team[0]: team[1] for team in team_and_image}
+
+    return render_template("teams_navigation.html", teams=results, all_teams=all_teams, comps=comps)
 
 @login_required
 @analysis_bp.route("/team/<int:team>", methods=["GET"])
@@ -54,12 +58,12 @@ def view_team_data(team):
         convert_match_to_list.insert(12, points_per_section[3])
 
         matches_with_calculated_scores.append(convert_match_to_list)
-    return render_template("team.html", matches=matches_with_calculated_scores, team=team)
+    return render_template("team.html", matches=matches_with_calculated_scores, team=team, comps=comps)
 
 
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
 def rankings_list():
-    return render_template("rankings.html")
+    return render_template("rankings.html", comps=comps)
 
 
 @analysis_bp.route("/sorter", methods=['GET', 'POST'])
@@ -162,4 +166,4 @@ def calculate_points(match):
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def analysis_dashboard():
-    return render_template("dashboard.html")
+    return render_template("dashboard.html", comps=comps)

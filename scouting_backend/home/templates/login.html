@@ -16,29 +16,8 @@
         data-text="sign_in_with"
         data-shape="rectangular"
         data-logo_alignment="left">
-    </div> --> 
-    <select aria-label="Default select example" class="form-select" id="comp">
-        {% for c in comps.keys() %}
-            <option id="{{ c }}" value="{{ c }}">{{ comps[c] }}</option>
-        {% endfor %}
-    </select>
-
+    </div> -->
 </div>
-
-<script>
-    localStorage.setItem("comp", document.getElementById("comp").value)
-    document.getElementById("team-url").setAttribute("href", `/analysis/team?code=${document.getElementById('comp').value}`)
-
-    document.getElementById("comp").onchange = () => {
-        localStorage.setItem("comp", document.getElementById("comp").value)
-        document.getElementById("team-url").setAttribute("href", `/analysis/team?code=${document.getElementById('comp').value}`)
-    }
-
-    var prevComp = localStorage.getItem("comp")
-    if (prevComp != undefined) {
-        document.getElementById(prevComp).setAttribute("selected", "true")
-    }
-</script>
 
 
 {% endblock %}

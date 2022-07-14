@@ -1,14 +1,16 @@
 import os
-from click import edit
-from flask import render_template, Blueprint, request, session, jsonify
-from sheet import create_new_sheet, edit_sheet, get_all_sheets
-from tba import get_match_team
 
-from .models import db, matchEntry
-from scouting_backend.analysis.analysis import db, conn
+from flask import render_template, Blueprint, request, session, jsonify
+from sheet import edit_sheet, get_all_sheets
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from tba import get_match_team
 
+from scouting_backend.analysis.analysis import db, conn
+from scouting_backend.home.home import CONST_HOME_TEAM
+from .models import db
+from ..tba import get_comps
+from scouting_backend.constants import CONST_HOME_TEAM, CONST_YEAR
 
 retrieval_bp = Blueprint(
     'retrieval_bp', __name__,
@@ -21,6 +23,7 @@ db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 c = conn
 
+comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
 @retrieval_bp.route("/qrScanner", methods=["GET", "POST"])
 def qrScanner():
@@ -70,7 +73,7 @@ def test():
     #     db.session.add(match)
     #     db.session.commit()
 
-    return render_template('QRScanner.html')
+    return render_template('QRScanner.html', comps=comps)
 
 
 @retrieval_bp.route("/thebluealliance")
