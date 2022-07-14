@@ -36,6 +36,7 @@ def team_navigation():
     if comp == None:
         all_teams = []
         team_and_image = []
+        results = []
     else:
         all_teams = get_teams_at_event(comp)
         team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams}""".format(teams=all_teams)).fetchall()

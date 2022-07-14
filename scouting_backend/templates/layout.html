@@ -73,7 +73,12 @@
     document.getElementById("comp").onchange = () => {
         localStorage.setItem("comp", document.getElementById("comp").value)
         document.getElementById("team-url").setAttribute("href", `/analysis/team?code=${document.getElementById('comp').value}`)
-        location.reload()
+        if (window.location.pathname == "/analysis/team") {
+            console.log("hola")
+            location.assign(`/analysis/team?code=${document.getElementById('comp').value}`)
+        } else {
+            location.reload()
+        }
     }
 
     var prevComp = localStorage.getItem("comp")

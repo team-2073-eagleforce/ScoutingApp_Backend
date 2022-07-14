@@ -9,7 +9,6 @@ function sortTable(table_to_sort){
     switching = true;
 
     while (switching) {
-        console.log("Hi")
         // Start by saying: no switching is done:
         switching = false;
         rows = table.rows;
