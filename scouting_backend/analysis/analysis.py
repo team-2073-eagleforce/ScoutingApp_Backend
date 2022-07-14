@@ -69,7 +69,8 @@ def rankings_list():
 @analysis_bp.route("/sorter", methods=['GET', 'POST'])
 def sorter():
     sort_by = request.form['button_selected']
-    all_teams = get_teams_at_event("2022cafr")
+    comp = request.form["comp"]
+    all_teams = get_teams_at_event(comp)
     team_data_for_selected = dict(zip(all_teams, fetch_sql_for_rankings(all_teams, sort_by)))
     return jsonify(team_data_for_selected)
 

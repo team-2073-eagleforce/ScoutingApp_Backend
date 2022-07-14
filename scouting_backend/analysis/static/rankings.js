@@ -41,7 +41,8 @@ function selector(sortby, has_been_clicked, table_type) {
         document.getElementById(table_type).style.display = "table"
     } else {
         $.post("/analysis/sorter", {
-            button_selected: sortby
+            button_selected: sortby,
+            comp: localStorage.getItem("comp")
         }, function (data) {
             for (let i = 0; i < Object.keys(data).length; i++) {
                 var tr = document.createElement("TR");

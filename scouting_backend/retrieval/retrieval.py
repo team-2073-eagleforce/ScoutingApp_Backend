@@ -27,7 +27,7 @@ comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
 @retrieval_bp.route("/qrScanner", methods=["GET", "POST"])
 def qrScanner():
-    return render_template('QRScanner.html')
+    return render_template('QRScanner.html', comps=comps)
 
 
 @retrieval_bp.route('/detectScan', methods=['POST'])
