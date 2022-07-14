@@ -14,3 +14,6 @@ AUTHORIZED_EMAIL = [
     "matt.beaudin@team2073.com",
     "garrett.hernandez@team2073.com",
 ]
+
+CONST_HOME_TEAM = 2073
+CONST_YEAR = 2022
