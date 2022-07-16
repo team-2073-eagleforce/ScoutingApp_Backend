@@ -3,6 +3,11 @@ if (params.get("code") == null) {
     window.location.replace(`/analysis/team?code=${localStorage.getItem('comp')}`)
 }
 
+var urls = document.getElementsByClassName("team-nav-urls")
+for (let i=0; i<urls.length; i++) {
+    urls[i].href += `?code=${localStorage.getItem('comp')}`
+}
+
 function sortTable(table_to_sort){
     var table, rows, switching, i, x, y, shouldSwitch;
     table = document.getElementById(table_to_sort);

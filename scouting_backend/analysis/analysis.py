@@ -47,7 +47,8 @@ def team_navigation():
 @login_required
 @analysis_bp.route("/team/<int:team>", methods=["GET"])
 def view_team_data(team):
-    matches = db.execute("SELECT * FROM scouting WHERE team=:team ORDER BY matchnumber ASC", {"team": team})
+    comp_code = request.args.get("comp")
+    matches = db.execute("SELECT * FROM scouting WHERE team=:team AND comp_code=:comp ORDER BY matchnumber ASC", {"team": team, "comp": comp_code})
     matches_with_calculated_scores = []
 
     for match_num, match in enumerate(matches):
