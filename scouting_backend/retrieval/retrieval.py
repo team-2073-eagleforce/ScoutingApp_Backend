@@ -37,10 +37,9 @@ def test():
     existing_match = db.execute('SELECT * FROM scouting WHERE team=:team AND "matchnumber"=:matchNumber AND "comp_code"=:comp', {"team": QRData[0], "matchNumber": QRData[1], "comp": QRData[12]}).fetchall()
 
     if len(existing_match) == 0:
-        c.execute('INSERT INTO scouting (team, "matchnumber", "comp_code", "autocrossing", "autoupper", "autobottom", "teleupper", "telebottom", "level", "driverperf", "defenseperf", "name", "comment") VALUES (:t, :m, :comp, :ac, :au, :ab, :tu, :tb, :l, :dp, :dep, :name, :co)', {
+        c.execute('INSERT INTO scouting (team, "matchnumber", "autocrossing", "autoupper", "autobottom", "teleupper", "telebottom", "level", "driverperf", "defenseperf", "name", "comment", "comp_code") VALUES (:t, :m, :ac, :au, :ab, :tu, :tb, :l, :dp, :dep, :name, :co, :comp)', {
             "t": QRData[0],
             "m": QRData[1],
-            "comp": QRData[12],
             "ac": QRData[2],
             "au": QRData[3],
             "ab": QRData[4],
@@ -51,6 +50,7 @@ def test():
             "dep": QRData[9],
             "name": QRData[10],
             "co": QRData[11],
+            "comp": QRData[12],
         })
         conn.commit()
 
