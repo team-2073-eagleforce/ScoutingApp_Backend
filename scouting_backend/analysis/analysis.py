@@ -25,6 +25,7 @@ CONST_AUTO_CROSS = [0, 2]
 comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
 def get_teams_at_event(event):
+    print(event)
     return tuple(int(team['team_number']) for team in get_match_team(event))
 
 @login_required
@@ -33,7 +34,7 @@ def team_navigation():
     comp = request.args.get("code")
 
     # In case someone visited /team directly, which requires a query string code, for error catching
-    if comp == None:
+    if comp is None:
         all_teams = []
         team_and_image = []
         results = []
@@ -52,7 +53,7 @@ def view_team_data(team):
     pit = db.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp", {"team": team, "comp": comp_code}).fetchall()
     matches_with_calculated_scores = []
 
-    for match_num, match in enumerate(matches):
+    for match in matches:
         convert_match_to_list = list(match)
         points_per_section = calculate_points(match)
         convert_match_to_list.insert(6, points_per_section[0])
@@ -69,46 +70,34 @@ def view_team_data(team):
 
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
 def rankings_list():
-    return render_template("rankings.html", comps=comps)
+    comp = request.args.get("code")
+    if comp is None:
+        all_teams = []
+        dic_team_with_average = {}
+    else:
+        all_teams = get_teams_at_event(comp)
+        team_with_selected_data_values = db.execute("""SELECT * FROM scouting WHERE team IN {teams}""".format(teams=all_teams)).fetchall()
 
+        dic_team_with_average = dict(zip(all_teams, ([0] * 7 for team in range(len(all_teams)))))
+        for match in team_with_selected_data_values:
+            team_score = dic_team_with_average[match[1]]
 
-@analysis_bp.route("/sorter", methods=['GET', 'POST'])
-def sorter():
-    sort_by = request.form['button_selected']
-    comp = request.form["comp"]
-    all_teams = get_teams_at_event(comp)
-    team_data_for_selected = dict(zip(all_teams, fetch_sql_for_rankings(all_teams, sort_by)))
-    return jsonify(team_data_for_selected)
+            calculated_scores = calculate_points(match)
+            team_score[0] += calculated_scores[0]
+            team_score[1] += calculated_scores[1]
+            team_score[2] += calculated_scores[2]
+            team_score[3] += calculated_scores[3]
+            team_score[4] += match[9]
+            team_score[5] += match[10]
+            team_score[6] += 1
 
-
-def fetch_sql_for_rankings(all_teams, sort_by):
-    corresponding_data_fields = {'by_auto': '"team", "autocrossing", "autoupper", "autobottom"', 'by_teleop': '"team", "teleupper", "telebottom"',
-         'by_climb': '"team", "level"', 'by_total': '"team", "autocrossing", "autoupper", "autobottom", "teleupper", "telebottom", "level"'}
-
-    team_with_selected_data_values = db.execute("""SELECT {sort_by} FROM scouting WHERE team IN {teams}""".format(sort_by=corresponding_data_fields[sort_by], teams=all_teams)).fetchall()
-    dic_team_with_average = dict(zip(all_teams, ([0] * 2 for team in range(len(all_teams)))))
-
-    for match in team_with_selected_data_values:
-        score_points = [[0, 2, 4, 2], [0, 2, 1], [0, 2, 4, 2, 2, 1, 0]]
-        team_score_for_datatype = dic_team_with_average[match[0]]
-
-        if sort_by == "by_auto":
-            team_score_for_datatype[0] += sum(np.multiply(match, score_points[0]))
-        elif sort_by == "by_teleop":
-            team_score_for_datatype[0] += sum(np.multiply(match, score_points[1]))
-        elif sort_by == "by_climb":
-            team_score_for_datatype[0] += CONST_CLIMB_POINTS[match[1]]
-        elif sort_by == "by_total":
-            team_score_for_datatype[0] += sum(np.multiply(match, score_points[2])) + CONST_CLIMB_POINTS[match[6]]
-        team_score_for_datatype[1] += 1
-
-    average_score_for_field = []
-    for score_sum in dic_team_with_average.values():
-        if score_sum[1] == 0:
-            score_sum[1] = 1
-        average_score_for_field.append(round(score_sum[0] / score_sum[1], 2))
-
-    return average_score_for_field
+        for score_sum in dic_team_with_average.values():
+            if score_sum[-1] == 0:
+                score_sum[-1] = 1
+            for score_index in range(len(score_sum[:-1])):
+                score_sum[score_index] = (round(score_sum[score_index] / score_sum[-1], 2))
+        print(dic_team_with_average)
+    return render_template("rankings.html", calculated_averages=dic_team_with_average, comps=comps)
 
 
 @analysis_bp.route("/api/get_match_schedule/<string:event_key>/<string:match_num>")
@@ -169,6 +158,7 @@ def calculate_points(match):
     points_per_section.append(sum(points_per_section))
 
     return points_per_section
+
 
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 @login_required
