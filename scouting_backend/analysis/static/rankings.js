@@ -1,4 +1,18 @@
-function sortTable(n) {
+var prevClassName
+function sortTable(n, className) {
+  var tags = document.getElementsByClassName(className)
+  for (let i=0; i<tags.length; i++) {
+    tags[i].setAttribute("style", "background-color: LightGreen;")
+  }
+
+  if (prevClassName != undefined && prevClassName != className) {
+    var tags = document.getElementsByClassName(prevClassName)
+    for (let i=0; i<tags.length; i++) {
+      tags[i].setAttribute("style", "background-color: white;")
+    }
+  }
+  prevClassName = className
+
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
   table = document.getElementById("rankings_table");
   switching = true;

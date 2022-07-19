@@ -11,24 +11,24 @@
         <thead>
         <tr>
             <th scope="col">Team</th>
-            <th onclick="sortTable(0)">Auto Average</th>
-            <th onclick="sortTable(1)">Teleop Average</th>
-            <th onclick="sortTable(2)">Climb Average</th>
-            <th onclick="sortTable(3)">Total Average</th>
-            <th onclick="sortTable(4)">Driver Average</th>
-            <th onclick="sortTable(5)">Defense Average</th>
+            <th onclick="sortTable(0, 'auto')">Auto Average</th>
+            <th onclick="sortTable(1, 'teleop')">Teleop Average</th>
+            <th onclick="sortTable(2, 'climb')">Climb Average</th>
+            <th onclick="sortTable(3, 'total')">Total Average</th>
+            <th onclick="sortTable(4, 'driver')">Driver Average</th>
+            <th onclick="sortTable(5, 'defense')">Defense Average</th>
         </tr>
         </thead>
         <tbody>
         {% for team in calculated_averages %}
         <tr class="data">
             <th scope="row">{{ team }}</th>
-            <td>{{ calculated_averages[team][0] }}</td>
-            <td>{{ calculated_averages[team][1] }}</td>
-            <td>{{ calculated_averages[team][2] }}</td>
-            <td>{{ calculated_averages[team][3] }}</td>
-            <td>{{ calculated_averages[team][4] }}</td>
-            <td>{{ calculated_averages[team][5] }}</td>
+            <td class="auto">{{ calculated_averages[team][0] }}</td>
+            <td class="teleop">{{ calculated_averages[team][1] }}</td>
+            <td class="climb">{{ calculated_averages[team][2] }}</td>
+            <td class="total">{{ calculated_averages[team][3] }}</td>
+            <td class="driver">{{ calculated_averages[team][4] }}</td>
+            <td class="defense">{{ calculated_averages[team][5] }}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -40,5 +40,5 @@
         window.location.replace(`/analysis/rankings?code=${localStorage.getItem('comp')}`)
     }
 </script>
-    <script src="/analysis/static/rankings.js"></script>
+<script src="/analysis/static/rankings.js"></script>
 {% endblock %}
