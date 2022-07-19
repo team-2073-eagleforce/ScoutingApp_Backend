@@ -26,3 +26,12 @@ def upload_image(file):
     r = cloudinary.uploader.upload(file)
     img_url = r["secure_url"]
     return img_url
+
+def create_message(email_text):
+    import sendgrid
+    return sendgrid.helpers.mail.Mail(
+        from_email=os.environ["FROM_EMAIL"],
+        to_emails=os.environ["TO_EMAIL"],
+        subject='SCOUTING APP V2 - unhandled exception occurred!',
+        plain_text_content=email_text,
+    )
