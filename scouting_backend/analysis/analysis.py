@@ -68,8 +68,8 @@ def view_team_data(team):
     return render_template("team.html", matches=matches_with_calculated_scores, team=team, comps=comps, pit=pit)
 
 
-@analysis_bp.route("/rankings", methods=['GET', 'POST'])
 @login_required
+@analysis_bp.route("/rankings", methods=['GET', 'POST'])
 def rankings_list():
     comp = request.args.get("code")
     if comp is None:
@@ -160,8 +160,7 @@ def calculate_points(match):
 
     return points_per_section
 
-
-@analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 @login_required
+@analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 def analysis_dashboard():
     return render_template("dashboard.html", comps=comps)

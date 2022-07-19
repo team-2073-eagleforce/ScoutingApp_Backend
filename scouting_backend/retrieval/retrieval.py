@@ -2,6 +2,7 @@ import os
 import traceback
 
 from flask import render_template, Blueprint, request, session, jsonify
+from scouting_backend.helpers import login_required
 from sheet import edit_sheet, get_all_sheets
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -25,12 +26,13 @@ conn = db()
 c = conn
 comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
-@retrieval_bp.route("/qrScanner", methods=["GET", "POST"])
 @login_required
+@retrieval_bp.route("/qrScanner", methods=["GET", "POST"])
 def qrScanner():
     return render_template('QRScanner.html', comps=comps)
 
 
+@login_required
 @retrieval_bp.route('/detectScan', methods=['POST'])
 def test():
     QRData = request.form['data'].split(',')
@@ -77,7 +79,7 @@ def test():
 
     return render_template('QRScanner.html', comps=comps)
 
-
+@login_required
 @retrieval_bp.route("/thebluealliance")
 def get_match_schedule():
     t = []
@@ -97,6 +99,7 @@ def get_match_schedule():
 
     return "Success maybe"
 
+@login_required
 @retrieval_bp.route("/testing-sheet-api")
 def testing_sheet_api():
     sheets = get_all_sheets(session)
