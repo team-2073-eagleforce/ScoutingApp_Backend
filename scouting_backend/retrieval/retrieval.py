@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from flask import render_template, Blueprint, request, session, jsonify
 from sheet import edit_sheet, get_all_sheets
@@ -22,7 +23,6 @@ engine = create_engine("postgresql://" + os.getenv("DATABASE_URL").split("://")[
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 c = conn
-
 comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
 @retrieval_bp.route("/qrScanner", methods=["GET", "POST"])
@@ -114,3 +114,4 @@ def upload_data_to_sheet(session, data):
 @retrieval_bp.route("/error")
 def error_causing_page():
     return 5 / 0
+

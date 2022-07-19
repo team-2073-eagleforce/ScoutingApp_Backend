@@ -6,6 +6,25 @@
 
 {% block body %}
 <h1>Team {{ team }}'s Data</h1>
+<div class="row">
+    <div class="col-3">
+        {% if pit[0][11] != 'N/A' %}
+            <img src="{{ pit[0][11] }}" class="img-thumbnail" > <!-- width="200px" height="200px"  -->
+        {% else %}
+            <img src="https://res.cloudinary.com/team2073-eagleforce/image/upload/v1658264240/th_vmkqqc.jpg" class="img-thumbnail">
+        {% endif %}
+    </div>
+    <div class="col-9">
+        <span><b>Drivetrain: </b>{{ pit[0][3] }}</span> <br>
+        <span><b>Offensive or Defense: </b>{{ pit[0][4] }}</span> <br>
+        <span><b>Prefered Scoring Location: </b> {{ pit[0][5] }}</span> <br>
+        <span><b>Auto: </b> {{ pit[0][6] }}</span> <br>
+        <span><b>Hub: </b> {{ pit[0][7] }}</span> <br>
+        <span><b>Climb: </b> {{ pit[0][8] }}</span> <br>
+        <span><b>Submitted by: </b> {{ pit[0][10] }}</span> <br>
+        <span><b>Comments: </b> {{ pit[0][9] }}</span>
+    </div>
+</div>
 <table class="table" id="table">
     <thead>
     <tr>
