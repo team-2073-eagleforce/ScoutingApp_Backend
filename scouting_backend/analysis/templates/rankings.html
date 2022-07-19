@@ -7,41 +7,38 @@
 {% block body %}
 <div class="container">
     <h1>Rankings</h1>
-
-    <form>
-        <button id="by_auto" type="button">By Autos</button>
-        <button id="by_teleop" type="button">By Teleop</button>
-        <button id="by_climb" type="button">By Climb</button>
-        <button id="by_total" type="button">By Total Points</button>
-    </form>
-
-    <table id="auto" class="table">
-        <tr>
-            <th>Team</th>
-            <th>Auto Points</th>
-        </tr>
-    </table>
-
-    <table id="teleop" class="table">
+    <table class="table" id="rankings_table">
+        <thead>
         <tr>
             <th scope="col">Team</th>
-            <th scope="col">Teleop Points</th>
+            <th onclick="sortTable(0)">Auto Average</th>
+            <th onclick="sortTable(1)">Teleop Average</th>
+            <th onclick="sortTable(2)">Climb Average</th>
+            <th onclick="sortTable(3)">Total Average</th>
+            <th onclick="sortTable(4)">Driver Average</th>
+            <th onclick="sortTable(5)">Defense Average</th>
         </tr>
-    </table>
-
-    <table id="climb" class="table">
-        <tr>
-            <th>Team</th>
-            <th>Climb Points</th>
+        </thead>
+        <tbody>
+        {% for team in calculated_averages %}
+        <tr class="data">
+            <th scope="row">{{ team }}</th>
+            <td>{{ calculated_averages[team][0] }}</td>
+            <td>{{ calculated_averages[team][1] }}</td>
+            <td>{{ calculated_averages[team][2] }}</td>
+            <td>{{ calculated_averages[team][3] }}</td>
+            <td>{{ calculated_averages[team][4] }}</td>
+            <td>{{ calculated_averages[team][5] }}</td>
         </tr>
-    </table>
-
-    <table id="total" class="table">
-        <tr>
-            <th>Team</th>
-            <th>Total Points</th>
-        </tr>
+        {% endfor %}
+        </tbody>
     </table>
 </div>
+<script>
+    var params = new URLSearchParams(window.location.search)
+    if (params.get("code") == null) {
+        window.location.replace(`/analysis/rankings?code=${localStorage.getItem('comp')}`)
+    }
+</script>
     <script src="/analysis/static/rankings.js"></script>
 {% endblock %}

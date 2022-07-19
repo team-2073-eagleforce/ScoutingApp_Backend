@@ -24,7 +24,7 @@
                     <a class="nav-link active" href="/retrieval/qrScanner">QR Scanner</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/analysis/team" id="team-url">Team</a>
+                    <a class="nav-link active" href="/analysis/team" id="team-url">Teams</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="/analysis/rankings">Rankings</a>
@@ -76,6 +76,8 @@
             location.assign(`/analysis/team?code=${document.getElementById('comp').value}`)
         } else if (window.location.pathname.split("/")[1] == "analysis" && window.location.pathname.split("/")[2] == "team" && window.location.pathname.split("/").length == 4) {
             location.assign(`/analysis/team/${window.location.pathname.split("/")[3]}?code=${document.getElementById('comp').value}`)
+        } else if (window.location.pathname == "/analysis/rankings") {
+            location.assign(`/analysis/rankings?code=${document.getElementById('comp').value}`)
         } else {
             location.reload()
         }
