@@ -69,6 +69,7 @@ def view_team_data(team):
 
 
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
+@login_required
 def rankings_list():
     comp = request.args.get("code")
     if comp is None:
