@@ -6,7 +6,7 @@
 
 {% block body %}
 <h1>Team {{ team }}'s Data</h1>
-<table class="table">
+<table class="table" id="table">
     <thead>
     <tr>
         <th scope="col">Match</th>
@@ -28,20 +28,20 @@
     </thead>
     <tbody>
     {% for m in matches %}
-    <tr>
+    <tr class="data">
         <th scope="row">{{ m[2] }}</th>
-        <td>{{ m[3] }}</td>
-        <td>{{ m[4] }}</td>
-        <td>{{ m[5] }}</td>
-        <td>{{ m[6] }}</td>
-        <td>{{ m[7] }}</td>
-        <td>{{ m[8] }}</td>
-        <td>{{ m[9] }}</td>
-        <td>{{ m[10] }}</td>
-        <td>{{ m[11] }}</td>
-        <td>{{ m[12] }}</td>
-        <td>{{ m[13] }}</td>
-        <td>{{ m[14] }}</td>
+        <td class="cross">{{ m[3] }}</td>
+        <td class="au">{{ m[4] }}</td>
+        <td class="ab">{{ m[5] }}</td>
+        <td class="ta">{{ m[6] }}</td>
+        <td class="tu">{{ m[7] }}</td>
+        <td class="tb">{{ m[8] }}</td>
+        <td class="tt">{{ m[9] }}</td>
+        <td class="level">{{ m[10] }}</td>
+        <td class="c">{{ m[11] }}</td>
+        <td class="tp">{{ m[12] }}</td>
+        <td class="driver">{{ m[13] }}</td>
+        <td class="defense">{{ m[14] }}</td>
         <td>{{ m[15] }}</td>
         <td>{{ m[16] }}</td>
     </tr>
@@ -49,4 +49,62 @@
 
     </tbody>
 </table>
+
+<script>
+    function calcAverage(className) {
+        const els = document.getElementsByClassName(className)
+        const nums = els.length
+        var total = 0
+        var res
+        for (let i=0; i<els.length; i++) {
+            total += parseInt(els[i].textContent) 
+        }
+        if (nums === 0) {
+            res = "N/A"
+        } else {
+            res = (total / nums).toFixed(2)
+        }
+        var td = document.createElement("td")
+        td.innerText = res
+
+        console.log(className, res, total, nums)
+        return td
+    }
+
+    var tdCounts = document.getElementsByTagName("td").length
+    if (tdCounts != 0) {
+        var crossAvg = calcAverage("cross")
+        var autoUpperAvg = calcAverage("au")
+        var autoBottomAvg = calcAverage("ab")
+        var totalAutoAvg = calcAverage("ta")
+        var teleopUpperAvg = calcAverage("tu")
+        var teleopBottomAvg = calcAverage("tb")
+        var totalTeleopAvg = calcAverage("tt")
+        var levelAvg = calcAverage("level")
+        var climbAvg = calcAverage("c")
+        var totalPointAvg = calcAverage("tp")
+        var driverAvg = calcAverage("driver")
+        var defenseAvg = calcAverage("defense")
+
+        var tr = document.createElement("tr")
+        var matchTd = document.createElement("td")
+        matchTd.innerText = "Avg"
+        tr.appendChild(matchTd)
+        crossAvg.setAttribute("class", "lol")
+        tr.appendChild(crossAvg)
+        tr.appendChild(autoUpperAvg)
+        tr.appendChild(autoBottomAvg)
+        tr.appendChild(totalAutoAvg)
+        tr.appendChild(teleopUpperAvg)
+        tr.appendChild(teleopBottomAvg)
+        tr.appendChild(totalTeleopAvg)
+        tr.appendChild(levelAvg)
+        tr.appendChild(climbAvg)
+        tr.appendChild(totalPointAvg)
+        tr.appendChild(driverAvg)
+        tr.appendChild(defenseAvg)
+        document.getElementById("table").appendChild(tr)
+    }
+    
+</script>
 {% endblock %}
