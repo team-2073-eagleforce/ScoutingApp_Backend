@@ -61,6 +61,9 @@ def view_team_data(team):
         convert_match_to_list.insert(12, points_per_section[3])
 
         matches_with_calculated_scores.append(convert_match_to_list)
+    
+    if len(pit) == 0:
+        pit = [["N/A" for i in range(12)]]
     return render_template("team.html", matches=matches_with_calculated_scores, team=team, comps=comps, pit=pit)
 
 
