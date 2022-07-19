@@ -39,3 +39,4 @@ Werkzeug==2.1.2
 sentry-sdk[flask]
 cloudinary
 rollbar
+sendgrid

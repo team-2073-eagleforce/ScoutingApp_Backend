@@ -49,6 +49,7 @@ def team_navigation():
 def view_team_data(team):
     comp_code = request.args.get("code")
     matches = db.execute("SELECT * FROM scouting WHERE team=:team AND comp_code=:comp ORDER BY matchnumber ASC", {"team": team, "comp": comp_code})
+    pit = db.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp", {"team": team, "comp": comp_code}).fetchall()
     matches_with_calculated_scores = []
 
     for match_num, match in enumerate(matches):
@@ -60,7 +61,7 @@ def view_team_data(team):
         convert_match_to_list.insert(12, points_per_section[3])
 
         matches_with_calculated_scores.append(convert_match_to_list)
-    return render_template("team.html", matches=matches_with_calculated_scores, team=team, comps=comps)
+    return render_template("team.html", matches=matches_with_calculated_scores, team=team, comps=comps, pit=pit)
 
 
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
