@@ -67,4 +67,11 @@ function sortTable(n, className) {
       }
     }
   }
+  
+  var elements = document.getElementsByClassName("rank")
+  for (let index=0; index<elements.length; index++){
+    elements[index].innerHTML = index+1;
+  }
 }
+
+
