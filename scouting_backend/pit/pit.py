@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from scouting_backend.home.home import CONST_HOME_TEAM
-from scouting_backend.helpers import upload_image
+from scouting_backend.helpers import login_required, upload_image
 
 from .models import PitEntry, db
 from scouting_backend.tba import get_comps
@@ -21,6 +21,7 @@ pit_bp = Blueprint(
 
 
 @pit_bp.route("/", methods=["GET", "POST"])
+@login_required
 def pit_submit():
     if request.method == "POST":
         print("LOOL")

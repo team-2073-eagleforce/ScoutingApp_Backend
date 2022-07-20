@@ -26,14 +26,14 @@ conn = db()
 c = conn
 comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
-@login_required
 @retrieval_bp.route("/qrScanner", methods=["GET", "POST"])
+@login_required
 def qrScanner():
     return render_template('QRScanner.html', comps=comps)
 
 
-@login_required
 @retrieval_bp.route('/detectScan', methods=['POST'])
+@login_required
 def test():
     QRData = request.form['data'].split(',')
     print(QRData)
@@ -79,7 +79,6 @@ def test():
 
     return render_template('QRScanner.html', comps=comps)
 
-@login_required
 @retrieval_bp.route("/thebluealliance")
 def get_match_schedule():
     t = []
@@ -99,7 +98,6 @@ def get_match_schedule():
 
     return "Success maybe"
 
-@login_required
 @retrieval_bp.route("/testing-sheet-api")
 def testing_sheet_api():
     sheets = get_all_sheets(session)

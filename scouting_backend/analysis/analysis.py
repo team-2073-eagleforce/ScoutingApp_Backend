@@ -28,8 +28,8 @@ def get_teams_at_event(event):
     print(event)
     return tuple(int(team['team_number']) for team in get_match_team(event))
 
-@login_required
 @analysis_bp.route("/team")
+@login_required
 def team_navigation():
     comp = request.args.get("code")
 
@@ -45,8 +45,8 @@ def team_navigation():
 
     return render_template("teams_navigation.html", teams=results, all_teams=all_teams, comps=comps)
 
-@login_required
 @analysis_bp.route("/team/<int:team>", methods=["GET"])
+@login_required
 def view_team_data(team):
     comp_code = request.args.get("code")
     matches = db.execute("SELECT * FROM scouting WHERE team=:team AND comp_code=:comp ORDER BY matchnumber ASC", {"team": team, "comp": comp_code})
@@ -68,8 +68,8 @@ def view_team_data(team):
     return render_template("team.html", matches=matches_with_calculated_scores, team=team, comps=comps, pit=pit)
 
 
-@login_required
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
+@login_required
 def rankings_list():
     comp = request.args.get("code")
     if comp is None:
@@ -160,7 +160,7 @@ def calculate_points(match):
 
     return points_per_section
 
-@login_required
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
+@login_required
 def analysis_dashboard():
     return render_template("dashboard.html", comps=comps)
