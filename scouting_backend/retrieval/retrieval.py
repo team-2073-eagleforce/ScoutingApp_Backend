@@ -11,7 +11,7 @@ from tba import get_match_team
 from scouting_backend.analysis.analysis import db, conn
 from scouting_backend.home.home import CONST_HOME_TEAM
 from .models import db
-from ..tba import get_comps
+from tba import get_comps
 from scouting_backend.constants import CONST_HOME_TEAM, CONST_YEAR
 
 retrieval_bp = Blueprint(

@@ -2,7 +2,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from googleapiclient import discovery
 
-SPREADSHEET_ID = '1cb7u43r9qbQg_tKyF8XVTSyu6CxLUnQPwCCTI1JAzCQ'
+SPREADSHEET_ID = '1VZlcq3AGvFD2UCURkmNp0FVrFHh1bEppPqjPTPhpedw'
 
 def edit_sheet(session, cell, data):
     credentials = google.oauth2.credentials.Credentials(
@@ -11,7 +11,6 @@ def edit_sheet(session, cell, data):
     service = discovery.build('sheets', 'v4', credentials=credentials)
   
   # The spreadsheet to request.
-    spreadsheet_id = '1cb7u43r9qbQg_tKyF8XVTSyu6CxLUnQPwCCTI1JAzCQ'  # TODO: Update placeholder value.
   
   # The A1 notation of the values to retrieve.
     range_ = cell 
@@ -26,7 +25,7 @@ def edit_sheet(session, cell, data):
   # The default dateTime render option is [DateTimeRenderOption.SERIAL_NUMBER].
     date_time_render_option = 'SERIAL_NUMBER'  # TODO: Update placeholder value.
   
-    request = service.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=range_, valueRenderOption=value_render_option, dateTimeRenderOption=date_time_render_option)
+    request = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=range_, valueRenderOption=value_render_option, dateTimeRenderOption=date_time_render_option)
     response = request.execute()
   
   # TODO: Change code below to process the `response` dict:
