@@ -13,7 +13,7 @@ api_bp = Blueprint(
 def index():
     comp_code = request.args.get("comp")
     res = []
-    results = c.execute("SELECT * FROM scouting WHERE comp_code=:comp", {"comp": comp_code}).fetchall()
+    results = c.execute("SELECT * FROM scouting WHERE comp_code=:comp ORDER BY team ASC, matchnumber ASC", {"comp": comp_code}).fetchall()
     for r in results:
         res.append(list(r))
         print(type(r))
