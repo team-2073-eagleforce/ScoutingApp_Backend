@@ -26,15 +26,20 @@ comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
 def get_teams_at_event(event):
     print(event)
+    if event == "testing":
+        return (2073)
     return tuple(int(team['team_number']) for team in get_match_team(event))
 
 @analysis_bp.route("/team")
 @login_required
 def team_navigation():
     comp = request.args.get("code")
-
+    if comp == "testing":
+        all_teams = [i+1 for i in range(9000)]
+        team_and_image = []
+        results = []
     # In case someone visited /team directly, which requires a query string code, for error catching
-    if comp is None:
+    elif comp is None:
         all_teams = []
         team_and_image = []
         results = []

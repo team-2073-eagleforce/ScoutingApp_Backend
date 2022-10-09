@@ -35,4 +35,5 @@ def get_comps(team, year=None):
     for r in res.json():
         comps[r["key"]] = r["short_name"]
     
+    comps["testing"] = "Demo/Training"
     return comps
