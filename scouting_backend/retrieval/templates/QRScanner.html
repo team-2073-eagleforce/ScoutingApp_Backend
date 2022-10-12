@@ -42,7 +42,7 @@
     var prevResult = ""
 
     function setResult(label, result) {
-        var data = result.data + "," + localStorage.getItem("comp")
+        var data = result.data // + "," + localStorage.getItem("comp")
         if (data != prevResult && !data.includes("error")) {
             // console.log(result.data);
             prevResult = data
