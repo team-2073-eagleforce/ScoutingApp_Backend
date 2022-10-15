@@ -11,13 +11,52 @@ X_TBA_Auth_Key = os.getenv("TBA_AUTH_KEY")
 
 def get_match_team(event_key):
     t = []
-    res = requests.get(f"https://www.thebluealliance.com/api/v3/event/{event_key}/teams", headers={
-        "X-TBA-Auth-Key": X_TBA_Auth_Key
-    })
-    j = res.json()
-    for team in res.json():
-        t.append(int(team["team_number"]))
-    
+
+    if event_key != "2022cacc":
+        res = requests.get(f"https://www.thebluealliance.com/api/v3/event/{event_key}/teams", headers={
+            "X-TBA-Auth-Key": X_TBA_Auth_Key
+        })
+        j = res.json()
+        for team in res.json():
+            t.append(int(team["team_number"]))
+    else:
+        j = [
+            {"team_number": 2288},
+            {"team_number": 5430},
+            {"team_number": 4698},
+            {"team_number": 3598},
+            {"team_number": 5274},
+            {"team_number": 1662},
+            {"team_number": 3189},
+            {"team_number": 8016},
+            {"team_number": 3257},
+            {"team_number": 5458},
+            {"team_number": 4643},
+            {"team_number": 1628},
+            {"team_number": 701},
+            {"team_number": 6918},
+            {"team_number": 3859},
+            {"team_number": 5817},
+            {"team_number": 2135},
+            {"team_number": 841},
+            {"team_number": 6662},
+            {"team_number": 6884},
+            {"team_number": 5940},
+            {"team_number": 8048},
+            {"team_number": 2643},
+            {"team_number": 6059},
+            {"team_number": 7777},
+            {"team_number": 199},
+            {"team_number": 5700},
+            {"team_number": 1072},
+            {"team_number": 114},
+            {"team_number": 7419},
+            {"team_number": 5924},
+            {"team_number": 7528},
+            {"team_number": 2551},
+            {"team_number": 1671},
+        ]
+
     data = db.execute("SELECT DISTINCT team FROM scouting WHERE comp_code=:comp", {"comp": event_key}).fetchall()
     print(data)
     for d in data:

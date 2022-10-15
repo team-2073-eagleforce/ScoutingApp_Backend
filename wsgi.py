@@ -2,8 +2,8 @@ from scouting_backend import create_app
 # from sentry_sdk.integrations.flask import FlaskIntegration
 # import sentry_sdk
 import os
-import rollbar
-import rollbar.contrib.flask
+#import rollbar
+#import rollbar.contrib.flask
 from flask import got_request_exception, request, session
 from werkzeug.exceptions import InternalServerError
 import traceback
