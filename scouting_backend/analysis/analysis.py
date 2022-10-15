@@ -121,9 +121,11 @@ def api_get_match_schedule(event_key, match_num):
 
 
 def fetch_sql_for_dashboard(teams):
+    teams = list(teams)
     for i in range(len(teams)):
         if teams[i] == "2073B":
             teams[i] = "9973"
+    teams = tuple(list(teams))
 
     matches_for_team = db.execute("""SELECT * FROM scouting WHERE team IN {teams}""".format(teams=teams)).fetchall()
     dic_matches_for_team = dict(zip(teams, ([int(teams[team])] + [0] * 7 for team in range(len(teams)))))
