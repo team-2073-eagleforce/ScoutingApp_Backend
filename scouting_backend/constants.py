@@ -7,6 +7,7 @@ AUTHORIZED_EMAIL = [
     "kent.young@team2073.com",
     "nathan.lee@team2073.com",
     "adam.kanemoto@team2073.com",
+    "breanna.tran@team2073.com",
     
     # mentors
     "nishan.sandhar@team2073.com",
