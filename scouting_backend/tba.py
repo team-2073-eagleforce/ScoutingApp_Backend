@@ -1,14 +1,31 @@
 import os
 import requests
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+
+engine = create_engine("postgresql://" + os.getenv("DATABASE_URL").split("://")[1])
+db = scoped_session(sessionmaker(bind=engine))
+conn = db()
 
 X_TBA_Auth_Key = os.getenv("TBA_AUTH_KEY")
 
-
 def get_match_team(event_key):
+    t = []
     res = requests.get(f"https://www.thebluealliance.com/api/v3/event/{event_key}/teams", headers={
         "X-TBA-Auth-Key": X_TBA_Auth_Key
     })
-    return (res.json())
+    j = res.json()
+    for team in res.json():
+        t.append(int(team["team_number"]))
+    
+    data = db.execute("SELECT DISTINCT team FROM scouting WHERE comp_code=:comp", {"comp": event_key}).fetchall()
+    print(data)
+    for d in data:
+        if d[0] not in t:
+            #t.append(d)
+            j.append({"team_number": d[0]})
+
+    return (j)
 
 
 def get_match_schedule(event_key, match_num):

@@ -24,12 +24,10 @@ pit_bp = Blueprint(
 @login_required
 def pit_submit():
     if request.method == "POST":
-        print("LOOL")
         res = c.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp", {
             "team": request.form["team"],
             "comp": request.form["comp"]
         }).fetchall()
-        print("THE COEE IS SUIO:I TO OWRKOSI BUT IST SLKN")
 
         if len(res) != 0:
             return "This data is submitted already"

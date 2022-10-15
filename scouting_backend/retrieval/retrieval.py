@@ -88,11 +88,11 @@ def get_match_schedule():
         t.append(int(team["team_number"]))    
     
     t.sort(reverse=True)
-
+    print(t)
     names = []
 
     for _ in t:
-        names["Team" + _]
+        names["Team" + str(_)]
 
     # create_new_sheet(session, t)
 
