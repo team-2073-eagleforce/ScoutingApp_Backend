@@ -172,4 +172,5 @@ def calculate_points(match):
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def analysis_dashboard():
-    return render_template("dashboard.html", comps=comps)
+    return render_template("error.html")
+    # return render_template("dashboard.html", comps=comps)
