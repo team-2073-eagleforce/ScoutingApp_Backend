@@ -1,9 +1,9 @@
-import requests
-import json
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
-res = requests.get(f"https://www.thebluealliance.com/api/v3/event/2017cacc/teams", headers={
-    "X-TBA-Auth-Key": "c6VZpR2NvDFhm1ixTkaG3xmvY8iGCHKMGCEDtO7qGnCTaTeRfjGYn1WflqVUYYcZ"
-})
+engine = create_engine("postgresql://aenizrypyfymkm:9b3a3a0cbe70f863a09eb75d450b70aa2a0ea507b8dd1908e44201a25dff2b7a@ec2-52-3-60-53.compute-1.amazonaws.com:5432/d7qmk8f1htkfkv")
+db = scoped_session(sessionmaker(bind=engine))
+conn = db()
 
-with open('test.json', "w") as f:
-    f.write(json.dumps(res.json()))
+db.execute('DELETE FROM scouting WHERE "matchnumber"=0')
+conn.commit()

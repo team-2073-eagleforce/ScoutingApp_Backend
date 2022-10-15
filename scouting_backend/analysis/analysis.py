@@ -84,7 +84,9 @@ def rankings_list():
         dic_team_with_average = {}
     else:
         all_teams = get_teams_at_event(comp)
-        team_with_selected_data_values = db.execute("""SELECT * FROM scouting WHERE team IN {teams}""".format(teams=all_teams)).fetchall()
+        team_with_selected_data_values = db.execute("""SELECT * FROM scouting WHERE team IN {teams} AND comp_code=:comp""".format(teams=all_teams), {
+            "comp_code": comp
+        }).fetchall()
 
         dic_team_with_average = dict(zip(all_teams, ([0] * 7 for team in range(len(all_teams)))))
         for match in team_with_selected_data_values:
