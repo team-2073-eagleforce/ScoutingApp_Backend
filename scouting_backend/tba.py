@@ -12,7 +12,7 @@ X_TBA_Auth_Key = os.getenv("TBA_AUTH_KEY")
 def get_match_team(event_key):
     t = []
 
-    if event_key != "2022cacc":
+    if event_key != "testing":
         res = requests.get(f"https://www.thebluealliance.com/api/v3/event/{event_key}/teams", headers={
             "X-TBA-Auth-Key": X_TBA_Auth_Key
         })
@@ -78,9 +78,17 @@ def get_match_schedule(event_key, match_num):
     #     f.write(str(res.json()))
     for r in res.json():
         if r["match_number"] == match_num:
+            red = r["alliances"]["red"]["team_keys"]
+            blue = r["alliances"]["blue"]["team_keys"]
+
+            if "2073B" in red:
+                red = list(map(lambda x: x.replace('frc2073B', 'frc9973'), red))
+            if "2073B" in blue:
+                blue = list(map(lambda x: x.replace('frc2073B', 'frc9973'), blue))
+
             return {
-                "red": r["alliances"]["red"]["team_keys"],
-                "blue": r["alliances"]["blue"]["team_keys"]
+                "red": red,
+                "blue": blue
             }
     return res.json()
 
@@ -94,5 +102,5 @@ def get_comps(team, year=None):
         comps[r["key"]] = r["short_name"]
     
     comps["testing"] = "Demo/Training"
-    comps["2022cacc"] = "CCC"
+    # comps["2022cacc"] = "CCC"
     return comps
