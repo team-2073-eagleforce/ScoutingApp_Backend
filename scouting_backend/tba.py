@@ -21,6 +21,8 @@ def get_match_team(event_key):
             t.append(int(team["team_number"]))
     else:
         j = [
+            {"team_number": 1678},
+            {"team_number": 2073},
             {"team_number": 2288},
             {"team_number": 5430},
             {"team_number": 4698},
