@@ -115,12 +115,13 @@ def api_get_match_schedule(event_key, match_num):
     # {"red": ["frc1", "frc2", "frc3"], "blue": ["frc4", "frc5", "frc6"]}
     teams_in_match = get_match_schedule(event_key, int(match_num))
     positions = ['red1', 'red2', 'red3', 'blue1', 'blue2', 'blue3']
-    averages_for_teams_in_match = dict(zip(positions, fetch_sql_for_dashboard(tuple(pos.split('frc')[1] for pos in teams_in_match['red'] + teams_in_match['blue']))))
+    averages_for_teams_in_match = dict(zip(positions, fetch_sql_for_dashboard(list(pos.split('frc')[1] for pos in teams_in_match['red'] + teams_in_match['blue']))))
 
     return jsonify(averages_for_teams_in_match)
 
 
 def fetch_sql_for_dashboard(teams):
+
     teams = list(teams)
     for i in range(len(teams)):
         if teams[i] == "2073B":
