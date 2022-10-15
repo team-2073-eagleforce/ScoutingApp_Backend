@@ -92,4 +92,5 @@ def get_comps(team, year=None):
         comps[r["key"]] = r["short_name"]
     
     comps["testing"] = "Demo/Training"
+    comps["2022cacc"] = "CCC"
     return comps

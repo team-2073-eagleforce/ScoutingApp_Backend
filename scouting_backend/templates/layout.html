@@ -38,7 +38,11 @@
                 <li class="nav-item">
                    <select class="form-select" id="comp" style="margin-left: 50px; height: 40px;">
                         {% for c in comps.keys() %}
-                            <option id="{{ c }}" value="{{ c }}">{{ comps[c] }}</option>
+                            {% if c == "2022cacc" %}
+                                <option id="{{ c }}" value="{{ c }}">CCC</option>
+                            {% else %}
+                                <option id="{{ c }}" value="{{ c }}">{{ comps[c] }}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </li>
