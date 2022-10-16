@@ -36,6 +36,9 @@ def qrScanner():
 @login_required
 def test():
     QRData = request.form['data'].split(',')
+    if QRData[12] == "2022caelk":
+        QRData[12] = "2022cacc"
+
     print(QRData)
     existing_match = db.execute('SELECT * FROM scouting WHERE team=:team AND "matchnumber"=:matchNumber AND "comp_code"=:comp', {"team": QRData[0], "matchNumber": QRData[1], "comp": QRData[12]}).fetchall()
 
