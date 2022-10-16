@@ -92,7 +92,7 @@ def authorize():
         include_granted_scopes='true')
 
     # Store the state so the callback can verify the auth server response.
-    session['state'] = state
+    # session['state'] = state
 
     return redirect(authorization_url)
 
@@ -101,10 +101,10 @@ def authorize():
 def oauth2callback():
     # Specify the state when creating the flow in the callback so that it can
     # verify in the authorization server response.
-    state = session['state']
+    #state = session['state']
 
     flow = google_auth_oauthlib.flow.Flow.from_client_config(
-        client_config=client_config, scopes=SCOPES, state=state)
+        client_config=client_config, scopes=SCOPES) # , state=state
     flow.redirect_uri = url_for('google_bp.oauth2callback', _external=True)
 
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.

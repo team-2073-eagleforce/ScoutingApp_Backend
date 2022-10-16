@@ -43,7 +43,7 @@ app.config["SECRET_KEY"] = "Nishan_update"
 #     # send exceptions from `app` to rollbar, using flask's signal system.
 #     got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
 
-@app.errorhandler(500)
+@app.errorhandler(Exception)
 def handle_500(e):
     print("error")
     error_tb = traceback.format_exc()
