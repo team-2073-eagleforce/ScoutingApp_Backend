@@ -2,13 +2,13 @@ var prevClassName
 function sortTable(n, className) {
   var tags = document.getElementsByClassName(className)
   for (let i=0; i<tags.length; i++) {
-    tags[i].setAttribute("style", "background-color: LightGreen;")
+    tags[i].setAttribute("style", "color: LightGreen;")
   }
 
   if (prevClassName != undefined && prevClassName != className) {
     var tags = document.getElementsByClassName(prevClassName)
     for (let i=0; i<tags.length; i++) {
-      tags[i].setAttribute("style", "background-color: white;")
+      tags[i].setAttribute("style", "color: white;")
     }
   }
   prevClassName = className

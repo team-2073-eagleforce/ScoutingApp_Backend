@@ -5,6 +5,18 @@
 {% endblock %}
 
 {% block body %}
+<style>
+    .strike {
+    background: repeating-linear-gradient(
+        180deg,
+        red 0%,
+        red 100%
+    );
+    background-size: 100% 2px;
+    background-position: center;
+    background-repeat: no-repeat;
+    }
+</style>
 <div class="container">
     <h1>Rankings</h1>
     <table class="table" id="rankings_table">
@@ -23,14 +35,14 @@
         <tbody>
         {% for team in calculated_averages %}
         <tr class="data">
-            <td class="rank"></td> 
-            <th scope="row">{{ team }}</th>
-            <td class="auto">{{ calculated_averages[team][0] }}</td>
-            <td class="teleop">{{ calculated_averages[team][1] }}</td>
-            <td class="climb">{{ calculated_averages[team][2] }}</td>
-            <td class="total">{{ calculated_averages[team][3] }}</td>
-            <td class="driver">{{ calculated_averages[team][4] }}</td>
-            <td class="defense">{{ calculated_averages[team][5] }}</td>
+            <td class="rank"></td>
+            <th scope="row"><button type="button" class="btn btn-link" onclick="strikethrough('{{ team }}')">{{ team }}</button></th>
+            <td class="auto {{ team }}">{{ calculated_averages[team][0] }}</td>
+            <td class="teleop {{ team }}">{{ calculated_averages[team][1] }}</td>
+            <td class="climb {{ team }}">{{ calculated_averages[team][2] }}</td>
+            <td class="total {{ team }}">{{ calculated_averages[team][3] }}</td>
+            <td class="driver {{ team }}">{{ calculated_averages[team][4] }}</td>
+            <td class="defense {{ team }}">{{ calculated_averages[team][5] }}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -41,6 +53,22 @@
     if (params.get("code") == null) {
         window.location.replace(`/analysis/rankings?code=${localStorage.getItem('comp')}`)
     }
+
+    function strikethrough(team) {
+        var eles = document.getElementsByClassName(team);
+        for (ele in eles) {
+            if (ele == "length") {
+                break
+            }
+            console.log(ele)
+            if (eles[ele].getAttribute("class").indexOf("strike") != -1) {
+                eles[ele].setAttribute("class", eles[ele].getAttribute("class").replace("strike", ""))
+            } else {
+                eles[ele].setAttribute("class", eles[ele].getAttribute("class") + " strike")
+            }
+        }
+    }
+
 </script>
 <script src="/analysis/static/rankings.js"></script>
 {% endblock %}
