@@ -56,6 +56,7 @@
 
     function strikethrough(team) {
         var eles = document.getElementsByClassName(team);
+        var mod = false;
         for (ele in eles) {
             if (ele == "length") {
                 break
@@ -63,12 +64,36 @@
             console.log(ele)
             if (eles[ele].getAttribute("class").indexOf("strike") != -1) {
                 eles[ele].setAttribute("class", eles[ele].getAttribute("class").replace("strike", ""))
+                mod = true;
             } else {
                 eles[ele].setAttribute("class", eles[ele].getAttribute("class") + " strike")
+                mod = false;
             }
+        }
+
+        if (!mod) {
+            fetch(`/analysis/strikethrough?team=${team}&comp=${document.getElementById('comp').value}`)
+        } else {
+            fetch(`/analysis/unstrikethrough?team=${team}&comp=${document.getElementById('comp').value}`)
         }
     }
 
+    function fetchStrikethrough() {
+        fetch("/analysis/strikethrough-all" + "?comp=" + document.getElementById("comp").value)
+        .then(response => response.json())
+        .then(data => {
+            for (var i=0; i<data.length; i++) {
+                var currTeam = data[i]
+                var eles = document.getElementsByClassName(currTeam);
+                for (ele in eles) {
+                    if (ele == "length") {
+                        break
+                    }
+                    eles[ele].setAttribute("class", eles[ele].getAttribute("class") + " strike")
+                }
+            }
+        })
+    }
 </script>
 <script src="/analysis/static/rankings.js"></script>
 {% endblock %}

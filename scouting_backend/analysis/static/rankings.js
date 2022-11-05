@@ -8,7 +8,7 @@ function sortTable(n, className) {
   if (prevClassName != undefined && prevClassName != className) {
     var tags = document.getElementsByClassName(prevClassName)
     for (let i=0; i<tags.length; i++) {
-      tags[i].setAttribute("style", "color: white;")
+      tags[i].setAttribute("style", "color: black;")
     }
   }
   prevClassName = className
@@ -73,5 +73,4 @@ function sortTable(n, className) {
     elements[index].innerHTML = index+1;
   }
 }
-
 

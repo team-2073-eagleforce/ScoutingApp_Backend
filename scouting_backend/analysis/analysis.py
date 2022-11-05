@@ -26,8 +26,6 @@ comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
 def get_teams_at_event(event):
     print(event)
-    if event == "testing":
-        return (2073)
     # elif event == "2022cacc":
     #     return (2288, 5430, 4698, 3598, 5274, 1662, 3189, 8060, 3257, 5458, 4643, 701, 1678, 6918, 3859, 2073, 9973, 5817, 2135, 841, 6662, 6884, 5940, 8048, 2643, 6059, 7777, 199, 1072, 114, 7419, 5924, 7528, 2551, 1671)
     return tuple(int(team['team_number']) for team in get_match_team(event))
