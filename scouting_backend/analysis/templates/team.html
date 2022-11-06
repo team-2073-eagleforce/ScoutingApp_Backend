@@ -25,6 +25,12 @@
         <span><b>Comments: </b> {{ pit[0][9] }}</span>
     </div>
 </div>
+<br>
+<div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="name" onchange="toggleNameOnOff();">
+    <label class="form-check-label" for="name">Toggle name visibility on/off</label>
+</div>
+<br>
 <table class="table" id="table">
     <thead>
     <tr class="sticky-top" style="background-color: gray;">
@@ -61,7 +67,7 @@
         <td class="tp">{{ m[12] }}</td>
         <td class="driver">{{ m[13] }}</td>
         <td class="defense">{{ m[14] }}</td>
-        <td>{{ m[15] }}</td>
+        <td class="names">{{ m[15] }}</td>
         <td>{{ m[16] }}</td>
     </tr>
     {% endfor %}
@@ -124,6 +130,20 @@
         tr.appendChild(defenseAvg)
         document.getElementById("table").appendChild(tr)
     }
-    
+
+    function toggleNameOnOff() {
+        console.log("hello world welcome to")
+        if (document.getElementById("name").checked == true) {
+            var names = document.getElementsByClassName("names")
+            for (var i=0; i<names.length; i++) {
+                names[i].style = "color: white"
+            }
+        } else {
+            var names = document.getElementsByClassName("names")
+            for (var i=0; i<names.length; i++) {
+                names[i].style = "color: black"
+            }
+        }
+    }
 </script>
 {% endblock %}

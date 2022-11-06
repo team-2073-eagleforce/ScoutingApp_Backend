@@ -195,10 +195,17 @@ def two_people(lst):
     new_data = []
 
     for row in lst:
-        if row[2] < 100:
+        if row[2] <= 100:
             new_data.append(row)
             try:
                 new_data.append(match_to_data[100 + row[2] % 100])
+            except Exception as e:
+                print(e)
+
+        if row[2] > 200 and row[2] < 300:
+            new_data.append(match_to_data)
+            try:
+                new_data.append(match_to_data[300 + row[2] % 100])
             except Exception as e:
                 print(e)
     
