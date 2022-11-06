@@ -11,6 +11,7 @@ X_TBA_Auth_Key = os.getenv("TBA_AUTH_KEY")
 
 def get_match_team(event_key):
     t = []
+    j = []
 
     if event_key != "testing":
         res = requests.get(f"https://www.thebluealliance.com/api/v3/event/{event_key}/teams", headers={

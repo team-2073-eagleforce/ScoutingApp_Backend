@@ -70,7 +70,9 @@ def view_team_data(team):
     
     if len(pit) == 0:
         pit = [["N/A" for i in range(12)]]
-    return render_template("team.html", matches=matches_with_calculated_scores, team=team, comps=comps, pit=pit)
+    
+    print("Good day: " + str(two_people(matches_with_calculated_scores)))
+    return render_template("team.html", matches=two_people(matches_with_calculated_scores), team=team, comps=comps, pit=pit)
 
 
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
@@ -179,3 +181,25 @@ def calculate_points(match):
 def analysis_dashboard():
     # return render_template("error.html")
     return render_template("dashboard.html", comps=comps)
+
+def two_people(lst):
+    """
+    list will be sorted in this order: match 1, match 101, match 2, match 102, etc. 
+    Assume the list is already sorted by match number asc
+    """
+    match_to_data = {}
+
+    for row in lst:
+        match_to_data[row[2]] = row
+    
+    new_data = []
+
+    for row in lst:
+        if row[2] < 100:
+            new_data.append(row)
+            try:
+                new_data.append(match_to_data[100 + row[2] % 100])
+            except Exception as e:
+                print(e)
+    
+    return new_data
