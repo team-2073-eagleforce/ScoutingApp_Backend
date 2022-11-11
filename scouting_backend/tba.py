@@ -65,4 +65,5 @@ def get_comps(team, year=None):
     
     comps["testing"] = "Demo/Training"
     comps["2022cacc"] = "CCC"
+    comps["2022mttd"] = "Madtown Throwdown"
     return comps

@@ -45,7 +45,7 @@ def team_navigation():
         results = []
     else:
         all_teams = get_teams_at_event(comp)
-        team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams}""".format(teams=all_teams)).fetchall()
+        team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams} AND comp_code='{comp}'""".format(teams=all_teams, comp=comp)).fetchall()
         results = {team[0]: team[1] for team in team_and_image}
 
     return render_template("teams_navigation.html", teams=results, all_teams=all_teams, comps=comps)
@@ -181,6 +181,36 @@ def calculate_points(match):
 def analysis_dashboard():
     # return render_template("error.html")
     return render_template("dashboard.html", comps=comps)
+
+@analysis_bp.route("/strikethrough")
+def strikethrough():
+    db.execute("INSERT INTO picklist (team, comp_code, strikethrough) VALUES (:t, :c, 'true')", {
+        "t": request.args.get("team"),
+        "c": request.args.get("comp")
+    })
+    db().commit()
+
+@analysis_bp.route("/unstrikethrough")
+def un_strikethrough():
+    db.execute("DELETE FROM picklist WHERE team=:t AND comp_code=:comp", {
+        "t": request.args.get("team"),
+        "comp": request.args.get("comp")
+    })
+    db().commit()
+
+@analysis_bp.route("/strikethrough-all")
+def strikethrough_all():
+    json_data = []
+    print(request.args.get("comp"))
+    results = db.execute("SELECT team FROM picklist WHERE comp_code=:comp", {
+        "comp": request.args.get("comp")
+    }).fetchall()
+
+    for row in results:
+        json_data.append(str(row[0]))
+    
+    print("STRIKETHROUGHHhhhhhhhhhh:" + str(json_data))
+    return jsonify(json_data)
 
 def two_people(lst):
     """
