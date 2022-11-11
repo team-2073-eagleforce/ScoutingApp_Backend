@@ -209,7 +209,6 @@ def strikethrough_all():
     for row in results:
         json_data.append(str(row[0]))
     
-    print("STRIKETHROUGHHhhhhhhhhhh:" + str(json_data))
     return jsonify(json_data)
 
 def two_people(lst):
