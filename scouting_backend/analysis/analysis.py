@@ -7,7 +7,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from scouting_backend.helpers import login_required
 from scouting_backend.tba import get_match_schedule, get_match_team, get_comps, get_offseason_bots
-from scouting_backend.constants import CONST_HOME_TEAM, CONST_YEAR
+from scouting_backend.constants import CONST_HOME_TEAM, CONST_YEAR, MADTOWN_2022_OFFSEASON_BOTS
 
 analysis_bp = Blueprint(
     'analysis_bp', __name__,
@@ -115,20 +115,23 @@ def api_get_match_schedule(event_key, match_num):
     # {"red": ["frc1", "frc2", "frc3"], "blue": ["frc4", "frc5", "frc6"]}
     teams_in_match = get_match_schedule(event_key, int(match_num))
     positions = ['red1', 'red2', 'red3', 'blue1', 'blue2', 'blue3']
-    averages_for_teams_in_match = dict(zip(positions, fetch_sql_for_dashboard(list(pos.split('frc')[1] for pos in teams_in_match['red'] + teams_in_match['blue']))))
+    averages_for_teams_in_match = dict(zip(positions, fetch_sql_for_dashboard(list(pos.split('frc')[1] for pos in teams_in_match['red'] + teams_in_match['blue']), event_key)))
 
     return jsonify(averages_for_teams_in_match)
 
 
-def fetch_sql_for_dashboard(teams):
+def fetch_sql_for_dashboard(teams, comp_code):
 
     teams = list(teams)
-    for i in range(len(teams)):
-        if teams[i] == "2073B":
-            teams[i] = "9973"
+    
+    # Madtown offseason bot lookup
+    keys = MADTOWN_2022_OFFSEASON_BOTS.keys()
+    for i in range(len(teams)):    
+        if teams[i] in keys:
+            teams[i] = MADTOWN_2022_OFFSEASON_BOTS[teams[i]]
     teams = tuple(list(teams))
 
-    matches_for_team = db.execute("""SELECT * FROM scouting WHERE team IN {teams}""".format(teams=teams)).fetchall()
+    matches_for_team = db.execute('''SELECT * FROM scouting WHERE team IN {teams} AND "comp_code"=:comp'''.format(teams=teams), {"comp": comp_code}).fetchall()
     dic_matches_for_team = dict(zip(teams, ([int(teams[team])] + [0] * 7 for team in range(len(teams)))))
 
     for match in matches_for_team:
@@ -179,8 +182,8 @@ def calculate_points(match):
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def analysis_dashboard():
-    return render_template("error.html")
-    # return render_template("dashboard.html", comps=comps)
+    # return render_template("error.html")
+    return render_template("dashboard.html", comps=comps)
 
 @analysis_bp.route("/strikethrough")
 def strikethrough():
