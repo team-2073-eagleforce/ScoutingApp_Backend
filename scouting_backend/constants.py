@@ -3,6 +3,9 @@ AUTHORIZED_EMAIL = [
     "boyuan.liu@team2073.com",
 
     # Pit Scouts
+    "andy.wang@team2073.com",
+    "cayden.granado@team2073.com",
+    "melanie.chi@team2073.com",
     "hieuson.dang@team2073.com",
 
     # strategists
