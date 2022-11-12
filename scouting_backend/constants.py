@@ -4,7 +4,7 @@ AUTHORIZED_EMAIL = [
     "logan.wong@team2073.com",
 
     # Pit Scouts
-    "andy.wang@team2073.com"
+    "andy.wang@team2073.com",
 
     # strategists
     "kent.young@team2073.com",
