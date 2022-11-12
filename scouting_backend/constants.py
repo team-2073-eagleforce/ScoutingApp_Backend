@@ -1,10 +1,12 @@
 AUTHORIZED_EMAIL = [
     # developers
     "boyuan.liu@team2073.com",
-    "logan.wong@team2073.com",
 
     # Pit Scouts
     "andy.wang@team2073.com",
+    "cayden.granado@team2073.com",
+    "melanie.chi@team2073.com",
+    "hieuson.dang@team2073.com",
 
     # strategists
     "kent.young@team2073.com",
@@ -13,7 +15,7 @@ AUTHORIZED_EMAIL = [
 
     # drivers
     "breanna.tran@team2073.com",
-    "hieuson.dang@team2073.com",
+    "logan.wong@team2073.com",
 
     # mentors
     "nishan.sandhar@team2073.com",
