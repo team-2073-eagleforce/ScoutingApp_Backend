@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from scouting_backend.helpers import login_required
-from scouting_backend.tba import get_match_schedule, get_match_team, get_comps
+from scouting_backend.tba import get_match_schedule, get_match_team, get_comps, get_offseason_bots
 from scouting_backend.constants import CONST_HOME_TEAM, CONST_YEAR
 
 analysis_bp = Blueprint(
@@ -209,8 +209,12 @@ def strikethrough_all():
     for row in results:
         json_data.append(str(row[0]))
     
-    print("STRIKETHROUGHHhhhhhhhhhh:" + str(json_data))
     return jsonify(json_data)
+
+
+@analysis_bp.route("/get-offseason")
+def get_offseason_bot():
+    return jsonify(get_offseason_bots("2022mttd"))
 
 def two_people(lst):
     """
