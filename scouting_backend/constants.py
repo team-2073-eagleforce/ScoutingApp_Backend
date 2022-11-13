@@ -2,6 +2,9 @@ AUTHORIZED_EMAIL = [
     # developers
     "boyuan.liu@team2073.com",
 
+    # technicians
+    "ethan.see@team2073.com",
+
     # Pit Scouts
     "hieuson.dang@team2073.com",
 

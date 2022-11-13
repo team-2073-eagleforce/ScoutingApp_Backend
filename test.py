@@ -5,5 +5,5 @@ engine = create_engine("postgresql://aenizrypyfymkm:9b3a3a0cbe70f863a09eb75d450b
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 
-db.execute('DELETE FROM scouting WHERE "matchnumber"=1 AND "comp_code"=:comp', {"comp": "2022mttd"})
+db.execute('DELETE scouting SET team=:newteam WHERE team=:oldteam', {"newteam": "4255", "oldteam": 4225})
 conn.commit()
