@@ -55,6 +55,7 @@ def team_navigation():
 def view_team_data(team):
     comp_code = request.args.get("code")
     matches = db.execute("SELECT * FROM scouting WHERE team=:team AND comp_code=:comp ORDER BY matchnumber ASC", {"team": team, "comp": comp_code})
+    print(matches)
     pit = db.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp", {"team": team, "comp": comp_code}).fetchall()
     matches_with_calculated_scores = []
 
@@ -236,14 +237,18 @@ def two_people(lst):
             new_data.append(row)
             try:
                 new_data.append(match_to_data[100 + row[2] % 100])
+                print(match_to_data[100 + row[2] % 100])
             except Exception as e:
                 print(e)
+        
+        if row[2] > 200:
+            new_data.append(match_to_data[row[2]])
 
-        if row[2] > 200 and row[2] < 300:
-            new_data.append(match_to_data)
-            try:
-                new_data.append(match_to_data[300 + row[2] % 100])
-            except Exception as e:
-                print(e)
+        # if row[2] > 200 and row[2] < 300:
+        #     new_data.append(match_to_data)
+        #     try:
+        #         new_data.append(match_to_data[200 + row[2] % 100])
+        #     except Exception as e:
+        #         print(e)
     
     return new_data

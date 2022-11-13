@@ -73,9 +73,9 @@
 </body>
 <script>
     // localStorage.setItem("comp", document.getElementById("comp").value)
-    if (location.protocol !== "https:") {
-        location.protocol = "https:";
-    }
+    // if (location.protocol !== "https:") {
+    //     location.protocol = "https:";
+    // }
     // document.getElementById("team-url").setAttribute("href", `/analysis/team?code=${document.getElementById('comp').value}`)
     document.getElementById("comp").onchange = () => {
         localStorage.setItem("comp", document.getElementById("comp").value)
