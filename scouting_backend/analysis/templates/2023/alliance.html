@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Dashboard</h1>
+    <input type="text" placeholder="Match Number" id="match">
+    <button type="button" id="button">Submit</button>
+    <!-- <img src="/analysis/static/2023/fieldMap.PNG"> -->
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+                <td>8</td>
+                <td>9</td>
+            </tr>
+            <tr>
+                <td id="0-0"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="0-1"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="0-2"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="0-3"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="0-4"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="0-5"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="0-6"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="0-7"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="0-8"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+            </tr>
+            <tr>
+                <td id="1-0"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="1-1"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="1-2"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="1-3"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="1-4"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="1-5"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="1-6"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="1-7"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="1-8"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+            </tr>
+            <tr>
+                <td id="2-0"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="2-1"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="2-2"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="2-3"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="2-4"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="2-5"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="2-6"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="2-7"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+                <td id="2-8"><img src="/analysis/static/2023/empty.png" width="25%" height="25%"></td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+<script>
+    document.getElementById("button").onclick = () => {
+        fetch("/analysis/api/alliance/2023", {
+            method: "POST",
+            body: JSON.stringify({
+                "match_number": document.getElementById("match").value,
+                "comp_code": localStorage.getItem("comp")
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            var red_auto = data["red_auto"]
+            for (let i=0; i<2; i++) {
+                for (let j=0; j<9; j++) {
+                    if (red_auto[i][j] == 1) {
+                        document.getElementById(`${i}-${j}`).innerHTML = `<img src="/analysis/static/2023/cube.jpg" width="25%" height="25%">`
+                    } else if (red_auto[i][j] == 2) {
+                        document.getElementById(`${i}-${j}`).innerHTML = `<img src="/analysis/static/2023/cone.jpeg" width="25%" height="25%">`
+                    }
+                } 
+            }
+        })
+    }
+</script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script> -->
+{% endblock %}
