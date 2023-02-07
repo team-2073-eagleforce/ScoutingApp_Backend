@@ -40,3 +40,4 @@ sentry-sdk[flask]
 cloudinary
 rollbar
 sendgrid
+termcolor

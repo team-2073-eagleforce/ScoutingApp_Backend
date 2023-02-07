@@ -13,6 +13,11 @@ from scouting_backend.home.home import CONST_HOME_TEAM
 from .models import db
 from tba import get_comps
 from scouting_backend.constants import CONST_HOME_TEAM, CONST_YEAR
+import datetime, json
+
+today = datetime.date.today()
+
+from database import load_json
 
 retrieval_bp = Blueprint(
     'retrieval_bp', __name__,
@@ -34,7 +39,21 @@ def qrScanner():
 
 @retrieval_bp.route('/detectScan', methods=['POST'])
 @login_required
-def test():
+def detectScan():
+    return redirect(f"/detectScan/{year}")
+
+
+@retrieval_bp.route('/detectScan/2023', methods=['POST'])
+@login_required
+def detect_scan_2023():
+    print(request.form["data"].split("'"))
+    json_data = json.loads(request.form["data"].split("'")[1])
+    load_json(json_data)
+    return render_template('QRScanner.html', comps=comps)
+
+@retrieval_bp.route('/detectScan/2022', methods=['POST'])
+@login_required
+def detect_scan_2022():
     QRData = request.form['data'].split(',')
     if QRData[12] == "2022caelk":
         QRData[12] = "2022cacc"
@@ -61,24 +80,6 @@ def test():
         conn.commit()
 
     print("Does it exist? ", existing_match)
-    # existing_match = matchEntry.query.filter(matchEntry.team == QRData[0] or matchEntry.matchNumber == QRData[1]).first()
-    # if not existing_match:
-    #     match = matchEntry(
-    #         team=int(QRData[0]),
-    #         matchNumber=int(QRData[1]),
-    #         autoCrossing=int(QRData[2]),
-    #         autoUpper=int(QRData[3]),
-    #         autoBottom=int(QRData[4]),
-    #         teleUpper=int(QRData[5]),
-    #         teleBottom=int(QRData[6]),
-    #         level=int(QRData[7]),
-    #         driverPerf=int(QRData[8]),
-    #         defensePerf=int(QRData[9]),
-    #         name=str(QRData[10]),
-    #         comment=str(QRData[11]),
-    #     )
-    #     db.session.add(match)
-    #     db.session.commit()
 
     return render_template('QRScanner.html', comps=comps)
 
@@ -115,9 +116,3 @@ def upload_data_to_sheet(session, data):
     sheets = get_all_sheets(session)
 
     return edit_sheet(session, "Sheet1!A1:A12", data)
-
-@retrieval_bp.route("/error")
-def error_causing_page():
-    return 5 / 0
-
-####

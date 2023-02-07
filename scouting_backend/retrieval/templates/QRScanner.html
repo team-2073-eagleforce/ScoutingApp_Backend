@@ -46,13 +46,13 @@
         if (data != prevResult && !data.includes("error")) {
             // console.log(result.data);
             prevResult = data
-            data = data.split(", ").join(",")
+            //data = data.split(", ").join(",")
             console.log(data)
             label.textContent = data;
             label.style.color = 'teal';
             clearTimeout(label.highlightTimeout);
             label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 3000);
-            $.post("/retrieval/detectScan", {
+            $.post(`/retrieval/detectScan/${new Date().getFullYear()}`, {
                 data: data
             });
             console.log("success")

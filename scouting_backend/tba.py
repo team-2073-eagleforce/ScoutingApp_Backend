@@ -37,25 +37,29 @@ def get_match_team(event_key):
     return (j)
 
 
-def get_match_schedule(event_key, match_num):
-    res = requests.get(f"https://www.thebluealliance.com/api/v3/event/{event_key}/matches", headers={
-        "X-TBA-Auth-Key": X_TBA_Auth_Key  
-    })
+def get_match_schedule(event_key, match_num, test=False):
+    if test:
+        print("hello")
+        res = requests.get(f"https://tba-mock-2073.free.beeceptor.com/event/test/matches")
+    else:
+        print("world")
+        res = requests.get(f"https://www.thebluealliance.com/api/v3/event/{event_key}/matches", headers={
+            "X-TBA-Auth-Key": X_TBA_Auth_Key  
+        })
     
-    # with open("data.json", "w") as f:
-    #     f.write(str(res.json()))
+    print(res.json())
     for r in res.json():
-        if r["match_number"] == match_num:
+        if r["match_number"] == int(match_num):
             red = r["alliances"]["red"]["team_keys"]
             blue = r["alliances"]["blue"]["team_keys"]
 
-            for i in red:
-                if i.split("frc")[1] in madtown_offseason_value:
-                    red = list(map(lambda x: x.replace(i, MADTOWN_2022_OFFSEASON_BOTS[i.split("frc")[1]]), red))
+            # for i in red:
+            #     if i.split("frc")[1] in madtown_offseason_value:
+            #         red = list(map(lambda x: x.replace(i, MADTOWN_2022_OFFSEASON_BOTS[i.split("frc")[1]]), red))
 
-            for i in red:
-                if i.split("frc")[1] in madtown_offseason_value:
-                    red = list(map(lambda x: x.replace(i, MADTOWN_2022_OFFSEASON_BOTS[i.split("frc")[1]]), blue))
+            # for i in red:
+            #     if i.split("frc")[1] in madtown_offseason_value:
+            #         red = list(map(lambda x: x.replace(i, MADTOWN_2022_OFFSEASON_BOTS[i.split("frc")[1]]), blue))
                 
             return {
                 "red": red,
@@ -72,9 +76,9 @@ def get_comps(team, year=None):
     for r in res.json():
         comps[r["key"]] = r["short_name"]
     
-    comps["testing"] = "Demo/Training"
-    comps["2022cacc"] = "CCC"
-    comps["2022mttd"] = "Madtown Throwdown"
+    comps["test"] = "Demo/Training"
+    #comps["2022cacc"] = "CCC"
+    #comps["2022mttd"] = "Madtown Throwdown"
     return comps
 
 def get_offseason_bots(event_key):
