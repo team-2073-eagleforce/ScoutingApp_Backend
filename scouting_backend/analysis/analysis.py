@@ -101,9 +101,13 @@ def view_team_data_2023(team):
     comp_code = request.args.get("code")
     matches = db.execute(
         "SELECT * FROM scouting_2023 WHERE team_number=:team AND comp_code=:comp ORDER BY match_number ASC", {"team": team, "comp": comp_code}).fetchall()
+    
+    data = []
 
     for m in matches:
+        # tuple(m) + ()
         pass
+    
     pit = []
     # pit = db.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp",
     #                  {"team": team, "comp": comp_code}).fetchall()
