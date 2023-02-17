@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<title>Team {{ team }}</title>
+{% endblock %}
+
+{% block body %}
+<h1>Team {{ team }}'s Data</h1>
+<div class="row">
+    <div class="col-3">
+        {% if pit[0][11] != 'N/A' %}
+            <img src="{{ pit[0][11] }}" class="img-thumbnail" > <!-- width="200px" height="200px"  -->
+        {% else %}
+            <img src="https://res.cloudinary.com/team2073-eagleforce/image/upload/v1658264240/th_vmkqqc.jpg" class="img-thumbnail">
+        {% endif %}
+    </div>
+    <div class="col-9">
+        <span><b>Drivetrain: </b>{{ pit[0][3] }}</span> <br>
+        <span><b>Offensive or Defense: </b>{{ pit[0][4] }}</span> <br>
+        <span><b>Prefered Scoring Location: </b> {{ pit[0][5] }}</span> <br>
+        <span><b>Auto: </b> {{ pit[0][6] }}</span> <br>
+        <span><b>Hub: </b> {{ pit[0][7] }}</span> <br>
+        <span><b>Climb: </b> {{ pit[0][8] }}</span> <br>
+        <span><b>Submitted by: </b> {{ pit[0][10] }}</span> <br>
+        <span><b>Comments: </b> {{ pit[0][9] }}</span>
+    </div>
+</div>
+<br>
+<div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="name" onchange="toggleNameOnOff();">
+    <label class="form-check-label" for="name">Toggle name visibility on/off</label>
+</div>
+<br>
+<table class="table table-bordered" id="table">
+    <thead>
+    <tr class="sticky-top" style="background-color: gray;">
+        <th scope="col">Match</th>
+        <th>ALow</th>
+        <th>AMid</th>
+        <th>ATop</th>
+        <th>AClimb</th>
+        <th>TLow</th>
+        <th>TMid</th>
+        <th>TTop</th>
+        <th>TCone</th>
+        <th>TCube</th>
+        <th>EClimb</th>
+        <th>Driver</th>
+        <th>Defense</th>
+        <th>Name</th>
+        <th>Comments</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for m in matches %}
+        <tr>
+            <td>{{ m[2] }}</td>
+            <td>{{ m[3] }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+<script>
+    function calcAverage(className) {
+        const els = document.getElementsByClassName(className)
+        const nums = els.length
+        var total = 0
+        var res
+        for (let i=0; i<els.length; i++) {
+            total += parseInt(els[i].textContent) 
+        }
+        if (nums === 0) {
+            res = "N/A"
+        } else {
+            res = (total / nums).toFixed(2)
+        }
+        var td = document.createElement("td")
+        td.innerText = res
+
+        console.log(className, res, total, nums)
+        return td
+    }
+
+    var tdCounts = document.getElementsByTagName("td").length
+    if (tdCounts != 0) {
+        var crossAvg = calcAverage("cross")
+        var autoUpperAvg = calcAverage("au")
+        var autoBottomAvg = calcAverage("ab")
+        var totalAutoAvg = calcAverage("ta")
+        var teleopUpperAvg = calcAverage("tu")
+        var teleopBottomAvg = calcAverage("tb")
+        var totalTeleopAvg = calcAverage("tt")
+        var levelAvg = calcAverage("level")
+        var climbAvg = calcAverage("c")
+        var totalPointAvg = calcAverage("tp")
+        var driverAvg = calcAverage("driver")
+        var defenseAvg = calcAverage("defense")
+
+        var tr = document.createElement("tr")
+        var matchTd = document.createElement("td")
+        matchTd.innerText = "Avg"
+        tr.appendChild(matchTd)
+        crossAvg.setAttribute("class", "lol")
+        tr.appendChild(crossAvg)
+        tr.appendChild(autoUpperAvg)
+        tr.appendChild(autoBottomAvg)
+        tr.appendChild(totalAutoAvg)
+        tr.appendChild(teleopUpperAvg)
+        tr.appendChild(teleopBottomAvg)
+        tr.appendChild(totalTeleopAvg)
+        tr.appendChild(levelAvg)
+        tr.appendChild(climbAvg)
+        tr.appendChild(totalPointAvg)
+        tr.appendChild(driverAvg)
+        tr.appendChild(defenseAvg)
+        document.getElementById("table").appendChild(tr)
+    }
+
+    function toggleNameOnOff() {
+        console.log("hello world welcome to")
+        if (document.getElementById("name").checked == true) {
+            var names = document.getElementsByClassName("names")
+            for (var i=0; i<names.length; i++) {
+                names[i].style = "color: white"
+            }
+        } else {
+            var names = document.getElementsByClassName("names")
+            for (var i=0; i<names.length; i++) {
+                names[i].style = "color: black"
+            }
+        }
+    }
+</script>
+{% endblock %}

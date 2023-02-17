@@ -3,6 +3,11 @@
 {% block head %}
 <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
       integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" rel="stylesheet">
+<style>
+    .hidden-text {
+        display: none;
+    }
+</style>
 {% endblock %}
 
 {% block body %}
@@ -11,7 +16,7 @@
     <input type="text" placeholder="Match Number" id="match">
     <button type="button" id="button">Submit</button>
     <!-- <img src="/analysis/static/2023/fieldMap.PNG"> -->
-    <table class="table">
+    <table class="table table-bordered">
         <tbody>
             <tr>
                 <td>1</td>
@@ -60,6 +65,15 @@
         </tbody>
 
     </table>
+    <span id="red_auto" class="hidden-text"></span>
+    <span id="blue_auto" class="hidden-text"></span>
+    <span id="red_teleop" class="hidden-text"></span>
+    <span id="blue_teleop" class="hidden-text"></span>
+
+    <span id="red_auto_config" class="hidden-text"></span>
+    <span id="blue_auto_config" class="hidden-text"></span>
+    <span id="red_teleop_config" class="hidden-text"></span>
+    <span id="blue_teleop_config" class="hidden-text"></span>
 </div>
 
 <script>
@@ -77,12 +91,26 @@
         .then(response => response.json())
         .then(data => {
             var red_auto = data["red_auto"]
-            for (let i=0; i<2; i++) {
+            var blue_auto = data["blue_auto"]
+            var red_teleop = data["red_teleop"]
+            var blue_teleop = data["red_teleop"]
+
+            var red_auto = data["red_auto_config"]
+            var blue_auto = data["blue_auto_config"]
+            var red_teleop = data["red_teleop_config"]
+            var blue_teleop = data["red_teleop_config"]
+
+            console.log(red_auto)
+            for (let i=0; i<3; i++) {
                 for (let j=0; j<9; j++) {
+                    console.log(`before chec ij: ${i}, ${j}`)
                     if (red_auto[i][j] == 1) {
-                        document.getElementById(`${i}-${j}`).innerHTML = `<img src="/analysis/static/2023/cube.jpg" width="25%" height="25%">`
+                        console.log(`ij: ${i}, ${j}`)
+                        document.getElementById(`${i}-${j}`).innerHTML = `<img src="/analysis/static/2023/cube.jpg" class="img-fluid">`
                     } else if (red_auto[i][j] == 2) {
-                        document.getElementById(`${i}-${j}`).innerHTML = `<img src="/analysis/static/2023/cone.jpeg" width="25%" height="25%">`
+                        document.getElementById(`${i}-${j}`).innerHTML = `<img src="/analysis/static/2023/cone.jpeg" class="img-fluid">`
+                    } else {
+                        document.getElementById(`${i}-${j}`).innerHTML = `<img src="/analysis/static/2023/empty.png" class="img-fluid">`
                     }
                 } 
             }
