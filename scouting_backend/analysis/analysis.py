@@ -45,7 +45,7 @@ def get_teams_at_event(event):
 @login_required
 def team_navigation():
     comp = request.args.get("code")
-    if comp == "testing":
+    if comp == "test":
         all_teams = [i+1 for i in range(9000)]
         team_and_image = []
         results = []
@@ -63,9 +63,14 @@ def team_navigation():
     return render_template("teams_navigation.html", teams=results, all_teams=all_teams, comps=comps)
 
 
-@analysis_bp.route("/team/<int:team>", methods=["GET"])
+# @analysis_bp.route("/team/<int:team>", methods=["GET"])
+# @login_required
+# def view_team_data(team):
+#     return redirect(f"/analysis/team/{today.year}/{team}")
+
+@analysis_bp.route("/team/2022/<int:team>", methods=["GET"])
 @login_required
-def view_team_data(team):
+def view_team_data_2022(team):
     comp_code = request.args.get("code")
     matches = db.execute(
         "SELECT * FROM scouting WHERE team=:team AND comp_code=:comp ORDER BY matchnumber ASC", {"team": team, "comp": comp_code})
@@ -89,6 +94,35 @@ def view_team_data(team):
 
     return render_template("team.html", matches=two_people(matches_with_calculated_scores), team=team, comps=comps, pit=pit)
 
+
+@analysis_bp.route("/team/<int:team>", methods=["GET"])
+@login_required
+def view_team_data_2023(team):
+    comp_code = request.args.get("code")
+    matches = db.execute(
+        "SELECT * FROM scouting_2023 WHERE team_number=:team AND comp_code=:comp ORDER BY match_number ASC", {"team": team, "comp": comp_code}).fetchall()
+
+    for m in matches:
+        pass
+    pit = []
+    # pit = db.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp",
+    #                  {"team": team, "comp": comp_code}).fetchall()
+    matches_with_calculated_scores = []
+
+    # for match in matches:
+    #     convert_match_to_list = list(match)
+    #     points_per_section = calculate_points(match)
+    #     convert_match_to_list.insert(6, points_per_section[0])
+    #     convert_match_to_list.insert(9, points_per_section[1])
+    #     convert_match_to_list.insert(11, points_per_section[2])
+    #     convert_match_to_list.insert(12, points_per_section[3])
+
+    #     matches_with_calculated_scores.append(convert_match_to_list)
+
+    if len(pit) == 0:
+        pit = [["N/A" for i in range(12)]]
+
+    return render_template("2023/team.html", matches=matches, team=team, comps=comps, pit=pit)
 
 @analysis_bp.route("/alliance/2023")
 @login_required
@@ -353,9 +387,16 @@ def alliance_2023_api():
     print(data)
 
     red_auto = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    red_auto_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
+
     blue_auto = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    blue_auto_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
+
     red_teleop = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    red_teleop_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
+
     blue_teleop = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    blue_teleop_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
 
     for row in data:
         if row[0] in red_nums:
@@ -363,8 +404,10 @@ def alliance_2023_api():
                 for j in range(9):
                     if red_auto[i][j] == 0 and json.loads(row[1])[i][j] != 0:
                         red_auto[i][j] = json.loads(row[1])[i][j]
+                        red_auto_config[i][j] = row[0]
                     if red_teleop[i][j] == 0 and json.loads(row[2])[i][j] != 0:
                         red_teleop[i][j] = json.loads(row[2])[i][j]
+                        red_teleop_config[i][j] = row[0]
     
     for row in data:
         if row[0] in blue_nums:
@@ -372,10 +415,12 @@ def alliance_2023_api():
                 for j in range(9):
                     if blue_auto[i][j] == 0 and json.loads(row[1])[i][j] != 0:
                         blue_auto[i][j] = json.loads(row[1])[i][j]
+                        blue_auto_config[i][j] = row[0]
                     if blue_teleop[i][j] == 0 and json.loads(row[2])[i][j] != 0:
                         blue_teleop[i][j] = json.loads(row[2])[i][j]
+                        blue_teleop_config[i][j] = row[0]
 
-    return jsonify({"red_auto": red_auto, "red_teleop": red_teleop, "blue_auto": blue_auto, "blue_teleop": blue_teleop})
+    return jsonify({"red_auto": red_auto, "red_teleop": red_teleop, "blue_auto": blue_auto, "blue_teleop": blue_teleop, "red_auto_config": red_auto_config, "blue_auto_config": blue_auto_config, "red_teleop_config": red_teleop_config, "blue_teleop_config": blue_teleop_config})
 
 
 def two_people(lst):
