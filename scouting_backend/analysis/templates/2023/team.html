@@ -54,8 +54,21 @@
     <tbody>
     {% for m in matches %}
         <tr>
-            <td>{{ m[2] }}</td>
-            <td>{{ m[3] }}</td>
+            <td>{{ m[0] }}</td>
+            <td class="alow">{{ m[1] }}</td>
+            <td class="amid">{{ m[2] }}</td>
+            <td class="atop">{{ m[3] }}</td>
+            <td>{{ m[4] }}</td>
+            <td class="tlow">{{ m[5] }}</td>
+            <td class="tmid">{{ m[6] }}</td>
+            <td class="ttop">{{ m[7] }}</td>
+            <td class="tcone">{{ m[8] }}</td>
+            <td class="tcube">{{ m[9] }}</td>
+            <td>{{ m[10] }}</td>
+            <td class="driver">{{ m[11] }}</td>
+            <td class="defense">{{ m[12] }}</td>
+            <td class="name">{{ m[13] }}</td>
+            <td>{{ m[14] }}</td>
         </tr>
     {% endfor %}
 
@@ -85,16 +98,14 @@
 
     var tdCounts = document.getElementsByTagName("td").length
     if (tdCounts != 0) {
-        var crossAvg = calcAverage("cross")
-        var autoUpperAvg = calcAverage("au")
-        var autoBottomAvg = calcAverage("ab")
-        var totalAutoAvg = calcAverage("ta")
-        var teleopUpperAvg = calcAverage("tu")
-        var teleopBottomAvg = calcAverage("tb")
-        var totalTeleopAvg = calcAverage("tt")
-        var levelAvg = calcAverage("level")
-        var climbAvg = calcAverage("c")
-        var totalPointAvg = calcAverage("tp")
+        var alowAvg = calcAverage("alow")
+        var amidAvg = calcAverage("amid")
+        var atopAvg = calcAverage("atop")
+        var tlowAvg = calcAverage("tlow")
+        var tmidAvg = calcAverage("tmid")
+        var ttopAvg = calcAverage("ttop")
+        var tconeAvg = calcAverage("tcone")
+        var tcubeAvg = calcAverage("tcube")
         var driverAvg = calcAverage("driver")
         var defenseAvg = calcAverage("defense")
 
@@ -103,16 +114,14 @@
         matchTd.innerText = "Avg"
         tr.appendChild(matchTd)
         crossAvg.setAttribute("class", "lol")
-        tr.appendChild(crossAvg)
-        tr.appendChild(autoUpperAvg)
-        tr.appendChild(autoBottomAvg)
-        tr.appendChild(totalAutoAvg)
-        tr.appendChild(teleopUpperAvg)
-        tr.appendChild(teleopBottomAvg)
-        tr.appendChild(totalTeleopAvg)
-        tr.appendChild(levelAvg)
-        tr.appendChild(climbAvg)
-        tr.appendChild(totalPointAvg)
+        tr.appendChild(alowAvg)
+        tr.appendChild(amidAvg)
+        tr.appendChild(atopAvg)
+        tr.appendChild(tlowAvg)
+        tr.appendChild(tmidAvg)
+        tr.appendChild(ttopAvg)
+        tr.appendChild(tconeAvg)
+        tr.appendChild(tcubeAvg)
         tr.appendChild(driverAvg)
         tr.appendChild(defenseAvg)
         document.getElementById("table").appendChild(tr)
