@@ -102,12 +102,30 @@ def view_team_data_2023(team):
     matches = db.execute(
         "SELECT * FROM scouting_2023 WHERE team_number=:team AND comp_code=:comp ORDER BY match_number ASC", {"team": team, "comp": comp_code}).fetchall()
     
-    data = []
+    data = [] # [[match num, alow, amid, atop, aclimb, tlow, tmid, ttop, tcone, tcube, eclimb, drivep, defp, name, comment]]
 
     for m in matches:
         # tuple(m) + ()
-        pass
-    
+        team_d = []
+        auto_grid = json.loads(m[3])
+        teleop_grid = json.loads(m[5])
+
+        team_d.append(m[2])
+        team_d.append(len([x for x in auto_grid[2] if x > 0]))
+        team_d.append(len([x for x in auto_grid[1] if x > 0]))
+        team_d.append(len([x for x in auto_grid[0] if x > 0]))
+        team_d.append(m[4])
+        team_d.append(len([x for x in teleop_grid[2] if x > 0]))
+        team_d.append(len([x for x in teleop_grid[1] if x > 0]))
+        team_d.append(len([x for x in teleop_grid[0] if x > 0]))
+        team_d.append(m[6])
+        team_d.append(m[7])
+        team_d.append(m[8])
+        team_d.append(m[9])
+        team_d.append(m[10])
+        team_d.append(m[11])
+        team_d.append(m[12])
+        data.append(team_d)
     pit = []
     # pit = db.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp",
     #                  {"team": team, "comp": comp_code}).fetchall()
@@ -126,7 +144,7 @@ def view_team_data_2023(team):
     if len(pit) == 0:
         pit = [["N/A" for i in range(12)]]
 
-    return render_template("2023/team.html", matches=matches, team=team, comps=comps, pit=pit)
+    return render_template("2023/team.html", matches=data, team=team, comps=comps, pit=pit)
 
 @analysis_bp.route("/alliance/2023")
 @login_required
@@ -390,6 +408,7 @@ def alliance_2023_api():
 
     print(data)
 
+    # TODO: For some reason it returns config info instead acutal data
     red_auto = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
     red_auto_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
 
