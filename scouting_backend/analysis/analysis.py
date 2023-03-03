@@ -45,7 +45,7 @@ def get_teams_at_event(event):
 @login_required
 def team_navigation():
     comp = request.args.get("code")
-    if comp == "test":
+    if comp == "test" or comp == "2023azva" or comp =="testing":
         all_teams = [i+1 for i in range(9000)]
         team_and_image = []
         results = []
@@ -107,17 +107,17 @@ def view_team_data_2023(team):
     for m in matches:
         # tuple(m) + ()
         team_d = []
-        auto_grid = json.loads(m[3])
-        teleop_grid = json.loads(m[5])
+        auto_grid = json.loads(json.loads(m[3]))
+        teleop_grid = json.loads(json.loads(m[5]))
 
         team_d.append(m[2])
-        team_d.append(len([x for x in auto_grid[2] if x > 0]))
-        team_d.append(len([x for x in auto_grid[1] if x > 0]))
-        team_d.append(len([x for x in auto_grid[0] if x > 0]))
+        team_d.append(len([x for x in auto_grid[2] if int(x) > 0]))
+        team_d.append(len([x for x in auto_grid[1] if int(x) > 0]))
+        team_d.append(len([x for x in auto_grid[0] if int(x) > 0]))
         team_d.append(m[4])
-        team_d.append(len([x for x in teleop_grid[2] if x > 0]))
-        team_d.append(len([x for x in teleop_grid[1] if x > 0]))
-        team_d.append(len([x for x in teleop_grid[0] if x > 0]))
+        team_d.append(len([x for x in teleop_grid[2] if int(x) > 0]))
+        team_d.append(len([x for x in teleop_grid[1] if int(x) > 0]))
+        team_d.append(len([x for x in teleop_grid[0] if int(x) > 0]))
         team_d.append(m[6])
         team_d.append(m[7])
         team_d.append(m[8])

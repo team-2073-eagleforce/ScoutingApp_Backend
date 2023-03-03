@@ -47,7 +47,7 @@ def detectScan():
 @login_required
 def detect_scan_2023():
     print(request.form["data"].split("'"))
-    json_data = json.loads(request.form["data"].split("'")[1])
+    json_data = json.loads(request.form["data"].split("'")[0])
     load_json(json_data)
     return render_template('QRScanner.html', comps=comps)
 
