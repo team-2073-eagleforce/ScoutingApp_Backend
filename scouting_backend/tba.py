@@ -11,11 +11,11 @@ conn = db()
 X_TBA_Auth_Key = os.getenv("TBA_AUTH_KEY")
 madtown_offseason_value = list(MADTOWN_2022_OFFSEASON_BOTS.values())
 
-def get_match_team(event_key):
+def get_match_team(event_key, year=2023):
     t = []
     j = []
 
-    if event_key != "testing":
+    if event_key != "testing" and event_key != "test":
         res = requests.get(f"https://www.thebluealliance.com/api/v3/event/{event_key}/teams", headers={
             "X-TBA-Auth-Key": X_TBA_Auth_Key
         })
@@ -23,7 +23,11 @@ def get_match_team(event_key):
         for team in res.json():
             t.append(int(team["team_number"]))
 
-    data = db.execute("SELECT DISTINCT team FROM scouting WHERE comp_code=:comp", {"comp": event_key}).fetchall()
+    if year == 2022:
+        data = db.execute("SELECT DISTINCT team FROM scouting WHERE comp_code=:comp", {"comp": event_key}).fetchall()
+    elif year == 2023:
+        data = db.execute("SELECT DISTINCT team_number FROM scouting_2023 WHERE comp_code=:comp", {"comp": event_key}).fetchall()
+
     print(data)
     for d in data:
         if d[0] not in t:
@@ -76,7 +80,7 @@ def get_comps(team, year=None):
     for r in res.json():
         comps[r["key"]] = r["short_name"]
     
-    comps["test"] = "Demo/Training"
+    comps["testing"] = "Demo/Training"
     #comps["2022cacc"] = "CCC"
     #comps["2022mttd"] = "Madtown Throwdown"
     return comps
