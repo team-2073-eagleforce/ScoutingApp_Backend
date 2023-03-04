@@ -46,6 +46,7 @@ def detectScan():
 @retrieval_bp.route('/detectScan/2023', methods=['POST'])
 @login_required
 def detect_scan_2023():
+    request.session["errordata"] = request.form["data"]
     print(request.form["data"].split("'"))
     json_data = json.loads(request.form["data"].split("'")[0])
     load_json(json_data)
