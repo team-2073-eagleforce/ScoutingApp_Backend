@@ -61,7 +61,7 @@ def pit_submit():
 @login_required
 def pit_submit_2023():
     if request.method == "POST":
-        res = c.execute("SELECT * FROM pit_scout_2023 WHERE team=:team AND comp_code=:comp", {
+        res = c.execute("SELECT * FROM pit_scouting_2023 WHERE team_number=:team AND comp_code=:comp", {
             "team": request.form["team"],
             "comp": request.form["comp"]
         }).fetchall()
@@ -69,18 +69,34 @@ def pit_submit_2023():
         if len(res) != 0:
             return "This data is submitted already"
 
-        print(request.form[""])
-        # robot_image_url = upload_image(request.files.getlist('pic')[0])
+        auto_abilities = ", ".join(request.form.getlist("auto-abilities"))
+        prefered_gp = ", ".join(request.form.getlist("prefered-gp"))
+        cannot_pu = ", ".join(request.form.getlist("cannot-gp"))
+        cone_pu = ", ".join(request.form.getlist("cone-pu"))
+        cube_pu = ", ".join(request.form.getlist("cube-pu"))
 
-        # c.execute("INSERT INTO pit_scouting_2023 (comp_code, img_url, drive_train, robot_type, weight, drivetrain_velocity, preferred_game_piece, cannot_pick_up, cone_pick_up, cube_pick_up, auto_position, auto_abilities, name) VALUES (:comp, :img, :drivetrain, :robot_type, :weight, :drivetrain_velocity, :pgp, :cannotpu, :conepu, :cubepu, :autopos, :autoab, :name)", {
-        #     "comp": request.form["comp"],
-        #     "img": robot_image_url,
-        #     "drivetrain": request.form["drivetrain"],
-        #     "robot_type": request.form["type"],
-        #     "weight": request.form["weight"],
-        #     "drivetrain_velocity": request.form["vel"],
-        #     "pgp": request.form[""]
-        # })
+        robot_image_url = upload_image(request.files.getlist('pic')[0])
+
+        c.execute("INSERT INTO pit_scouting_2023 (comp_code, img_url, drive_train, robot_type, weight, drivetrain_velocity, preferred_game_piece, cannot_pick_up, cone_pick_up, cube_pick_up, auto_position, auto_abilities, name, team_number) VALUES (:comp, :img, :drivetrain, :robot_type, :weight, :drivetrain_velocity, :pgp, :cannotpu, :conepu, :cubepu, :autopos, :autoab, :name, :team)", {
+            "comp": request.form["comp"],
+            "img": robot_image_url,
+            "drivetrain": request.form["drivetrain"],
+            "robot_type": request.form["type"],
+            "weight": request.form["weight"],
+            "drivetrain_velocity": request.form["vel"],
+            "pgp": prefered_gp,
+            "cannotpu": cannot_pu,
+            "conepu": cone_pu,
+            "cubepu": cube_pu,
+            "autopos": request.form["autopos"],
+            "autoab": auto_abilities,
+            "name": session.get("name"),
+            "comment": request.form["comment"],
+            "team": request.form["team"]
+        })
+        conn.commit()
+
+        return "Scouting data submitted successfully, click to <a href='/pit/scout/2023'>here</a> to go back to Pit Scouting form."
     
     else:
         return render_template("2023/form.html", comps=get_comps(CONST_HOME_TEAM, CONST_YEAR))
