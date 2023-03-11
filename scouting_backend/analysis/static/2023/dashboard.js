@@ -4,6 +4,8 @@ document.getElementById("button").onclick = () => {
     fetch(`/analysis/api/2023/get_match_schedule/${comp}/${match}`)
         .then(response => response.json())
         .then(data => {
+            console.log(data)
+
             document.getElementById("red1-team").innerText = data["red1"]["team_number"]
             document.getElementById("red1-auto-balance").innerText = `${data["red1"]["auto_balanced"][0]} : ${data["red1"]["auto_balanced"][1]}`
             document.getElementById("red1-auto-score").innerText = `${data["red1"]["auto_score"]}`
