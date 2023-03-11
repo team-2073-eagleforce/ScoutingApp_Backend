@@ -77,7 +77,7 @@ def pit_submit_2023():
 
         robot_image_url = upload_image(request.files.getlist('pic')[0])
 
-        c.execute("INSERT INTO pit_scouting_2023 (comp_code, img_url, drive_train, robot_type, weight, drivetrain_velocity, preferred_game_piece, cannot_pick_up, cone_pick_up, cube_pick_up, auto_position, auto_abilities, name, team_number) VALUES (:comp, :img, :drivetrain, :robot_type, :weight, :drivetrain_velocity, :pgp, :cannotpu, :conepu, :cubepu, :autopos, :autoab, :name, :team)", {
+        c.execute("INSERT INTO pit_scouting_2023 (comp_code, img_url, drive_train, robot_type, weight, drivetrain_velocity, preferred_game_piece, cannot_pick_up, cone_pick_up, cube_pick_up, auto_position, auto_abilities, name, team_number, comment) VALUES (:comp, :img, :drivetrain, :robot_type, :weight, :drivetrain_velocity, :pgp, :cannotpu, :conepu, :cubepu, :autopos, :autoab, :name, :team, :comment)", {
             "comp": request.form["comp"],
             "img": robot_image_url,
             "drivetrain": request.form["drivetrain"],
