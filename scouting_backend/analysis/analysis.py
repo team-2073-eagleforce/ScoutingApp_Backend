@@ -55,11 +55,11 @@ def team_navigation():
         results = []
     else:
         all_teams = get_teams_at_event(comp)
-        team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams} AND comp_code='{comp}'""".format(
-            teams=all_teams, comp=comp)).fetchall()
-        results = {team[0]: team[1] for team in team_and_image}
+        # team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams} AND comp_code='{comp}'""".format(
+        #     teams=all_teams, comp=comp)).fetchall()
+        # results = {team[0]: team[1] for team in team_and_image}
 
-    return render_template("teams_navigation.html", teams=results, all_teams=all_teams, comps=comps)
+    return render_template("teams_navigation.html", all_teams=all_teams, comps=comps) # all_teams=all_teams, comps=comps)
 
 
 # @analysis_bp.route("/team/<int:team>", methods=["GET"])
@@ -323,7 +323,8 @@ def calculate_points(match):
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def analysis_dashboard():
-    return redirect(f"/analysis/dashboard/{today.year}")
+    return render_template("2023/dashboard.html", comps=comps)
+    # return redirect(f"/analysis/dashboard/{today.year}")
     # return render_template("error.html")
     # return render_template("dashboard.html", comps=comps)
 
