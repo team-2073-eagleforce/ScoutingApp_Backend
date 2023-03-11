@@ -8,8 +8,8 @@
 <h1>Team {{ team }}'s Data</h1>
 <div class="row">
     <div class="col-3">
-        {% if pit[0][11] != 'N/A' %}
-            <img src="{{ pit[0][11] }}" class="img-thumbnail" > <!-- width="200px" height="200px"  -->
+        {% if pit[0][2] != 'N/A' %}
+            <img src="{{ pit[0][2] }}" class="img-thumbnail" > <!-- width="200px" height="200px"  -->
         {% else %}
             <img src="https://res.cloudinary.com/team2073-eagleforce/image/upload/v1658264240/th_vmkqqc.jpg" class="img-thumbnail">
         {% endif %}
@@ -17,12 +17,16 @@
     <div class="col-9">
         <span><b>Drivetrain: </b>{{ pit[0][3] }}</span> <br>
         <span><b>Offensive or Defense: </b>{{ pit[0][4] }}</span> <br>
-        <span><b>Prefered Scoring Location: </b> {{ pit[0][5] }}</span> <br>
-        <span><b>Auto: </b> {{ pit[0][6] }}</span> <br>
-        <span><b>Hub: </b> {{ pit[0][7] }}</span> <br>
-        <span><b>Climb: </b> {{ pit[0][8] }}</span> <br>
-        <span><b>Submitted by: </b> {{ pit[0][10] }}</span> <br>
-        <span><b>Comments: </b> {{ pit[0][9] }}</span>
+        <span><b>Weight: </b> {{ pit[0][5] }}</span> <br>
+        <span><b>Drivetrain Velocity: </b> {{ pit[0][6] }}</span> <br>
+        <span><b>Frame Perimeter: </b> {{ pit[0][7] }}</span> <br>
+        <span><b>Cannot Pick Up: </b> {{ pit[0][8] }}</span> <br>
+        <span><b>Cone Pick Up: </b> {{ pit[0][10] }}</span> <br>
+        <span><b>Cube Pick Up: </b> {{ pit[0][9] }}</span> <br>
+        <span><b>Auto Position: </b> {{ pit[0][9] }}</span> <br>
+        <span><b>Auto Abilities: </b> {{ pit[0][9] }}</span> <br>
+        <span><b>Submitted By: </b> {{ pit[0][9] }}</span> <br>
+        <span><b>Comment: </b> {{ pit[0][9] }}</span> <br>
     </div>
 </div>
 <br>

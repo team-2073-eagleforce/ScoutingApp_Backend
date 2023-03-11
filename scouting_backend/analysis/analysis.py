@@ -126,23 +126,14 @@ def view_team_data_2023(team):
         team_d.append(m[12])
         data.append(team_d)
     pit = []
-    # pit = db.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp",
-    #                  {"team": team, "comp": comp_code}).fetchall()
-    matches_with_calculated_scores = []
-
-    # for match in matches:
-    #     convert_match_to_list = list(match)
-    #     points_per_section = calculate_points(match)
-    #     convert_match_to_list.insert(6, points_per_section[0])
-    #     convert_match_to_list.insert(9, points_per_section[1])
-    #     convert_match_to_list.insert(11, points_per_section[2])
-    #     convert_match_to_list.insert(12, points_per_section[3])
-
-    #     matches_with_calculated_scores.append(convert_match_to_list)
+    pit = db.execute("SELECT * FROM pit_scouting_2023 WHERE team_number=:team AND comp_code=:comp", {"team": team, "comp": comp_code}).fetchall()
+    
+    print(pit)
 
     if len(pit) == 0:
         pit = [["N/A" for i in range(12)]]
 
+    print(pit)
     return render_template("2023/team.html", matches=data, team=team, comps=comps, pit=pit)
 
 @analysis_bp.route("/alliance/2023")
