@@ -1,0 +1,250 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <title>Pit Scouting</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Pit Scouting Form</h1>
+    <small>Common conversion links: <a href="https://www.unitconverters.net/weight-and-mass/kg-to-lbs.htm">kg to lbs</a>, <a href="https://www.convertunits.com/from/m/s/to/ft/s">m/s to ft/s</a>, <a href="https://www.unitconverters.net/length/cm-to-inches.htm">cm to in</a></small>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="team" class="form-label">Team Number</label>
+            <input type="number" class="form-control" id="team" name="team">
+        </div>
+        <div class="mb-3">
+            <label for="comp" class="form-label">Choose a competition</label>
+            <select class="form-select" aria-label="Default select example" id="comp" name="comp">
+                <option selected>Choose a competition</option>
+                {% for c in comps.keys() %}
+                    <option value="{{ c }}" id="{{ c }}">{{ comps[c] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Drivetrain</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="swerve" value="Swerve">
+                <label class="form-check-label" for="swerve">
+                    Swerve
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="west-coast" value="West Coast">
+                <label class="form-check-label" for="west-coast">
+                    West Coast
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="omni" value="Omni">
+                <label class="form-check-label" for="omni">
+                    Omni
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="mechanum" value="Mechanum">
+                <label class="form-check-label" for="mechanum">
+                    Mechanum
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="tank-tread" value="Tank Tread">
+                <label class="form-check-label" for="tank-tread">
+                    Tank Tread
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="drivetrain" id="other">
+                <label class="form-check-label" for="other">
+                    <input type="text" id="other-drivetrain" disabled>
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="type" class="form-label">Offense or Defensive</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="type" id="offensive" value="Offensive">
+                <label class="form-check-label" for="offensive">
+                    Offensive
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="type" id="defensive" value="Defensive">
+                <label class="form-check-label" for="Defensive">
+                    Defensive
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="weight" class="form-label">Weight (lbs)</label>
+            <input type="text" name="weight" id="weight" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="vel" class="form-label">Drivetrain Velocity (ft/s)</label>
+            <input type="text" name="vel" id="vel" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="frame-perimeter" class="form-label">Frame Perimeter (in.)</label>
+            <input type="text" name="frame-perimeter" id="frame-perimeter" class="form-control">
+        </div>
+
+        <label for="prefered-gp">Prefered Game Piece</label> <br>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="prefered-gp" id="pgp-cube">
+            <label class="form-check-label" for="pgp-cube" value="cube">
+              Cube
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="prefered-gp" id="pgp-cone" value="cone">
+            <label class="form-check-label" for="pgp-cone">
+              Cone
+            </label>
+        </div> <br>
+
+        <label for="cannot-gp">Cannot Pick Up</label> <br>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="cannot-gp" id="cgp-cube">
+            <label class="form-check-label" for="cgp-cube" value="cube">
+              Cube
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="cannot-gp" id="cgp-cone" value="cone">
+            <label class="form-check-label" for="cgp-cone">
+              Cone
+            </label>
+        </div> <br>
+
+        <label for="cone-pu">Cone Pick Up</label> <br>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="cone-pu" id="floor">
+            <label class="form-check-label" for="floor" value="Floor">
+              Floor
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="cone-pu" id="shelf" value="Shelf">
+            <label class="form-check-label" for="shelf">
+                Shelf
+            </label>
+        </div> 
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="cone-pu" id="ramp" value="Ramp">
+            <label class="form-check-label" for="ramp">
+                Ramp
+            </label>
+        </div> 
+        <br>
+        
+        <label for="cube-pu">Cube Pick Up</label> <br>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="cube-pu" id="floor">
+            <label class="form-check-label" for="floor" value="Floor">
+              Floor
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="cube-pu" id="shelf" value="Shelf">
+            <label class="form-check-label" for="shelf">
+                Shelf
+            </label>
+        </div> 
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="cube-pu" id="ramp" value="Ramp">
+            <label class="form-check-label" for="ramp">
+                Ramp
+            </label>
+        </div> 
+        <br>
+        <div class="mb-3">
+            <label for="autopos" class="form-label">Auto Position</label>
+            <input type="text" name="autopos" id="autopos" class="form-control">
+        </div>
+
+        <label for="auto-abilities">Auto Abilities</label> <br>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="auto-abilities" id="mobility">
+            <label class="form-check-label" for="mobility" value="Mobility">
+                Mobility
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="auto-abilities" id="dock" value="Dock">
+            <label class="form-check-label" for="dock">
+              Dock
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="auto-abilities" id="engage" value="Engage">
+            <label class="form-check-label" for="engage">
+                Engage
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="auto-abilities" id="scoretop" value="Score Top">
+            <label class="form-check-label" for="scoretop">
+                Score Top
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="auto-abilities" id="scoremid" value="Score Mid">
+            <label class="form-check-label" for="scoremid">
+                Score Mid
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="auto-abilities" id="scorelow" value="Score Low">
+            <label class="form-check-label" for="scorelow">
+                Score Low
+            </label>
+        </div> <br>
+
+        <div class="mb-3">
+            <label for="pic" class="form-label">Robot Picture</label>
+            <input type="file" class="form-control" id="pic" name="pic" onchange="loadPreview(this)">
+            <div>
+                <img id="preview">
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label for="comment" class="form-label">Anything else?</label>
+            <textarea class="form-control" id="comment" rows="3" name="comment"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <script>
+        const DRIVETRAIN_ID = ["swerve", "omni", "west-coast", "mechanum", "tank-tread"]
+        function loadPreview(input) {
+            var file = input.files[0]
+            var fileReader = new FileReader()
+            // var preview = fileReader.readAsDataURL(file);
+            // console.log(preview)
+            fileReader.addEventListener("load", function () {
+                // convert image to base64 encoded string
+                document.getElementById("preview").setAttribute("src", this.result);
+            });
+            fileReader.readAsDataURL(file)
+        }
+        
+        document.getElementById("other").onclick = () => {
+            document.getElementById("other-drivetrain").disabled = false
+        }
+        
+        document.getElementById("other-drivetrain").onblur = () => {
+            document.getElementById("other").setAttribute("value", document.getElementById("other-drivetrain").value)
+        }
+    
+        for (let i=0; i<DRIVETRAIN_ID.length; i++) {
+            document.getElementById(DRIVETRAIN_ID[i]).onclick = () => {
+                document.getElementById("other-drivetrain").disabled = true
+                document.getElementById("other-drivetrain").value = ""
+            }
+        }
+        
+    </script>
+{% endblock %}

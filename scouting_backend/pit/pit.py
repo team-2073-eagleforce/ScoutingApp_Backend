@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, request, session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from scouting_backend.home.home import CONST_HOME_TEAM
+from scouting_backend.home.home import CONST_HOME_TEAM, CONST_YEAR
 from scouting_backend.helpers import login_required, upload_image
 
 from .models import PitEntry, db
@@ -20,7 +20,7 @@ pit_bp = Blueprint(
 )
 
 
-@pit_bp.route("/", methods=["GET", "POST"])
+@pit_bp.route("/scout/2022", methods=["GET", "POST"])
 @login_required
 def pit_submit():
     if request.method == "POST":
@@ -54,7 +54,33 @@ def pit_submit():
         conn.commit()
         return "Done"
     else:
-        return render_template("form.html", comps=get_comps(CONST_HOME_TEAM, 2022))
+        return render_template("2023/form.html", comps=get_comps(CONST_HOME_TEAM, CONST_YEAR))
+
+
+@pit_bp.route("/scout/2023", methods=["GET", "POST"])
+@login_required
+def pit_submit_2023():
+    if request.method == "POST":
+        res = c.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp", {
+            "team": request.form["team"],
+            "comp": request.form["comp"]
+        }).fetchall()
+
+        if len(res) != 0:
+            return "This data is submitted already"
+
+        robot_image_url = upload_image(request.files.getlist('pic')[0])
+
+        c.execute("INSERT INTO pit_scouting_2023 (comp_code, img_url, drive_train, robot_type, weight, drivetrain_velocity, preferred_game_piece, cannot_pick_up, cone_pick_up, cube_pick_up, auto_position, auto_abilities, name) VALUES (:comp, :img, :drivetrain, :robot_type, :weight, :drivetrain_velocity, :pgp, :cannotpu, :conepu, :cubepu, :autopos, :autoab, :name)", {
+            "comp": request.form["comp"],
+            "img": robot_image_url,
+            "drivetrain": request.form["drivetrain"],
+            "robot_type": request.form["type"],
+            "weight": request.form["weight"]
+        })
+    
+    else:
+        return render_template("2023/form.html", comps=get_comps(CONST_HOME_TEAM, CONST_YEAR))
 
 
 @pit_bp.route("/analysis")

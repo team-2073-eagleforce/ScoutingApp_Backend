@@ -33,7 +33,6 @@ CONST_AUTO_CROSS = [0, 2]
 
 comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
-
 def get_teams_at_event(event):
     print(event)
     # elif event == "2022cacc":
@@ -388,7 +387,7 @@ def alliance_2023_api():
     print(request.json)
 
     data = get_match_schedule(request.json["comp_code"], request.json["match_number"], test=True)
-    print(data)
+
 
     red_1 = int(data["red"][0].split("frc")[1])
     red_2 = int(data["red"][1].split("frc")[1])
@@ -401,25 +400,25 @@ def alliance_2023_api():
     red_nums = [red_1, red_2, red_3]
     blue_nums = [blue_1, blue_2, blue_3]
 
+    print(red_nums, blue_nums)
+
     data = fetch("SELECT team_number, auto_grid, tele_grid FROM scouting_2023 WHERE match_number=:match AND comp_code=:comp", {
         "match": request.json["match_number"],
         "comp": request.json["comp_code"],
     })
 
-    print(data)
-
     # TODO: For some reason it returns config info instead acutal data
     red_auto = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    red_auto_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
+    #red_auto_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
 
     blue_auto = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    blue_auto_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
+    #blue_auto_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
 
     red_teleop = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    red_teleop_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
+    #red_teleop_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
 
     blue_teleop = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    blue_teleop_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
+    #blue_teleop_config = [[None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None, None]]
 
     for row in data:
         if row[0] in red_nums:
@@ -427,10 +426,10 @@ def alliance_2023_api():
                 for j in range(9):
                     if red_auto[i][j] == 0 and json.loads(row[1])[i][j] != 0:
                         red_auto[i][j] = json.loads(row[1])[i][j]
-                        red_auto_config[i][j] = row[0]
+                        #red_auto_config[i][j] = row[0]
                     if red_teleop[i][j] == 0 and json.loads(row[2])[i][j] != 0:
                         red_teleop[i][j] = json.loads(row[2])[i][j]
-                        red_teleop_config[i][j] = row[0]
+                        #red_teleop_config[i][j] = row[0]
     
     for row in data:
         if row[0] in blue_nums:
@@ -438,12 +437,14 @@ def alliance_2023_api():
                 for j in range(9):
                     if blue_auto[i][j] == 0 and json.loads(row[1])[i][j] != 0:
                         blue_auto[i][j] = json.loads(row[1])[i][j]
-                        blue_auto_config[i][j] = row[0]
+                        #blue_auto_config[i][j] = row[0]
                     if blue_teleop[i][j] == 0 and json.loads(row[2])[i][j] != 0:
                         blue_teleop[i][j] = json.loads(row[2])[i][j]
-                        blue_teleop_config[i][j] = row[0]
+                        #blue_teleop_config[i][j] = row[0]
 
-    return jsonify({"red_auto": red_auto, "red_teleop": red_teleop, "blue_auto": blue_auto, "blue_teleop": blue_teleop, "red_auto_config": red_auto_config, "blue_auto_config": blue_auto_config, "red_teleop_config": red_teleop_config, "blue_teleop_config": blue_teleop_config})
+    print(red_auto)
+
+    return jsonify({"red_auto": red_auto, "red_teleop": red_teleop, "blue_auto": blue_auto, "blue_teleop": blue_teleop}) #  "red_auto_config": red_auto_config, "blue_auto_config": blue_auto_config, "red_teleop_config": red_teleop_config, "blue_teleop_config": blue_teleop_config
 
 
 def two_people(lst):

@@ -45,6 +45,9 @@ def get_match_schedule(event_key, match_num, test=False):
     if test:
         print("hello")
         res = requests.get(f"https://tba-mock-2073.free.beeceptor.com/event/test/matches")
+        # res = requests.get(f"https://www.thebluealliance.com/api/v3/event/2023caph/matches", headers={
+        #     "X-TBA-Auth-Key": X_TBA_Auth_Key  
+        # })
     else:
         print("world")
         res = requests.get(f"https://www.thebluealliance.com/api/v3/event/{event_key}/matches", headers={

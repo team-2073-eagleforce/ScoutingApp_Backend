@@ -28,22 +28,30 @@ def load_json(data):
     comment = data["comment"]
     comp_code = data["compCode"]
 
-    c.execute("INSERT INTO scouting_2023 (team_number, match_number, auto_grid, tele_grid, auto_charging_station, cone_transport, cube_transport, end_charging_station, driver_ranking, defense_ranking, name, comment, comp_code) VALUES (:team, :match, :ag, :tg, :auto_cs, :cone, :cube, :end_cs, :driver, :defense, :name, :comment, :comp_code)", {
+    results = c.execute("SELECT * FROM scouting_2023 WHERE team_number=:team, match_number=:match, comp_code=:comp, name=:name", {
         "team": team_number,
         "match": match_number,
-        "ag": auto_grid,
-        "tg": tele_grid,
-        "auto_cs": auto_charging_station,
-        "cone": cone_transport,
-        "cube": cube_transport,
-        "end_cs": end_charging_station,
-        "driver": driver_ranking,
-        "defense": defense_ranking,
-        "name": name,
-        "comment": comment,
-        "comp_code": comp_code
-    })
-    conn.commit()
+        "comp": comp_code,
+        "name": name
+    }).fetchall()
+
+    if len(results) == 0:
+        c.execute("INSERT INTO scouting_2023 (team_number, match_number, auto_grid, tele_grid, auto_charging_station, cone_transport, cube_transport, end_charging_station, driver_ranking, defense_ranking, name, comment, comp_code) VALUES (:team, :match, :ag, :tg, :auto_cs, :cone, :cube, :end_cs, :driver, :defense, :name, :comment, :comp_code)", {
+            "team": team_number,
+            "match": match_number,
+            "ag": auto_grid,
+            "tg": tele_grid,
+            "auto_cs": auto_charging_station,
+            "cone": cone_transport,
+            "cube": cube_transport,
+            "end_cs": end_charging_station,
+            "driver": driver_ranking,
+            "defense": defense_ranking,
+            "name": name,
+            "comment": comment,
+            "comp_code": comp_code
+        })
+        conn.commit()
 
 
 def fetch(sql_statement, params):
