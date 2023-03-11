@@ -28,7 +28,7 @@ def load_json(data):
     comment = data["comment"]
     comp_code = data["compCode"]
 
-    results = c.execute("SELECT * FROM scouting_2023 WHERE team_number=:team, match_number=:match, comp_code=:comp, name=:name", {
+    results = c.execute("SELECT * FROM scouting_2023 WHERE team_number=:team AND match_number=:match AND comp_code=:comp AND name=:name", {
         "team": team_number,
         "match": match_number,
         "comp": comp_code,
