@@ -18,6 +18,14 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def pit_scout_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("email") is None:
+            return redirect("/google/authorize")
+        return f(*args, **kwargs)
+    return decorated_function
+
 cloudinary.config(
     cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME"),
     api_key = os.getenv("CLOUDINARY_API_KEY"),
@@ -38,9 +46,10 @@ def create_message(email_text):
         plain_text_content=email_text,
     )
 
-def team_data(team_num):
-    data = fetch("SELECT * FROM scouting_2023 WHERE team_number=:team", {
-        "team": team_num
+def team_data(team_num, comp_code):
+    data = fetch("SELECT * FROM scouting_2023 WHERE team_number=:team AND comp_code=:comp_code", {
+        "team": team_num,
+        "comp_code": comp_code
     })
 
     auto_balanced = 0
@@ -52,10 +61,10 @@ def team_data(team_num):
     points_total = 0
 
     for match in data:
-        if match[4] == 2:
+        if match[4] == 3:
             auto_balanced += 1
         
-        if match[4] == 1 or match[4] == 2:
+        if match[4] == 2 or match[4] == 3:
             auto_total += 1
         
         auto_grid = json.loads(match[3])
@@ -79,41 +88,37 @@ def team_data(team_num):
             total += 10
         
         points_total += total
-
-    return [[auto_balanced, auto_total], round(auto_score_total / len(match), 2), round(teleop_cone_total / len(match), 2), round(teleop_cube_total / len(match), 2), 0, round(points_total / len(match), 2)] # Missing endgame, insert it before the last ele
+    
+    if len(data) == 0:
+        data = ["N/A"]
+    
+    print(team_num, auto_score_total, len(data))
+    return [[auto_balanced, auto_total], round(auto_score_total / len(data), 2), round(teleop_cone_total / len(data), 2), round(teleop_cube_total / len(data), 2), 0, round(points_total / len(data), 2)] # Missing endgame, insert it before the last ele
 
 
 def grid_score(grid, auto=False):
     score = 0
 
-    print("GRIDDDDDDDDDDDDDDDDDDDDDDD: ", grid)
+    grid = json.loads(grid)
 
-    for i in range(7):
-        if grid[0][i] != 0:
-            if auto:
-                score += 6
-            else:
-                score += 5
+    # print("GRIDDDDDDDDDDDDDDDDDDDDDDD: ", grid)
 
-    for i in range(7):
-        if grid[1][i] != 0:
-            if auto:
-                score += 5
-            else:
-                score += 4
-    
-    for i in range(7):
-        if grid[2][i] != 0:
-            if auto:
-                score += 4
-            else:
-                score += 3
+    if auto:
+        score += grid[0].count(1) * 6
+        score += grid[1].count(1) * 4
+        score += grid[2].count(1) * 3
+    else:
+        score += grid[0].count(1) * 5
+        score += grid[1].count(1) * 3
+        score += grid[2].count(1) * 2
 
     return score
 
 def count_objects(grid):
     cone = 0
     cube = 0
+    
+    grid = json.loads(grid)
 
     for row in range(3):
         for col in range(7):
