@@ -44,7 +44,7 @@ def get_teams_at_event(event):
 @login_required
 def team_navigation():
     comp = request.args.get("code")
-    if comp == "test" or comp == "2023azva" or comp =="testing":
+    if comp == "test" or comp =="testing":
         all_teams = [i+1 for i in range(9000)]
         team_and_image = []
         results = []
@@ -193,15 +193,16 @@ def api_get_match_schedule(event_key, match_num):
 
 @analysis_bp.route("/api/2023/get_match_schedule/<string:event_key>/<string:match_num>")
 def api_get_match_schedule_2023(event_key, match_num):
-    data = get_match_schedule(event_key, match_num, test=True)
+    # data = get_match_schedule(event_key, match_num, test=True)
+    data = get_match_schedule(event_key, match_num, test=False)
 
-    red_1_data = team_data(int(data["red"][0].split("frc")[1]))
-    red_2_data = team_data(int(data["red"][1].split("frc")[1]))
-    red_3_data = team_data(int(data["red"][2].split("frc")[1]))
+    red_1_data = team_data(int(data["red"][0].split("frc")[1]), event_key)
+    red_2_data = team_data(int(data["red"][1].split("frc")[1]), event_key)
+    red_3_data = team_data(int(data["red"][2].split("frc")[1]), event_key)
 
-    blue_1_data = team_data(int(data["blue"][0].split("frc")[1]))
-    blue_2_data = team_data(int(data["blue"][1].split("frc")[1]))
-    blue_3_data = team_data(int(data["blue"][2].split("frc")[1]))
+    blue_1_data = team_data(int(data["blue"][0].split("frc")[1]), event_key)
+    blue_2_data = team_data(int(data["blue"][1].split("frc")[1]), event_key)
+    blue_3_data = team_data(int(data["blue"][2].split("frc")[1]), event_key)
 
     result = {
         "red1": {
