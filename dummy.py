@@ -1,6 +1,6 @@
 import random
 import json
-from database import load_json
+from database import load_json, c
 
 def generate_grid(grid=None):
     top_row = []
@@ -270,7 +270,7 @@ def main():
             "alliances": {
             "blue": {
                 "team_keys": [
-                    f"frc{schedule[match_num][0][0]}",
+                   f"frc{schedule[match_num][0][0]}",
                     f"frc{schedule[match_num][0][1]}",
                     f"frc{schedule[match_num][0][2]}",
                 ]
@@ -289,5 +289,4 @@ def main():
     with open("schedule.json", "w") as f:
         f.write(json.dumps(schedule_formatted))
 
-main()
 

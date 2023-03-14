@@ -143,9 +143,9 @@ def alliance_view():
     return render_template("2023/alliance.html", comps=comps)
 
 
-@analysis_bp.route("/rankings", methods=['GET', 'POST'])
+@analysis_bp.route("/rankings/2022", methods=['GET', 'POST'])
 @login_required
-def rankings_list():
+def rankings_list_2022():
     comp = request.args.get("code")
     if comp is None:
         all_teams = []
@@ -179,7 +179,30 @@ def rankings_list():
         print(dic_team_with_average)
     return render_template("rankings.html", calculated_averages=dic_team_with_average, comps=comps)
 
+@analysis_bp.route("/rankings", methods=['GET', 'POST'])
+@login_required
+def rankings_list_2023():
+    teamAverage = []
+    jay = -1
+    boolean = False
+    comp = request.args.get("code")
+    if comp is None:
+        all_teams = []
+    else:
+        data = c.execute("...")
+        for i in data:
+            for j in teamAverage:
+                if j[1] == i[1]:
+                    boolean = True
+                    jay = teamAverage.index(j)
+            if(not boolean):
+                for k in teamAverage[jay]:
+                    j[k] = (float(j[k] + i[k]))/2
+            else:
+                teamAverage.append(i)
+            boolean = False
 
+                    
 @analysis_bp.route("/api/get_match_schedule/<string:event_key>/<string:match_num>")
 def api_get_match_schedule(event_key, match_num):
     # {"red": ["frc1", "frc2", "frc3"], "blue": ["frc4", "frc5", "frc6"]}
