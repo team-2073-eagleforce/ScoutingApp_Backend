@@ -1,5 +1,6 @@
 from functools import wraps
 from flask import request, redirect, url_for, session
+from constants import DNP
 
 import cloudinary
 import cloudinary.uploader
@@ -45,6 +46,28 @@ def create_message(email_text):
         subject='SCOUTING APP V2 - unhandled exception occurred!',
         plain_text_content=email_text,
     )
+
+def is_non_desirable_scouter(name):
+    if name.lower() in DNP:
+        return True
+    return False
+
+def remove_non_desirable_data(data):
+    """
+    Args: 
+    - data: list filled with tuples; tuple[11] is the name.
+
+    Returns:
+    Same format like data except with all DNP scouts' data removed
+
+    Extra Credit: if you can use is_non_desirable_scounter function effectively
+    """
+    new_data = []
+    for i in data:
+        if not is_non_desirable_scouter(i[11]):
+            new_data.append(i)
+    return new_data
+
 
 def team_data(team_num, comp_code):
     data = fetch("SELECT * FROM scouting_2023 WHERE team_number=:team AND comp_code=:comp_code", {
@@ -95,7 +118,6 @@ def team_data(team_num, comp_code):
     print(team_num, auto_score_total, len(data))
     return [[auto_balanced, auto_total], round(auto_score_total / len(data), 2), round(teleop_cone_total / len(data), 2), round(teleop_cube_total / len(data), 2), 0, round(points_total / len(data), 2)] # Missing endgame, insert it before the last ele
 
-
 def grid_score(grid, auto=False):
     score = 0
 
@@ -128,3 +150,4 @@ def count_objects(grid):
                 cube += 1
     
     return cone, cube
+
