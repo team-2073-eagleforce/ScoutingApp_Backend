@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-from flask import jsonify, render_template, Blueprint, request, redirect
+from flask import jsonify, render_template, Blueprint, request, redirect, session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
