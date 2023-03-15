@@ -12,8 +12,10 @@ import datetime
 import json
 from termcolor import colored
 
-from helpers import team_data
+from helpers import team_data, grid_score
 from database import fetch
+
+from ..constants import DNP
 
 today = datetime.date.today()
 
@@ -45,7 +47,7 @@ def get_teams_at_event(event):
 def team_navigation():
     comp = request.args.get("code")
     if comp == "test" or comp =="testing":
-        all_teams = [i+1 for i in range(9000)]
+        all_teams = [i+1 for i in range(1)]
         team_and_image = []
         results = []
     # In case someone visited /team directly, which requires a query string code, for error catching
@@ -182,27 +184,72 @@ def rankings_list_2022():
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
 @login_required
 def rankings_list_2023():
+    if session.get("email") in PIT_SCOUT_EMAIL:
+        return "Unauthorized. As a pit scout, you can only view the <a href='/analysis/team>'teams page</a> or submit <a href='/pit/scout/2023>'pit scouting data</a>"
     teamAverage = []
     jay = -1
     boolean = False
     comp = request.args.get("code")
     if comp is None:
-        all_teams = []
+        average = {}
     else:
-        data = c.execute("...")
-        for i in data:
-            for j in teamAverage:
-                if j[1] == i[1]:
-                    boolean = True
-                    jay = teamAverage.index(j)
-            if(not boolean):
-                for k in teamAverage[jay]:
-                    j[k] = (float(j[k] + i[k]))/2
-            else:
-                teamAverage.append(i)
-            boolean = False
+        data = db.execute("SELECT * FROM scouting_2023 WHERE comp_code=:comp", {
+            "comp": comp
+        }).fetchall()
 
-                    
+        unwanted_removed = {}
+        average = {}
+
+        for match in data:
+            if match[11].lower() not in DNP:
+                if unwanted_removed.get(match[1]) == None:
+                    unwanted_removed[match[1]] = [match]
+                else:
+                    unwanted_removed[match[1]].append(match)
+            else:
+                print(match)
+
+        for team_num in list(unwanted_removed.keys()):
+            match_total = 0
+            match_count = 0
+            auto = 0
+            teleop = 0
+            # auto_endgame = 0
+            teleop_endgame = 0
+            driver = 0
+            defense = 0
+
+            for match in unwanted_removed[team_num]:
+                auto_grid_score = grid_score(json.loads(match[3]), auto=True)
+                teleop_grid_score = grid_score(json.loads(match[5]))
+                # auto_endgame TBD
+                if match[8] == 1:
+                    teleop_endgame += 2
+                    match_total += 2
+                elif match[8] == 2:
+                    teleop_endgame += 6
+                    match_total += 6
+                elif match[8] == 3:
+                    teleop_endgame += 10
+                    match_total += 10
+                
+                total_score = auto_grid_score + teleop_grid_score
+
+                match_total += total_score
+                match_count += 1
+                auto += auto_grid_score
+                teleop += teleop_grid_score
+                driver += match[9]
+                defense += match[10]
+
+            if match_count == 0:
+                match_count = 1
+            
+            print(driver, match_count, team_num)
+            average[team_num] = [round(match_total / match_count, 2), round(auto / match_count, 2), round(teleop / match_count, 2), round(teleop_endgame / match_count, 2), round(driver / match_count, 2), round(defense / match_count, 2)]
+
+    return render_template("2023/rankings.html", calculated_averages=average, comps=comps)
+
 @analysis_bp.route("/api/get_match_schedule/<string:event_key>/<string:match_num>")
 def api_get_match_schedule(event_key, match_num):
     # {"red": ["frc1", "frc2", "frc3"], "blue": ["frc4", "frc5", "frc6"]}
@@ -347,6 +394,8 @@ def calculate_points(match):
 @analysis_bp.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def analysis_dashboard():
+    if session.get("email") in PIT_SCOUT_EMAIL:
+        return "Unauthorized. As a pit scout, you can only view the <a href='/analysis/team>'teams page</a> or submit <a href='/pit/scout/2023>'pit scouting data</a>"
     return render_template("2023/dashboard.html", comps=comps)
     # return redirect(f"/analysis/dashboard/{today.year}")
     # return render_template("error.html")
@@ -356,6 +405,8 @@ def analysis_dashboard():
 @analysis_bp.route("/dashboard/2023", methods=['GET', 'POST'])
 @login_required
 def analysis_dashboard_2023():
+    if session.get("email") in PIT_SCOUT_EMAIL:
+        return "Unauthorized. As a pit scout, you can only view the <a href='/analysis/team>'teams page</a> or submit <a href='/pit/scout/2023>'pit scouting data</a>"
     # return render_template("error.html")
     return render_template("2023/dashboard.html", comps=comps)
 

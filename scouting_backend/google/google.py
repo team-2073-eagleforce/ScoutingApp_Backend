@@ -5,7 +5,7 @@ import requests
 from flask import jsonify, render_template, Blueprint, request, session, redirect, url_for
 
 from scouting_backend import sheet
-from scouting_backend.constants import AUTHORIZED_EMAIL
+from scouting_backend.constants import AUTHORIZED_EMAIL, PIT_SCOUT_EMAIL
 from scouting_backend.helpers import login_required
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -124,7 +124,7 @@ def oauth2callback():
 
     session["name"] = r["given_name"] + " " + r["family_name"]
 
-    if r["email"] not in AUTHORIZED_EMAIL:
+    if r["email"] not in AUTHORIZED_EMAIL or r["email"] not in PIT_SCOUT_EMAIL:
         return "405 UNAUTHORIZED"
 
     session["email"] = r["email"]
