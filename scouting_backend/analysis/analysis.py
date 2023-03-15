@@ -448,6 +448,18 @@ def get_offseason_bot():
     return jsonify(get_offseason_bots("2022mttd"))
 
 
+@analysis_bp.route("/picklist")
+def picklist_2023():
+    comp = request.args.get("code")
+
+    if comp == None or comp == "testing":
+        teams = []
+    else:
+        teams = sorted(get_teams_at_event(comp))
+
+    print(comp, teams)
+    return render_template("2023/picklist.html", comps=comps, teams=teams)
+
 @analysis_bp.route("/api/alliance/2023", methods=["GET", "POST"])
 def alliance_2023_api():
 

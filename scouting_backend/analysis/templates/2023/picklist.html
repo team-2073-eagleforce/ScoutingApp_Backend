@@ -1,0 +1,135 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<title>Team {{ team }}</title>
+{% endblock %}
+
+{% block body %}
+<h1>Picklist</h1>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add Team
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="add-team">
+            <label>Select a Team</label>
+            <select class="form-select" aria-label="Default select example" id="teamNum">
+                {% for team in teams %}
+                    <option value="{{ team }}">{{ team }}</option>
+                {% endfor %}
+            </select>
+            <label for="pick">Add to</label> <br>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="pick" id="1" value="1">
+                <label class="form-check-label" for="1">
+                  1st Pick
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="pick" id="2" value="2">
+                <label class="form-check-label" for="2">
+                  2nd Pick
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="pick" id="3" value="3">
+                <label class="form-check-label" for="3">
+                  3rd Pick
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="pick" id="dnp" value="dnp">
+                <label class="form-check-label" for="dnp">
+                  DNP
+                </label>
+            </div>
+            <button type="button" class="btn btn-primary" id="submit">Submit</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<h2>1st Pick</h2>
+<ol id="1st-pick"></ol>
+<hr>
+<h2>2nd Pick</h2>
+<ol id="2nd-pick"></ol>
+<hr>
+<h2>3rd Pick</h3>
+<ol id="3rd-pick"></ol>
+<hr>
+<h2>DNP (Do Not Pick)</h2>
+<ol id="dnpick"></ol>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function setLinks() {
+    
+        var upLink = document.querySelectorAll(".up");
+
+        for (var i = 0; i < upLink.length; i++) {
+            console.log("up")
+            upLink[i].addEventListener('click', function () {
+                var wrapper = this.parentElement;
+
+                if (wrapper.previousElementSibling)
+                    wrapper.parentNode.insertBefore(wrapper, wrapper.previousElementSibling);
+            });
+        }
+
+        var downLink = document.querySelectorAll(".down");
+
+        for (var i = 0; i < downLink.length; i++) {
+            console.log("down")
+            downLink[i].addEventListener('click', function () {
+                var wrapper = this.parentElement;
+
+                if (wrapper.nextElementSibling)
+                    wrapper.parentNode.insertBefore(wrapper.nextElementSibling, wrapper);
+            });
+        }
+    }
+    var params = new URLSearchParams(window.location.search)
+    if (params.get("code") == null) {
+        window.location.replace(`/analysis/picklist?code=${document.getElementById("comp").value}`)
+    }
+
+    document.getElementById("submit").onclick = () => {
+        $('#exampleModal').modal('hide');
+
+        if (document.getElementById("1").checked) {
+            var li = document.createElement("li");
+            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a>`
+            document.getElementById("1st-pick").appendChild(li)
+            setLinks()
+        } 
+        if (document.getElementById("2").checked) {
+            var li = document.createElement("li");
+            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a>`
+            document.getElementById("2nd-pick").appendChild(li)
+            setLinks()
+        } 
+        if (document.getElementById("3").checked) {
+            var li = document.createElement("li");
+            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a>`
+            document.getElementById("3rd-pick").appendChild(li)
+            setLinks()
+        }
+    }
+
+
+</script>
+{% endblock %}
