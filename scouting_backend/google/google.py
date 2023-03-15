@@ -124,7 +124,7 @@ def oauth2callback():
 
     session["name"] = r["given_name"] + " " + r["family_name"]
 
-    if r["email"] not in AUTHORIZED_EMAIL or r["email"] not in PIT_SCOUT_EMAIL:
+    if r["email"] not in AUTHORIZED_EMAIL and r["email"] not in PIT_SCOUT_EMAIL:
         return "405 UNAUTHORIZED"
 
     session["email"] = r["email"]
