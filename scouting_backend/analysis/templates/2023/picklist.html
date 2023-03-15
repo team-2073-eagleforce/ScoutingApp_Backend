@@ -128,6 +128,12 @@
             document.getElementById("3rd-pick").appendChild(li)
             setLinks()
         }
+        if (document.getElementById("dnp").checked) {
+            var li = document.createElement("li");
+            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a>`
+            document.getElementById("dnpick").appendChild(li)
+            setLinks()
+        }
     }
 
 

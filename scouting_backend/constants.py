@@ -4,6 +4,7 @@ AUTHORIZED_EMAIL = [
 
     # technicians
     "ethan.see@team2073.com",
+    "lucian.mayers-viseroi@team2073.com",
 
     # strategists
     "kent.young@team2073.com",
@@ -22,7 +23,7 @@ AUTHORIZED_EMAIL = [
 
 
 PIT_SCOUT_EMAIL = [
-    "Aaron.Choi@team2073.com",
+    "aaron.choi@team2073.com",
     "jayden.dhaliwal@team2073.com",
 
     "andy.wang@team2073.com",
@@ -32,7 +33,7 @@ PIT_SCOUT_EMAIL = [
     "ethan.see@team2073.com",
 
     "cayden.granado@team2073.com",
-    "Spencer.Hoang@team2073.com",
+    "spencer.hoang@team2073.com",
 
     "chelsea.ha@team2073.com",
     "nathan.lee@team2073.com",
