@@ -15,7 +15,7 @@ from tba import get_comps
 from scouting_backend.constants import CONST_HOME_TEAM, CONST_YEAR
 import datetime, json
 
-from ..constants import DNP, PIT_SCOUT_EMAIL
+from constants import DNP, PIT_SCOUT_EMAIL
 
 today = datetime.date.today()
 
