@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+<style>
+    .strike {
+    background: repeating-linear-gradient(
+        180deg,
+        red 0%,
+        red 100%
+    );
+    background-size: 100% 2px;
+    background-position: center;
+    background-repeat: no-repeat;
+    }
+</style>
+<div class="container">
+    <h1>Rankings</h1>
+    <table class="table" id="rankings_table">
+        <thead>
+        <tr class="sticky-top" style="background-color: gray;">
+            <th>Rank</th>
+            <th scope="col">Team</th>
+            <th onclick="sortTable(1, 'total')">Total Average</th>
+            <th onclick="sortTable(2, 'auto')">Auto Average</th>
+            <th onclick="sortTable(3, 'teleop')">Teleop Average</th>
+            <th onclick="sortTable(4, 'teleop_endgame')">Teleop Endgame Average</th>
+            <th onclick="sortTable(5, 'driver')">Driver Average</th>
+            <th onclick="sortTable(6, 'defense')">Defense Average</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for team in calculated_averages %}
+        <tr class="data">
+            <td class="rank"></td>
+            <th scope="row"><button type="button" class="btn btn-link" onclick="document.location.assign(`/analysis/team/{{ team }}?code=` + localStorage.getItem('comp'))">{{ team }}</button></th>
+            <td class="total {{ team }}">{{ calculated_averages[team][0] }}</td>
+            <td class="auto {{ team }}">{{ calculated_averages[team][1] }}</td>
+            <td class="teleop {{ team }}">{{ calculated_averages[team][2] }}</td>
+            <td class="teleop_endgame {{ team }}">{{ calculated_averages[team][3] }}</td>
+            <td class="driver {{ team }}">{{ calculated_averages[team][4] }}</td>
+            <td class="defense {{ team }}">{{ calculated_averages[team][5] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="/analysis/static/rankings.js"></script>
+
+<script>
+    var params = new URLSearchParams(window.location.search)
+    if (params.get("code") == null) {
+        window.location.replace(`/analysis/rankings?code=${localStorage.getItem('comp')}`)
+    }
+
+    function strikethrough(team) {
+        var eles = document.getElementsByClassName(team);
+        var mod = false;
+        for (ele in eles) {
+            if (ele == "length") {
+                break
+            }
+            console.log(ele)
+            if (eles[ele].getAttribute("class").indexOf("strike") != -1) {
+                eles[ele].setAttribute("class", eles[ele].getAttribute("class").replace("strike", ""))
+                mod = true;
+            } else {
+                eles[ele].setAttribute("class", eles[ele].getAttribute("class") + " strike")
+                mod = false;
+            }
+        }
+
+        if (!mod) {
+            fetch(`/analysis/strikethrough?team=${team}&comp=${document.getElementById('comp').value}`)
+        } else {
+            fetch(`/analysis/unstrikethrough?team=${team}&comp=${document.getElementById('comp').value}`)
+        }
+    }
+
+    function fetchStrikethrough() {
+        fetch("/analysis/strikethrough-all" + "?comp=" + document.getElementById("comp").value)
+        .then(response => response.json())
+        .then(data => {
+            for (var i=0; i<data.length; i++) {
+                var currTeam = data[i]
+                var eles = document.getElementsByClassName(currTeam);
+                for (ele in eles) {
+                    if (ele == "length") {
+                        break
+                    }
+                    eles[ele].setAttribute("class", eles[ele].getAttribute("class") + " strike")
+                }
+            }
+        })
+    }
+
+    window.onload = () => {
+        // fetchStrikethrough()
+    }
+
+    sortTable(1, 'total')
+</script>
+{% endblock %}

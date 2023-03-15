@@ -34,6 +34,8 @@ comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 @retrieval_bp.route("/qrScanner", methods=["GET", "POST"])
 @login_required
 def qrScanner():
+    if session.get("email") in PIT_SCOUT_EMAIL:
+        return "Unauthorized. As a pit scout, you can only view the <a href='/analysis/team>'teams page</a> or submit <a href='/pit/scout/2023>'pit scouting data</a>"
     return render_template('QRScanner.html', comps=comps)
 
 

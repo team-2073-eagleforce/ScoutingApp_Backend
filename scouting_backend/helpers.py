@@ -151,3 +151,6 @@ def count_objects(grid):
     
     return cone, cube
 
+
+def endgame_score(num, auto=False):
+    pass
