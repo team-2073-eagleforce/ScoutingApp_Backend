@@ -15,7 +15,7 @@ from termcolor import colored
 from helpers import team_data, grid_score
 from database import fetch
 
-from ..constants import DNP, PIT_SCOUT_EMAIL
+from constants import DNP, PIT_SCOUT_EMAIL
 
 today = datetime.date.today()
 
