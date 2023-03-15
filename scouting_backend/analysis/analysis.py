@@ -240,7 +240,9 @@ def rankings_list_2023():
                 auto += auto_grid_score
                 teleop += teleop_grid_score
                 driver += match[9]
-                defense += match[10]
+                
+                if match[10] > 0:
+                    defense += match[10]
 
             if match_count == 0:
                 match_count = 1
