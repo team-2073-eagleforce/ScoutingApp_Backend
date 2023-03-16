@@ -21,3 +21,4 @@ _Remember never to commit secrets saved in .env files to Github._
 ## Installing Dependencies 
 
 Run ```pip install -r requirements.txt``` to install dependencies
+

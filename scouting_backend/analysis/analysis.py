@@ -186,6 +186,7 @@ def rankings_list_2022():
 def rankings_list_2023():
     if session.get("email") in PIT_SCOUT_EMAIL:
         return "Unauthorized. As a pit scout, you can only view the <a href='/analysis/team'>teams page</a> or submit <a href='/pit/scout/2023'>pit scouting data</a>"
+
     teamAverage = []
     jay = -1
     boolean = False
