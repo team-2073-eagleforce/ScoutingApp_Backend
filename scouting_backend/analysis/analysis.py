@@ -25,10 +25,10 @@ analysis_bp = Blueprint(
     static_folder='static'
 )
 
-engine = create_engine(
-    "postgresql://" + os.getenv("DATABASE_URL").split("://")[1])
+engine = create_engine("postgresql://" + os.getenv("DATABASE_URL").split("://")[1])
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
+c = conn
 
 CONST_CLIMB_POINTS = [0, 4, 6, 10, 15]
 CONST_AUTO_CROSS = [0, 2]
@@ -460,6 +460,14 @@ def picklist_2023():
         teams = sorted(get_teams_at_event(comp))
 
     print(comp, teams)
+
+    data = c.execute("SELECT * FROM picklist WHERE comp=:comp", {
+        "comp": comp
+    }).fetchall()
+
+    for row in data:
+        print(row)
+
     return render_template("2023/picklist.html", comps=comps, teams=teams)
 
 @analysis_bp.route("/api/alliance/2023", methods=["GET", "POST"])
@@ -560,3 +568,22 @@ def two_people(lst):
         #         print(e)
 
     return new_data
+
+@analysis_bp.route("/api/2023/save", methods=["GET", "POST"])
+def save_picklist_2023():
+    comp = request.json["comp"]
+    print(comp)
+    print(request.json)
+
+    c.execute("DELETE FROM picklist WHERE comp=:comp", {
+        "comp": comp
+    })
+    conn.commit()
+
+    c.execute("INSERT INTO picklist (data, comp) VALUES (:data, :comp)", {
+        "data": json.dumps(request.json),
+        "comp": comp
+    })
+    conn.commit()
+
+    return jsonify({"success": True})
