@@ -31,7 +31,6 @@ PIT_SCOUT_EMAIL = [
     "emma.provins@team2073.com",
 
     "breanna.tran@team2073.com",
-    "ethan.see@team2073.com",
 
     "cayden.granado@team2073.com",
     "spencer.hoang@team2073.com",
