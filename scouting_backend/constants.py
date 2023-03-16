@@ -5,6 +5,7 @@ AUTHORIZED_EMAIL = [
     # technicians
     "ethan.see@team2073.com",
     "lucian.mayers-viseroi@team2073.com",
+    "hurmann.saini@team2073.com",
 
     # strategists
     "kent.young@team2073.com",
