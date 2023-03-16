@@ -129,10 +129,16 @@ def grid_score(grid, auto=False):
         score += grid[0].count(1) * 6
         score += grid[1].count(1) * 4
         score += grid[2].count(1) * 3
+        score += grid[0].count(2) * 6
+        score += grid[1].count(2) * 4
+        score += grid[2].count(2) * 3
     else:
         score += grid[0].count(1) * 5
         score += grid[1].count(1) * 3
         score += grid[2].count(1) * 2
+        score += grid[0].count(2) * 5
+        score += grid[1].count(2) * 3
+        score += grid[2].count(2) * 2
 
     return score
 
