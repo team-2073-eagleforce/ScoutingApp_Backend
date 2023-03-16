@@ -10,6 +10,7 @@
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Add Team
   </button>
+<button type="button" class="btn btn-success" id="save">Save</button>
   
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -62,17 +63,27 @@
     </div>
   </div>
 
-<h2>1st Pick</h2>
-<ol id="1st-pick"></ol>
-<hr>
-<h2>2nd Pick</h2>
-<ol id="2nd-pick"></ol>
-<hr>
-<h2>3rd Pick</h3>
-<ol id="3rd-pick"></ol>
-<hr>
-<h2>DNP (Do Not Pick)</h2>
-<ol id="dnpick"></ol>
+<div class="row">
+  <div class="col-9">
+    <h2>1st Pick</h2>
+    <ol id="1st-pick"></ol>
+    <hr>
+    <h2>2nd Pick</h2>
+    <ol id="2nd-pick"></ol>
+    <hr>
+    <h2>3rd Pick</h3>
+    <ol id="3rd-pick"></ol>
+    <hr>
+    <h2>DNP (Do Not Pick)</h2>
+    <ol id="dnpick"></ol>
+  </div>
+  <div class="col-3">
+    {% for team in teams %}
+      <input type="checkbox" id="cb-{{ team }}" onclick="strikethrough('{{ team }}')">{{ team }} <br>
+    {% endfor %}
+  </div>
+</div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
@@ -101,6 +112,15 @@
                     wrapper.parentNode.insertBefore(wrapper.nextElementSibling, wrapper);
             });
         }
+        
+        var deleteLink = document.querySelectorAll(".delete")
+        
+        for (var i=0; i<deleteLink.length; i++) {
+          deleteLink[i].addEventListener("click", function() {
+            var wrapper = this.parentElement;
+            wrapper.remove();
+          })
+        }
     }
     var params = new URLSearchParams(window.location.search)
     if (params.get("code") == null) {
@@ -112,30 +132,78 @@
 
         if (document.getElementById("1").checked) {
             var li = document.createElement("li");
-            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a>`
+            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a> <a class='delete' href='#'>delete</a>`
+            li.setAttribute("class", "t"+document.getElementById("teamNum").value)
             document.getElementById("1st-pick").appendChild(li)
             setLinks()
         } 
         if (document.getElementById("2").checked) {
             var li = document.createElement("li");
-            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a>`
+            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a> <a class='delete' href='#'>delete</a>`
+            li.setAttribute("class", "t"+document.getElementById("teamNum").value)
             document.getElementById("2nd-pick").appendChild(li)
             setLinks()
         } 
         if (document.getElementById("3").checked) {
             var li = document.createElement("li");
-            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a>`
+            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a> <a class='delete' href='#'>delete</a>`
+            li.setAttribute("class", "t"+document.getElementById("teamNum").value)
             document.getElementById("3rd-pick").appendChild(li)
             setLinks()
         }
         if (document.getElementById("dnp").checked) {
             var li = document.createElement("li");
-            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a>`
+            li.innerHTML = `Team ${document.getElementById("teamNum").value} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a> <a class='delete' href='#'>delete</a>`
+            li.setAttribute("class", "t"+document.getElementById("teamNum").value)
             document.getElementById("dnpick").appendChild(li)
             setLinks()
         }
     }
 
+    function strikethrough(teamNum) {
+      if (document.getElementById("cb-" + teamNum).checked) {
+        var teams = document.querySelectorAll(".t" + teamNum)
+        for (let i=0; i<teams.length; i++) {
+          teams[i].setAttribute("style", "color: red;")
+        }
+      } else {
+        var teams = document.querySelectorAll(".t" + teamNum)
+        for (let i=0; i<teams.length; i++) {
+          teams[i].setAttribute("style", "")
+        }
+      }
 
+    }
+
+    document.getElementById("save").onclick = () => {
+      var firstPickList = document.getElementById("1st-pick")
+      var secondPickList = document.getElementById("2nd-pick")
+      var thirdPickList = document.getElementById("3rd-pick")
+      var dnpList = document.getElementById("dnpick")
+
+      var firstPickTeamNums = []
+      var secondPickTeamNums = []
+      var thirdPickTeamNums = []
+      var dnpListTeamNums = []
+
+      for (let i=0; i<firstPickList.childNodes.length; i++) {
+        var team = firstPickList.childNodes[i].getAttribute("class").split("t")[1]
+        firstPickTeamNums.push(team)
+      }
+      
+      for (let i=0; i<firstPickList.childNodes.length; i++) {
+        var team = firstPickList.childNodes[i].getAttribute("class").split("t")[1]
+        firstPickTeamNums.push(team)
+      }
+      
+      for (let i=0; i<firstPickList.childNodes.length; i++) {
+        var team = firstPickList.childNodes[i].getAttribute("class").split("t")[1]
+        firstPickTeamNums.push(team)
+      }
+      // fetch("/api/analysis/save", {
+      //   method : "POST",
+      //   body: JSON.stringify({        })
+      // })
+    }
 </script>
 {% endblock %}

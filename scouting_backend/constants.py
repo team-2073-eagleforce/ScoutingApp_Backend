@@ -49,7 +49,6 @@ DNP = [
     "randy",
     "parnika",
     "mel",
-    "annemarie",	
     "praneel",
 	"praketh",
 	"siddharth"
