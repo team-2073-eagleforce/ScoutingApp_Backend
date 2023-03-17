@@ -188,8 +188,6 @@ def rankings_list_2023():
         return "Unauthorized. As a pit scout, you can only view the <a href='/analysis/team'>teams page</a> or submit <a href='/pit/scout/2023'>pit scouting data</a>"
 
     teamAverage = []
-    jay = -1
-    boolean = False
     comp = request.args.get("code")
     if comp is None:
         average = {}
@@ -222,7 +220,7 @@ def rankings_list_2023():
 
             for match in unwanted_removed[team_num]:
                 auto_grid_score = grid_score(json.loads(match[3]), auto=True)
-                print(match[5], team_num)
+                print(auto_grid_score, team_num)
                 teleop_grid_score = grid_score(json.loads(match[5]))
                 # auto_endgame TBD
                 if match[8] == 1:
@@ -248,7 +246,74 @@ def rankings_list_2023():
 
             if match_count == 0:
                 match_count = 1
-            
+                        
+            average[team_num] = [round(match_total / match_count, 2), round(auto / match_count, 2), round(teleop / match_count, 2), round(teleop_endgame / match_count, 2), round(driver / match_count, 2), round(defense / match_count, 2)]
+
+    return render_template("2023/rankings.html", calculated_averages=average, comps=comps)
+
+@analysis_bp.route("/rankings/all", methods=['GET', 'POST'])
+@login_required
+def rankings_list_2023_all():
+    if session.get("email") in PIT_SCOUT_EMAIL:
+        return "Unauthorized. As a pit scout, you can only view the <a href='/analysis/team'>teams page</a> or submit <a href='/pit/scout/2023'>pit scouting data</a>"
+
+    teamAverage = []
+    comp = request.args.get("code")
+    if comp is None:
+        average = {}
+    else:
+        data = db.execute("SELECT * FROM scouting_2023 WHERE comp_code=:comp", {
+            "comp": comp
+        }).fetchall()
+
+        data_sorted_by_team = {}
+        average = {}
+
+        for match in data:
+            if data_sorted_by_team.get(match[1]) == None:
+                data_sorted_by_team[match[1]] = [match]
+            else:
+                data_sorted_by_team[match[1]].append(match)
+
+        for team_num in list(data_sorted_by_team.keys()):
+            match_total = 0
+            match_count = 0
+            auto = 0
+            teleop = 0
+            # auto_endgame = 0
+            teleop_endgame = 0
+            driver = 0
+            defense = 0
+
+            for match in data_sorted_by_team[team_num]:
+                auto_grid_score = grid_score(json.loads(match[3]), auto=True)
+                print(auto_grid_score, team_num)
+                teleop_grid_score = grid_score(json.loads(match[5]))
+                # auto_endgame TBD
+                if match[8] == 1:
+                    teleop_endgame += 2
+                    match_total += 2
+                elif match[8] == 2:
+                    teleop_endgame += 6
+                    match_total += 6
+                elif match[8] == 3:
+                    teleop_endgame += 10
+                    match_total += 10
+                
+                total_score = auto_grid_score + teleop_grid_score
+
+                match_total += total_score
+                match_count += 1
+                auto += auto_grid_score
+                teleop += teleop_grid_score
+                driver += match[9]
+                
+                if match[10] > 0:
+                    defense += match[10]
+
+            if match_count == 0:
+                match_count = 1
+                        
             average[team_num] = [round(match_total / match_count, 2), round(auto / match_count, 2), round(teleop / match_count, 2), round(teleop_endgame / match_count, 2), round(driver / match_count, 2), round(defense / match_count, 2)]
 
     return render_template("2023/rankings.html", calculated_averages=average, comps=comps)
@@ -464,12 +529,15 @@ def picklist_2023():
 
     data = c.execute("SELECT * FROM picklist WHERE comp=:comp", {
         "comp": comp
-    }).fetchall()
+    }).fetchone()
 
-    for row in data:
-        print(row)
+    d = [[]]
+    if data != None:
+        d = json.loads(data[1])
 
-    return render_template("2023/picklist.html", comps=comps, teams=teams)
+    print("HELP MEEEEEEEEEEEEEEEEEEEEEEEEEEEEE LOGAN", data)
+    
+    return render_template("2023/picklist.html", comps=comps, teams=teams, data=d)
 
 @analysis_bp.route("/api/alliance/2023", methods=["GET", "POST"])
 def alliance_2023_api():
@@ -588,3 +656,17 @@ def save_picklist_2023():
     conn.commit()
 
     return jsonify({"success": True})
+
+@analysis_bp.route("/api/2023/picklist/fetch")
+def fetch_picklist():
+    comp = request.args.get("comp")
+    
+    data = c.execute("SELECT * FROM picklist WHERE comp=:comp", {
+        "comp": comp
+    }).fetchone()
+
+    d = [[]]
+    if data != None:
+        d = json.loads(data[1])
+
+    return jsonify(d)

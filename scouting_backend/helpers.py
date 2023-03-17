@@ -123,7 +123,6 @@ def grid_score(grid, auto=False):
 
     grid = json.loads(grid)
 
-    # print("GRIDDDDDDDDDDDDDDDDDDDDDDD: ", grid)
 
     if auto:
         score += grid[0].count(1) * 6
