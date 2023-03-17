@@ -52,8 +52,12 @@
 
 <script>
     var params = new URLSearchParams(window.location.search)
-    if (params.get("code") == null) {
+    if (params.get("code") == null && window.location.pathname == "/analysis/rankings") {
         window.location.replace(`/analysis/rankings?code=${localStorage.getItem('comp')}`)
+    }
+
+    if (params.get("code") == null && window.location.pathname == "/analysis/rankings/all") {
+        window.location.replace(`/analysis/rankings/all?code=${localStorage.getItem('comp')}`)
     }
 
     function strikethrough(team) {

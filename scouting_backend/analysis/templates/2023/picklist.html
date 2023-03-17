@@ -66,16 +66,32 @@
 <div class="row">
   <div class="col-9">
     <h2>1st Pick</h2>
-    <ol id="1st-pick"></ol>
+    <ol id="1st-pick">
+      {% for i in data.first %}
+        <li class="t{{ i[0] }}">Team {{ i[0] }} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a> <a class='delete' href='#'>delete</a></li>
+      {% endfor %}
+    </ol>
     <hr>
     <h2>2nd Pick</h2>
-    <ol id="2nd-pick"></ol>
+    <ol id="2nd-pick">
+      {% for i in data.second %}
+        <li class="t{{ i[0] }}">Team {{ i[0] }} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a> <a class='delete' href='#'>delete</a></li>
+      {% endfor %}
+    </ol>
     <hr>
     <h2>3rd Pick</h3>
-    <ol id="3rd-pick"></ol>
+    <ol id="3rd-pick">
+      {% for i in data.third %}
+        <li class="t{{ i[0] }}">Team {{ i[0] }} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a> <a class='delete' href='#'>delete</a></li>
+      {% endfor %}
+    </ol>
     <hr>
     <h2>DNP (Do Not Pick)</h2>
-    <ol id="dnpick"></ol>
+    <ol id="dnpick">
+      {% for i in data.dnp %}
+        <li class="t{{ i[0] }}">Team {{ i[0] }} - <a class='up' href='#'>up</a> <a class='down' href='#'>down</a> <a class='delete' href='#'>delete</a></li>
+      {% endfor %}
+    </ol>
   </div>
   <div class="col-3">
     {% for team in teams %}
@@ -122,6 +138,7 @@
           })
         }
     }
+    
     var params = new URLSearchParams(window.location.search)
     if (params.get("code") == null) {
         window.location.replace(`/analysis/picklist?code=${document.getElementById("comp").value}`)
@@ -175,6 +192,10 @@
 
     }
 
+    window.onbeforeunload = function() {
+      return "Data will be lost if you leave the page, are you sure?";
+    };
+
     document.getElementById("save").onclick = () => {
       var firstPickList = document.getElementById("1st-pick")
       var secondPickList = document.getElementById("2nd-pick")
@@ -187,24 +208,36 @@
       var dnpListTeamNums = []
 
       for (let i=0; i<firstPickList.childNodes.length; i++) {
+        if (firstPickList.childNodes[i].nodeType != Node.ELEMENT_NODE) {
+          continue
+        }
         var team = firstPickList.childNodes[i].getAttribute("class").split("t")[1]
         var checked = document.getElementById("cb-" + team).checked
         firstPickTeamNums.push([team, checked])
       }
 
       for (let i=0; i<secondPickList.childNodes.length; i++) {
+        if (secondPickList.childNodes[i].nodeType != Node.ELEMENT_NODE) {
+          continue
+        }
         var team = secondPickList.childNodes[i].getAttribute("class").split("t")[1]
         var checked = document.getElementById("cb-" + team).checked
         secondPickTeamNums.push([team, checked])
       }
 
       for (let i=0; i<thirdPickList.childNodes.length; i++) {
+        if (thirdPickList.childNodes[i].nodeType != Node.ELEMENT_NODE) {
+          continue
+        }
         var team = thirdPickList.childNodes[i].getAttribute("class").split("t")[1]
         var checked = document.getElementById("cb-" + team).checked
         thirdPickTeamNums.push([team, checked])
       }
 
       for (let i=0; i<dnpList.childNodes.length; i++) {
+        if (dnpList.childNodes[i].nodeType != Node.ELEMENT_NODE) {
+          continue
+        }
         var team = dnpList.childNodes[i].getAttribute("class").split("t")[1]
         var checked = document.getElementById("cb-" + team).checked
         dnpListTeamNums.push([team, checked])
@@ -224,5 +257,39 @@
         })
       })
     }
+
+    fetch("/analysis/api/2023/picklist/fetch?comp=" + document.getElementById("comp").value)
+    .then(response => response.json())
+    .then(data => {
+      for (let i=0; i<data.first.length; i++) {
+        if (data.first[i][1]) {
+          document.getElementById("cb-" + data.first[i][0]).checked = true
+          strikethrough(data.first[i][0])
+        }
+      }
+
+      for (let i=0; i<data.second.length; i++) {
+        if (data.second[i][1]) {
+          document.getElementById("cb-" + data.second[i][0]).checked = true
+          strikethrough(data.second[i][0])
+        }
+      }
+
+      for (let i=0; i<data.third.length; i++) {
+        if (data.third[i][1]) {
+          document.getElementById("cb-" + data.third[i][0]).checked = true
+          strikethrough(data.third[i][0])
+        }
+      }
+
+      for (let i=0; i<data.dnp.length; i++) {
+        if (data.dnp[i][1]) {
+          document.getElementById("cb-" + data.dnp[i][0]).checked = true
+          strikethrough(data.dnp[i][0])
+        }
+      }
+    })
+
+    setLinks()
 </script>
 {% endblock %}

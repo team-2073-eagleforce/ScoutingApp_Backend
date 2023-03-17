@@ -26,9 +26,17 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="/analysis/team" id="team-url">Teams</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/analysis/rankings">Rankings</a>
-                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Analysis
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="/analysis/rankings">General Rankings</a></li>
+                      <li><a class="dropdown-item" href="/analysis/rankings/all">Rankings (All Data)</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="/analysis/picklist">Picklist</a></li>
+                    </ul>
+                  </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="/analysis/dashboard">Dashboard</a>
                 </li>
@@ -65,7 +73,7 @@
 <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
     © 2023 Copyright:
     <a class="text-reset fw-bold" href="https://team2073.com/">FRC Team 2073</a>. Licensed under MIT <br>
-    <span class="badge text-bg-warning">Version 2023.0.3 Release</span>
+    <span class="badge text-bg-warning">Version 2023.1.0 Release (AZ Release)</span>
   </div>
 <script crossorigin="anonymous"
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
@@ -87,6 +95,9 @@
             location.assign(`/analysis/team/${window.location.pathname.split("/")[3]}?code=${document.getElementById('comp').value}`)
         } else if (window.location.pathname == "/analysis/rankings") {
             location.assign(`/analysis/rankings?code=${document.getElementById('comp').value}`)
+        }
+        else if (window.location.pathname == "/analysis/rankings/all") {
+            location.assign(`/analysis/rankings/all?code=${document.getElementById('comp').value}`)
         } else if (window.location.pathname.split("/")[1] == "analysis" && window.location.pathname.split("/")[2] == "picklist" && window.location.pathname.split("/").length == 3) {
             location.assign(`/analysis/picklist?code=${document.getElementById('comp').value}`)
         } else {
