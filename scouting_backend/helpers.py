@@ -81,6 +81,7 @@ def team_data(team_num, comp_code):
     auto_average = 0
     teleop_cone_total = 0
     teleop_cube_total = 0
+    teleop_climb = 0
     points_total = 0
 
     for match in data:
@@ -105,10 +106,13 @@ def team_data(team_num, comp_code):
 
         if match[8] == 1:
             total += 2
+            teleop_climb += 2
         elif match[8] == 2:
             total += 6
+            teleop_climb += 6
         elif match[8] == 3:
             total += 10
+            teleop_climb += 10
         
         points_total += total
     
@@ -116,7 +120,7 @@ def team_data(team_num, comp_code):
         data = ["N/A"]
     
     print(team_num, auto_score_total, len(data))
-    return [[auto_balanced, auto_total], round(auto_score_total / len(data), 2), round(teleop_cone_total / len(data), 2), round(teleop_cube_total / len(data), 2), 0, round(points_total / len(data), 2)] # Missing endgame, insert it before the last ele
+    return [[auto_balanced, auto_total], round(auto_score_total / len(data), 2), round(teleop_cone_total / len(data), 2), round(teleop_cube_total / len(data), 2), round(teleop_climb / len(data), 2), round(points_total / len(data), 2)] # Missing endgame, insert it before the last ele
 
 def grid_score(grid, auto=False):
     score = 0
