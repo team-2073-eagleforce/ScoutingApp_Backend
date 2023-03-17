@@ -213,7 +213,7 @@ def rankings_list_2023():
             match_count = 0
             auto = 0
             teleop = 0
-            # auto_endgame = 0
+            auto_endgame = 0
             teleop_endgame = 0
             driver = 0
             defense = 0
@@ -223,6 +223,14 @@ def rankings_list_2023():
                 print(auto_grid_score, team_num)
                 teleop_grid_score = grid_score(json.loads(match[5]))
                 # auto_endgame TBD
+                if match[4] == 1:
+                    auto += 8
+                    match_total += 8
+                elif match[4] == 2:
+                    auto += 12
+                    match_total += 12
+
+
                 if match[8] == 1:
                     teleop_endgame += 2
                     match_total += 2
