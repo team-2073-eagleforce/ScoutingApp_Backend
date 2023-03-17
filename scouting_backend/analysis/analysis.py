@@ -349,6 +349,7 @@ def api_get_match_schedule_2023(event_key, match_num):
             "auto_score": red_1_data[1],
             "teleop_cone": red_1_data[2],
             "teleop_cube": red_1_data[3],
+            "teleop_climb": red_1_data[4],
             "total_average": red_1_data[5],
         },
         "red2": {
@@ -357,6 +358,7 @@ def api_get_match_schedule_2023(event_key, match_num):
             "auto_score": red_2_data[1],
             "teleop_cone": red_2_data[2],
             "teleop_cube": red_2_data[3],
+            "teleop_climb": red_2_data[4],
             "total_average": red_2_data[5],
         },
         "red3": {
@@ -365,6 +367,7 @@ def api_get_match_schedule_2023(event_key, match_num):
             "auto_score": red_3_data[1],
             "teleop_cone": red_3_data[2],
             "teleop_cube": red_3_data[3],
+            "teleop_climb": red_3_data[4],
             "total_average": red_3_data[5],
         },
         "blue1": {
@@ -373,6 +376,7 @@ def api_get_match_schedule_2023(event_key, match_num):
             "auto_score": blue_1_data[1],
             "teleop_cone": blue_1_data[2],
             "teleop_cube": blue_1_data[3],
+            "teleop_climb": blue_1_data[4],
             "total_average": blue_1_data[5],
         },
         "blue2": {
@@ -381,6 +385,7 @@ def api_get_match_schedule_2023(event_key, match_num):
             "auto_score": blue_2_data[1],
             "teleop_cone": blue_2_data[2],
             "teleop_cube": blue_2_data[3],
+            "teleop_climb": blue_2_data[4],
             "total_average": blue_2_data[5],
         },
         "blue3": {
@@ -389,6 +394,7 @@ def api_get_match_schedule_2023(event_key, match_num):
             "auto_score": blue_3_data[1],
             "teleop_cone": blue_3_data[2],
             "teleop_cube": blue_3_data[3],
+            "teleop_climb": blue_3_data[4],
             "total_average": blue_3_data[5],
         },
     }
