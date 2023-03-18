@@ -217,6 +217,7 @@ def rankings_list_2023():
             teleop_endgame = 0
             driver = 0
             defense = 0
+            def_match = 0
 
             for match in unwanted_removed[team_num]:
                 auto_grid_score = grid_score(json.loads(match[3]), auto=True)
@@ -248,14 +249,19 @@ def rankings_list_2023():
                 auto += auto_grid_score
                 teleop += teleop_grid_score
                 driver += match[9]
+                defense += match[10]
                 
                 if match[10] > 0:
-                    defense += match[10]
+                    def_match += 1
 
+                print(team_num, def_match, defense)
+    
             if match_count == 0:
                 match_count = 1
-                        
-            average[team_num] = [round(match_total / match_count, 2), round(auto / match_count, 2), round(teleop / match_count, 2), round(teleop_endgame / match_count, 2), round(driver / match_count, 2), round(defense / match_count, 2)]
+            if def_match == 0:
+                def_match = 1
+
+            average[team_num] = [round(match_total / match_count, 2), round(auto / match_count, 2), round(teleop / match_count, 2), round(teleop_endgame / match_count, 2), round(driver / match_count, 2), round(defense / def_match, 2)]
 
     return render_template("2023/rankings.html", calculated_averages=average, comps=comps)
 
