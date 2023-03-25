@@ -24,7 +24,8 @@ AUTHORIZED_EMAIL = [
     "amrin.sandhar@team2073.com",
     "matt.beaudin@team2073.com",
     "garrett.hernandez@team2073.com",
-    "shaun.immeker@team2073.com,"
+    "shaun.immeker@team2073.com",
+    "bill.kendall@team2073.com"
 ]
 
 
