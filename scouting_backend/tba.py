@@ -84,9 +84,10 @@ def get_comps(team, year=None):
         comps[r["key"]] = r["short_name"]
     
     comps["testing"] = "Demo/Training"
-    comps["2023caph"] = "Hueneme Port (Testing)"
+    #comps["2023caph"] = "Hueneme Port (Testing)"
     #comps["2022cacc"] = "CCC"
     #comps["2022mttd"] = "Madtown Throwdown"
+    comps["2023code"] = "Colorado Regional"
     return comps
 
 def get_offseason_bots(event_key):
