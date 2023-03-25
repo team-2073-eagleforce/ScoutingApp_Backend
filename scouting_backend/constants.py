@@ -11,6 +11,9 @@ AUTHORIZED_EMAIL = [
     # strategists
     "kent.young@team2073.com",
     "nathan.lee@team2073.com",
+    
+    # scanner
+    "chelsea.ha@team2073.com",
 
     # drivers
     "logan.wong@team2073.com",
