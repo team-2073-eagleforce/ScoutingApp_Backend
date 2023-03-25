@@ -15,6 +15,7 @@ AUTHORIZED_EMAIL = [
     # scanner
     "chelsea.ha@team2073.com",
     "hieuson.dang@team2073.com",
+    "breanna.tran@team2073.com",
 
     # drivers
     "logan.wong@team2073.com",
@@ -35,8 +36,6 @@ PIT_SCOUT_EMAIL = [
 
     "andy.wang@team2073.com",
     "emma.provins@team2073.com",
-
-    "breanna.tran@team2073.com",
 
     "cayden.granado@team2073.com",
     "spencer.hoang@team2073.com",
