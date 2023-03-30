@@ -74,10 +74,11 @@ def pit_submit_2023():
         cannot_pu = ", ".join(request.form.getlist("cannot-gp"))
         cone_pu = ", ".join(request.form.getlist("cone-pu"))
         cube_pu = ", ".join(request.form.getlist("cube-pu"))
+        frame_perimeter = str(request.form.get("fp1")) + " by " + str(request.form.get("fp2"))
 
         robot_image_url = upload_image(request.files.getlist('pic')[0])
 
-        c.execute("INSERT INTO pit_scouting_2023 (comp_code, img_url, drive_train, robot_type, weight, drivetrain_velocity, preferred_game_piece, cannot_pick_up, cone_pick_up, cube_pick_up, auto_position, auto_abilities, name, team_number, comment) VALUES (:comp, :img, :drivetrain, :robot_type, :weight, :drivetrain_velocity, :pgp, :cannotpu, :conepu, :cubepu, :autopos, :autoab, :name, :team, :comment)", {
+        c.execute("INSERT INTO pit_scouting_2023 (comp_code, img_url, drive_train, robot_type, weight, drivetrain_velocity, preferred_game_piece, cannot_pick_up, cone_pick_up, cube_pick_up, auto_position, auto_abilities, name, team_number, comment, frame_perimeter) VALUES (:comp, :img, :drivetrain, :robot_type, :weight, :drivetrain_velocity, :pgp, :cannotpu, :conepu, :cubepu, :autopos, :autoab, :name, :team, :comment, :fp)", {
             "comp": request.form["comp"],
             "img": robot_image_url,
             "drivetrain": request.form["drivetrain"],
@@ -92,7 +93,8 @@ def pit_submit_2023():
             "autoab": auto_abilities,
             "name": session.get("name"),
             "comment": request.form["comment"],
-            "team": request.form["team"]
+            "team": request.form["team"],
+            "fp": frame_perimeter
         })
         conn.commit()
 

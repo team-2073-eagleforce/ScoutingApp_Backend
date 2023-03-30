@@ -112,7 +112,7 @@ def view_team_data_2023(team):
         teleop_grid = json.loads(json.loads(m[5]))
 
         team_d.append(m[2])
-        team_d.append(len([x for x in auto_grid[2] if int(x) > 0]))
+        team_d.append(f"{len([x for x in auto_grid[2] if int(x) == 1])} - {len([x for x in auto_grid[2] if int(x) == 2])}")
         team_d.append(len([x for x in auto_grid[1] if int(x) > 0]))
         team_d.append(len([x for x in auto_grid[0] if int(x) > 0]))
         team_d.append(m[4])
@@ -137,6 +137,7 @@ def view_team_data_2023(team):
 
     print(pit)
     return render_template("2023/team.html", matches=data, team=team, comps=comps, pit=pit)
+
 
 @analysis_bp.route("/alliance/2023")
 @login_required
