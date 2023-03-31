@@ -113,3 +113,9 @@ def get_offseason_bots(event_key):
                 off_season_bots.append(i)
 
     return sorted(set(off_season_bots))
+
+def get_team_name(team_num):
+    res = requests.get(f"https://www.thebluealliance.com/api/v3/team/frc{team_num}/simple", headers={
+        "X-TBA-Auth-Key": X_TBA_Auth_Key  
+    })
+    return res.json()["nickname"]

@@ -13,9 +13,9 @@ AUTHORIZED_EMAIL = [
     "nathan.lee@team2073.com",
     
     # scanner
-    "chelsea.ha@team2073.com",
-    "hieuson.dang@team2073.com",
-    "breanna.tran@team2073.com",
+    # "chelsea.ha@team2073.com",
+    # "hieuson.dang@team2073.com",
+    # "breanna.tran@team2073.com",
 
     # drivers
     "logan.wong@team2073.com",
@@ -31,16 +31,17 @@ AUTHORIZED_EMAIL = [
 
 
 PIT_SCOUT_EMAIL = [
-    "aaron.choi@team2073.com",
+    "breanna.tran@team2073.com",
+
+    "chelsea.ha@team2073.com",
+
     "jayden.dhaliwal@team2073.com",
 
-    "andy.wang@team2073.com",
     "emma.provins@team2073.com",
-
     "cayden.granado@team2073.com",
-    "spencer.hoang@team2073.com",
 
     "jamie.stephenson@team2073.com",
+    "hieuson.dang@team2073.com",
 ]
 
 DNP = [

@@ -100,8 +100,10 @@ def team_data(team_num, comp_code):
         total = grid_score(auto_grid, auto=True) + grid_score(teleop_grid)
 
         if match[4] == 1:
+            total += 3
+        if match[4] == 2:
             total += 8
-        elif match[4] == 2:
+        elif match[4] == 3:
             total += 12
 
         if match[8] == 1:
