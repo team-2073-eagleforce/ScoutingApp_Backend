@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from scouting_backend.helpers import login_required
-from scouting_backend.tba import get_match_schedule, get_match_team, get_comps, get_offseason_bots
+from scouting_backend.tba import get_match_schedule, get_match_team, get_comps, get_offseason_bots, get_team_name
 from scouting_backend.constants import CONST_HOME_TEAM, CONST_YEAR, MADTOWN_2022_OFFSEASON_BOTS
 import datetime
 import json
@@ -57,6 +57,12 @@ def team_navigation():
         results = []
     else:
         all_teams = get_teams_at_event(comp)
+        # team_names = []
+        # for team in list(all_teams):
+        #     team_names.append(get_team_name(team))
+        # data = {all_teams[i]: team_names[i] for i in range(len(all_teams))}
+        # print(data)
+
         # team_and_image = db.execute("""SELECT team, image_url FROM PitEntry WHERE team IN {teams} AND comp_code='{comp}'""".format(
         #     teams=all_teams, comp=comp)).fetchall()
         # results = {team[0]: team[1] for team in team_and_image}
@@ -136,7 +142,7 @@ def view_team_data_2023(team):
         pit = [["N/A" for i in range(12)]]
 
     print(pit)
-    return render_template("2023/team.html", matches=data, team=team, comps=comps, pit=pit)
+    return render_template("2023/team.html", matches=data, team=team, comps=comps, pit=pit, team_name=get_team_name(team))
 
 
 @analysis_bp.route("/alliance/2023")
@@ -226,6 +232,9 @@ def rankings_list_2023():
                 teleop_grid_score = grid_score(json.loads(match[5]))
                 # auto_endgame TBD
                 if match[4] == 1:
+                    auto += 3
+                    match_total += 3
+                elif match[4] == 1:
                     auto += 8
                     match_total += 8
                 elif match[4] == 2:
@@ -305,6 +314,17 @@ def rankings_list_2023_all():
                 print(auto_grid_score, team_num)
                 teleop_grid_score = grid_score(json.loads(match[5]))
                 # auto_endgame TBD
+                
+                if match[4] == 1:
+                    auto += 3
+                    match_total += 3
+                elif match[4] == 1:
+                    auto += 8
+                    match_total += 8
+                elif match[4] == 2:
+                    auto += 12
+                    match_total += 12
+
                 if match[8] == 1:
                     teleop_endgame += 2
                     match_total += 2
