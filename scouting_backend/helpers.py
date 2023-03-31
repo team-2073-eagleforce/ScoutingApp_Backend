@@ -121,8 +121,9 @@ def team_data(team_num, comp_code):
     if len(data) == 0:
         data = ["N/A"]
     
-    print(team_num, auto_score_total, len(data))
-    return [[auto_balanced, auto_total], round(auto_score_total / len(data), 2), round(teleop_cone_total / len(data), 2), round(teleop_cube_total / len(data), 2), round(teleop_climb / len(data), 2), round(points_total / len(data), 2)] # Missing endgame, insert it before the last ele
+    # print(team_num, auto_score_total, len(data))
+    print(auto_balanced, auto_total, team_num)
+    return [[auto_balanced, auto_total], round(auto_score_total / len(data), 2), round(teleop_cone_total / len(data), 2), round(teleop_cube_total / len(data), 2), round(teleop_climb / len(data), 2), round(points_total / len(data), 2)]
 
 def grid_score(grid, auto=False):
     score = 0

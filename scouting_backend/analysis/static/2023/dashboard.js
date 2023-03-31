@@ -48,7 +48,7 @@ document.getElementById("button").onclick = () => {
             document.getElementById("blue2-total").innerText = `${data["blue2"]["total_average"]}`
 
             document.getElementById("blue3-team").innerText = data["blue3"]["team_number"]
-            document.getElementById("blue3-auto-balance").innerText = `${data["blue3"]["auto_balanced"][0]} : ${data["blue1"]["auto_balanced"][1]}`
+            document.getElementById("blue3-auto-balance").innerText = `${data["blue3"]["auto_balanced"][0]} : ${data["blue3"]["auto_balanced"][1]}`
             document.getElementById("blue3-auto-score").innerText = `${data["blue3"]["auto_score"]}`
             document.getElementById("blue3-teleop-cone").innerText = `${data["blue3"]["teleop_cone"]}`
             document.getElementById("blue3-teleop-cube").innerText = `${data["blue3"]["teleop_cube"]}`
