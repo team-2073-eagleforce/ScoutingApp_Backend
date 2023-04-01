@@ -42,6 +42,7 @@ def get_match_team(event_key, year=2023):
 
 
 def get_match_schedule(event_key, match_num, test=False):
+    # Playoff needs to be tested if made to world
     if test:
         print("hello")
         res = requests.get(f"https://tba-mock-2073.free.beeceptor.com/event/test/matches")
@@ -56,7 +57,17 @@ def get_match_schedule(event_key, match_num, test=False):
     
     print(res.json())
     for r in res.json():
-        if int(match_num) > 100:
+        if int(match_num) > 200:
+            actual_match_num = int(match_num) - 200
+            if r["key"] == f"{event_key}_f1m{actual_match_num}":
+                red = r["alliances"]["red"]["team_keys"]
+                blue = r["alliances"]["blue"]["team_keys"]
+                return {
+                    "red": red,
+                    "blue": blue
+                } 
+
+        elif int(match_num) > 100:
             actual_match_num = int(match_num) - 100
             if r["key"] == f"{event_key}_sf{actual_match_num}m1":
                 red = r["alliances"]["red"]["team_keys"]
@@ -65,23 +76,23 @@ def get_match_schedule(event_key, match_num, test=False):
                     "red": red,
                     "blue": blue
                 }  
+        else:
+            if r["key"] == f"{event_key}_qm{match_num}":
+                red = r["alliances"]["red"]["team_keys"]
+                blue = r["alliances"]["blue"]["team_keys"]
 
-        if r["match_number"] == int(match_num):
-            red = r["alliances"]["red"]["team_keys"]
-            blue = r["alliances"]["blue"]["team_keys"]
+                # for i in red:
+                #     if i.split("frc")[1] in madtown_offseason_value:
+                #         red = list(map(lambda x: x.replace(i, MADTOWN_2022_OFFSEASON_BOTS[i.split("frc")[1]]), red))
 
-            # for i in red:
-            #     if i.split("frc")[1] in madtown_offseason_value:
-            #         red = list(map(lambda x: x.replace(i, MADTOWN_2022_OFFSEASON_BOTS[i.split("frc")[1]]), red))
-
-            # for i in red:
-            #     if i.split("frc")[1] in madtown_offseason_value:
-            #         red = list(map(lambda x: x.replace(i, MADTOWN_2022_OFFSEASON_BOTS[i.split("frc")[1]]), blue))
-                
-            return {
-                "red": red,
-                "blue": blue
-            }
+                # for i in red:
+                #     if i.split("frc")[1] in madtown_offseason_value:
+                #         red = list(map(lambda x: x.replace(i, MADTOWN_2022_OFFSEASON_BOTS[i.split("frc")[1]]), blue))
+                    
+                return {
+                    "red": red,
+                    "blue": blue
+                }
     return res.json()
 
 def get_comps(team, year=None):
