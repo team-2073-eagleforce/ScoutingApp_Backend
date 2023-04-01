@@ -10,6 +10,7 @@ import os
 from database import fetch
 import json
 
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -19,6 +20,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 def pit_scout_login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -27,16 +29,19 @@ def pit_scout_login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 cloudinary.config(
-    cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key = os.getenv("CLOUDINARY_API_KEY"),
-    api_secret = os.getenv("CLOUDINARY_API_SECRET")
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
 )
+
 
 def upload_image(file):
     r = cloudinary.uploader.upload(file)
     img_url = r["secure_url"]
     return img_url
+
 
 def create_message(email_text):
     import sendgrid
@@ -47,10 +52,12 @@ def create_message(email_text):
         plain_text_content=email_text,
     )
 
+
 def is_non_desirable_scouter(name):
     if name.lower() in DNP:
         return True
     return False
+
 
 def remove_non_desirable_data(data):
     """
@@ -87,10 +94,10 @@ def team_data(team_num, comp_code):
     for match in data:
         if match[4] == 3:
             auto_balanced += 1
-        
+
         if match[4] == 2 or match[4] == 3:
             auto_total += 1
-        
+
         auto_grid = json.loads(match[3])
         auto_score_total += grid_score(auto_grid, auto=True)
         teleop_grid = json.loads(match[5])
@@ -100,10 +107,13 @@ def team_data(team_num, comp_code):
         total = grid_score(auto_grid, auto=True) + grid_score(teleop_grid)
 
         if match[4] == 1:
+            auto_score_total += 3
             total += 3
-        if match[4] == 2:
+        elif match[4] == 2:
+            auto_score_total += 8
             total += 8
         elif match[4] == 3:
+            auto_score_total += 12
             total += 12
 
         if match[8] == 1:
@@ -115,21 +125,21 @@ def team_data(team_num, comp_code):
         elif match[8] == 3:
             total += 10
             teleop_climb += 10
-        
+
         points_total += total
-    
+
     if len(data) == 0:
         data = ["N/A"]
-    
-    # print(team_num, auto_score_total, len(data))
+
+    print(team_num, auto_score_total, len(data))
     print(auto_balanced, auto_total, team_num)
     return [[auto_balanced, auto_total], round(auto_score_total / len(data), 2), round(teleop_cone_total / len(data), 2), round(teleop_cube_total / len(data), 2), round(teleop_climb / len(data), 2), round(points_total / len(data), 2)]
+
 
 def grid_score(grid, auto=False):
     score = 0
 
     grid = json.loads(grid)
-
 
     if auto:
         score += grid[0].count(1) * 6
@@ -148,10 +158,11 @@ def grid_score(grid, auto=False):
 
     return score
 
+
 def count_objects(grid):
     cone = 0
     cube = 0
-    
+
     grid = json.loads(grid)
 
     for row in range(3):
@@ -160,7 +171,7 @@ def count_objects(grid):
                 cone += 1
             elif grid[row][col] == 2:
                 cube += 1
-    
+
     return cone, cube
 
 
