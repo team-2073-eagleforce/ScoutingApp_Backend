@@ -26,16 +26,20 @@ AUTHORIZED_EMAIL = [
     "matt.beaudin@team2073.com",
     "garrett.hernandez@team2073.com",
     "shaun.immeker@team2073.com",
-    "bill.kendall@team2073.com"
+    "bill.kendall@team2073.com",
+
+    # Strategy members
+    "jayden.dhaliwal@team2073.com",
+    "chelsea.ha@team2073.com",
 ]
 
 
 PIT_SCOUT_EMAIL = [
     "breanna.tran@team2073.com",
 
-    "chelsea.ha@team2073.com",
+    #"chelsea.ha@team2073.com",
 
-    "jayden.dhaliwal@team2073.com",
+    #"jayden.dhaliwal@team2073.com",
 
     "emma.provins@team2073.com",
     "cayden.granado@team2073.com",
@@ -45,6 +49,11 @@ PIT_SCOUT_EMAIL = [
 ]
 
 DNP = [
+    "joshua",
+    "trevor",
+    "ethan i",
+    "robert",
+    "tyler",
     "noah",
     "ben",
     "robbie",
