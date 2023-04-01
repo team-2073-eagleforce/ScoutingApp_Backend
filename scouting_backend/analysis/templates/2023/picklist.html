@@ -6,6 +6,7 @@
 
 {% block body %}
 <h1>Picklist</h1>
+<h3>for <span id="compcomp"></span></h3>
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Add Team
@@ -102,7 +103,7 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
+<script defer>
     function setLinks() {
     
         var upLink = document.querySelectorAll(".up");
@@ -291,5 +292,7 @@
     })
 
     setLinks()
+    
+    document.getElementById("compcomp").innerText = localStorage.getItem("comp")
 </script>
 {% endblock %}
