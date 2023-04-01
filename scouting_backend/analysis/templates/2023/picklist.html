@@ -139,10 +139,10 @@
         }
     }
     
-    var params = new URLSearchParams(window.location.search)
-    if (params.get("code") == null) {
-        window.location.replace(`/analysis/picklist?code=${document.getElementById("comp").value}`)
-    }
+    // var params = new URLSearchParams(window.location.search)
+    // if (params.get("code") == null) {
+    //     window.location.replace(`/analysis/picklist?code=${document.getElementById("comp").value}`)
+    // }
 
     document.getElementById("submit").onclick = () => {
         $('#exampleModal').modal('hide');
@@ -291,9 +291,5 @@
     })
 
     setLinks()
-
-    if (document.getElementById(params.code) !== null) {
-        document.getElementById(params.code).setAttribute("selected", "true")
-    }
 </script>
 {% endblock %}
