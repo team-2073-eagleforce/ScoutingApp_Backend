@@ -61,7 +61,6 @@ def get_match_schedule(event_key, match_num, test=False):
             if r["key"] == f"{event_key}_sf{actual_match_num}m1":
                 red = r["alliances"]["red"]["team_keys"]
                 blue = r["alliances"]["blue"]["team_keys"]
-                print(red, blue, "TBA DATAAAAAAAAAAAAAAAAAAAAAAAAAA")    
                 return {
                     "red": red,
                     "blue": blue
