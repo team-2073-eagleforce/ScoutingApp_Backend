@@ -5,7 +5,6 @@ AUTHORIZED_EMAIL = [
     # technicians
     "ethan.see@team2073.com",
     "lucian.mayers-viseroi@team2073.com",
-    "hurmann.saini@team2073.com",
     "leah.wong@team2073.com",
 
     # strategists
@@ -19,6 +18,7 @@ AUTHORIZED_EMAIL = [
 
     # drivers
     "logan.wong@team2073.com",
+    "hurmann.saini@team2073.com",
 
     # mentors
     "nishan.sandhar@team2073.com",
