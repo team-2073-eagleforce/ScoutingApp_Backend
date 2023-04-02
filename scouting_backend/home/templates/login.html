@@ -18,5 +18,39 @@
         data-logo_alignment="left">
     </div> -->
     <img src="https://res.cloudinary.com/team2073-eagleforce/image/upload/v1658267904/Colored_Logo_-_Black_Version_exbdch.png" width="59%" height="50%" style="padding: none; margin: none">
+    <h1 id="result"><span id="days"></span> <span id="hours"></span> <span id="mins"></span> <span id="secs"></span> <span id="end"></span> <a href="https://firstchampionship.org">until FRC 2023 World Championship!</a></h1>
+    <script>
+    // The data/time we want to countdown to
+    var countDownDate = new Date("Apr 18, 2023 12:00:00").getTime();
+
+    // Run myfunc every second
+    var myfunc = setInterval(function() {
+
+    var now = new Date().getTime();
+    var timeleft = countDownDate - now;
+        
+    // Calculating the days, hours, minutes and seconds left
+    var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+        
+    // Result is output to the specific element
+    document.getElementById("days").innerHTML = days + "d "
+    document.getElementById("hours").innerHTML = hours + "h " 
+    document.getElementById("mins").innerHTML = minutes + "m " 
+    document.getElementById("secs").innerHTML = seconds + "s " 
+        
+    // Display the message when countdown is over
+    if (timeleft < 0) {
+        clearInterval(myfunc);
+        document.getElementById("days").innerHTML = ""
+        document.getElementById("hours").innerHTML = "" 
+        document.getElementById("mins").innerHTML = ""
+        document.getElementById("secs").innerHTML = ""
+        document.getElementById("result").innerHTML = "Have fun at World Championship!";
+    }
+    }, 1000);
+    </script>
 </div>
 {% endblock %}
