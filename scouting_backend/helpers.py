@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import request, redirect, url_for, session
-from constants import DNP
+from constants import DNP, SCOUTING_DEVELOPERS
 
 import cloudinary
 import cloudinary.uploader
@@ -9,7 +9,6 @@ import cloudinary.api
 import os
 from database import fetch
 import json
-
 
 def login_required(f):
     @wraps(f)
@@ -47,7 +46,7 @@ def create_message(email_text):
     import sendgrid
     return sendgrid.helpers.mail.Mail(
         from_email=os.environ["FROM_EMAIL"],
-        to_emails=os.environ["TO_EMAIL"],
+        to_emails=[sendgrid.To(email) for email in SCOUTING_DEVELOPERS],
         subject='SCOUTING APP V2 - unhandled exception occurred!',
         plain_text_content=email_text,
     )

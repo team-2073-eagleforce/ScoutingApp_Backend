@@ -70,3 +70,8 @@ MADTOWN_2022_OFFSEASON_BOTS = {"1323B": "9323", "1323C": "8323", "1678B": "9678"
 
 CONST_HOME_TEAM = 2073
 CONST_YEAR = 2023
+
+SCOUTING_DEVELOPERS = [
+    "boyuan.liu@team2073.com",
+    "boyuanliu6@yahoo.com"
+]
