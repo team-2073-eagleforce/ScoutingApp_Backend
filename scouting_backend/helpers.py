@@ -46,7 +46,7 @@ def create_message(email_text):
     import sendgrid
     return sendgrid.helpers.mail.Mail(
         from_email=os.environ["FROM_EMAIL"],
-        to_emails=[sendgrid.To(email) for email in SCOUTING_DEVELOPERS],
+        to_emails=["boyuan.liu@team2073.com", "cayden.granado@team2073.com", "jayden.dhaliwal@team2073.com", "chelsea.ha@team2073.com"],
         subject='SCOUTING APP V2 - unhandled exception occurred!',
         plain_text_content=email_text,
     )
