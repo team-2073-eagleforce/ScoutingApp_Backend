@@ -118,9 +118,12 @@ def view_team_data_2023(team):
         teleop_grid = json.loads(json.loads(m[5]))
 
         team_d.append(m[2])
-        team_d.append(f"{len([x for x in auto_grid[2] if int(x) == 1])} - {len([x for x in auto_grid[2] if int(x) == 2])}")
-        team_d.append(f"{len([x for x in auto_grid[1] if int(x) == 1])} - {len([x for x in auto_grid[1] if int(x) == 2])}")
-        team_d.append(f"{len([x for x in auto_grid[0] if int(x) == 1])} - {len([x for x in auto_grid[0] if int(x) == 2])}")
+        team_d.append(f"{len([x for x in auto_grid[2] if int(x) == 1]) + len([x for x in auto_grid[2] if int(x) == 3])*2 + len([x for x in auto_grid[2] if int(x) == 5]) + len([x for x in auto_grid[2] if int(x) == 6])} - {len([x for x in auto_grid[2] if int(x) == 2]) + len([x for x in auto_grid[2] if int(x) == 5]) + len([x for x in auto_grid[2] if int(x) == 4])*2 + len([x for x in auto_grid[2] if int(x) == 7])}") # 3 -> two cones, 5 -> cone/cube, 4 -> two cubes, 7 -> cube, 6 -> cone
+
+        team_d.append(f"{len([x for x in auto_grid[1] if int(x) == 1]) + len([x for x in auto_grid[1] if int(x) == 3])*2 + len([x for x in auto_grid[1] if int(x) == 5]) + len([x for x in auto_grid[1] if int(x) == 6])} - {len([x for x in auto_grid[2] if int(x) == 2]) + len([x for x in auto_grid[2] if int(x) == 5]) + len([x for x in auto_grid[2] if int(x) == 4])*2 + len([x for x in auto_grid[2] if int(x) == 7])}") # 3 -> two cones, 5 -> cone/cube, 4 -> two cubes, 7 -> cube, 6 -> cone
+
+        team_d.append(f"{len([x for x in auto_grid[2] if int(x) == 1]) + len([x for x in auto_grid[2] if int(x) == 3])*2 + len([x for x in auto_grid[2] if int(x) == 5]) + len([x for x in auto_grid[2] if int(x) == 6])} - {len([x for x in auto_grid[2] if int(x) == 2]) + len([x for x in auto_grid[2] if int(x) == 5]) + len([x for x in auto_grid[2] if int(x) == 4])*2 + len([x for x in auto_grid[2] if int(x) == 7])}") # 3 -> two cones, 5 -> cone/cube, 4 -> two cubes, 7 -> cube, 6 -> cone
+
         team_d.append(m[4])
         team_d.append(f"{len([x for x in teleop_grid[2] if int(x) == 1])} - {len([x for x in teleop_grid[2] if int(x) == 2])}")
         team_d.append(f"{len([x for x in teleop_grid[1] if int(x) == 1])} - {len([x for x in teleop_grid[1] if int(x) == 2])}")
