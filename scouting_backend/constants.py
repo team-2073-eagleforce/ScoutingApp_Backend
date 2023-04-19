@@ -3,7 +3,7 @@ AUTHORIZED_EMAIL = [
     "boyuan.liu@team2073.com",
     "jayden.dhaliwal@team2073.com"
 
-    #things
+    #thing
     # technicians
     "ethan.see@team2073.com",
     "lucian.mayers-viseroi@team2073.com",
