@@ -4,6 +4,8 @@ AUTHORIZED_EMAIL = [
     "jayden.dhaliwal@team2073.com"
 
     #thing
+    #remove
+    #jslkfj
     # technicians
     "ethan.see@team2073.com",
     "lucian.mayers-viseroi@team2073.com",
