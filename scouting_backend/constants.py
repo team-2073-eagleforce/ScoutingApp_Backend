@@ -1,7 +1,11 @@
 AUTHORIZED_EMAIL = [
     # developers
     "boyuan.liu@team2073.com",
+    "jayden.dhaliwal@team2073.com"
 
+    #thing
+    #remove
+    #jslkfj
     # technicians
     "ethan.see@team2073.com",
     "lucian.mayers-viseroi@team2073.com",
@@ -38,9 +42,18 @@ AUTHORIZED_EMAIL = [
 PIT_SCOUT_EMAIL = [
     "breanna.tran@team2073.com",
 
+    "jason.keyes@team2073.com",
+
+    "robert.choi@team2073.com",
+
+    "erin.choi@team2073.com",
+
+    "cameron.fong@team2073.com",
+
+    "austin.agamata@team2073.com",
+
     "chelsea.ha@team2073.com",
 
-    "jayden.dhaliwal@team2073.com",
 
     "emma.provins@team2073.com",
     "cayden.granado@team2073.com",
