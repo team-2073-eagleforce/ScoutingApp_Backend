@@ -49,7 +49,9 @@ PIT_SCOUT_EMAIL = [
     "hieuson.dang@team2073.com",
 
     "aaron.choi@team2073.com",
-    "robert.choi@team2073.com"
+    "robert.choi@team2073.com",
+
+    "cameron.fong@team2073.com"
 ]
 
 DNP = [
