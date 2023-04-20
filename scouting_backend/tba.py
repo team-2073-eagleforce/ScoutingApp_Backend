@@ -21,19 +21,17 @@ def get_match_team(event_key, year=2023):
         })
         j = res.json()
         for team in res.json():
-            t.append(int(team["team_number"]))
+            t.append(int(team["team_number"])) 
 
     if year == 2022:
         data = db.execute("SELECT DISTINCT team FROM scouting WHERE comp_code=:comp", {"comp": event_key}).fetchall()
     elif year == 2023:
         data = db.execute("SELECT DISTINCT team_number FROM scouting_2023 WHERE comp_code=:comp", {"comp": event_key}).fetchall()
 
-    print(data)
     for d in data:
         if d[0] not in t:
             #t.append(d)
             j.append({"team_number": d[0]})
-    
     if event_key == "2022mttd":
         for bot in madtown_offseason_value:
             if {"team_number": str(bot)} not in j:
@@ -57,8 +55,8 @@ def get_match_schedule(event_key, match_num, test=False):
     
     print(res.json())
     for r in res.json():
-        if int(match_num) > 200:
-            actual_match_num = int(match_num) - 200
+        if int(match_num) > 300:
+            actual_match_num = int(match_num) - 300
             if r["key"] == f"{event_key}_f1m{actual_match_num}":
                 red = r["alliances"]["red"]["team_keys"]
                 blue = r["alliances"]["blue"]["team_keys"]
@@ -67,8 +65,8 @@ def get_match_schedule(event_key, match_num, test=False):
                     "blue": blue
                 } 
 
-        elif int(match_num) > 100:
-            actual_match_num = int(match_num) - 100
+        elif int(match_num) > 200:
+            actual_match_num = int(match_num) - 200
             if r["key"] == f"{event_key}_sf{actual_match_num}m1":
                 red = r["alliances"]["red"]["team_keys"]
                 blue = r["alliances"]["blue"]["team_keys"]
