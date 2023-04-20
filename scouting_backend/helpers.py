@@ -179,7 +179,7 @@ def count_objects(grid):
     grid = json.loads(grid)
 
     for row in range(3):
-        for col in range(7):
+        for col in range(9):
             if grid[row][col] == 1:
                 cone += 1
             elif grid[row][col] == 2:
