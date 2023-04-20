@@ -2,6 +2,8 @@ AUTHORIZED_EMAIL = [
     # developers
     "boyuan.liu@team2073.com",
     "jayden.dhaliwal@team2073.com",
+    "chelsea.ha@team2073.com",
+    "cayden.granado@team2073.com",
 
     #thing
     #remove
@@ -68,20 +70,15 @@ PIT_SCOUT_EMAIL = [
 ]
 
 DNP = [
-    "joshua",
-    "trevor",
-    "ethan i",
     "robert",
     "tyler",
     "noah",
-    "ben",
     "robbie",
     "randy",
     "parnika",
     "mel",
     "praneel",
 	"praketh",
-	"siddharth"
 ]
 
 MADTOWN_2022_OFFSEASON_BOTS = {"1323B": "9323", "1323C": "8323", "1678B": "9678", "1678C": "8678", "1678D": "7678", "1678E": "6678", "2073B": "9073", "2813B": "9813", "299B": "9299", "3859B": "9859", "5419B": "9419", "5940B": "9940", "6657B": "9657", "7419B": "9919", "971B": "9971", "971C": "8971", "973B": "9973", "973C": "8973"}
