@@ -1,7 +1,7 @@
 AUTHORIZED_EMAIL = [
     # developers
     "boyuan.liu@team2073.com",
-    "jayden.dhaliwal@team2073.com"
+    "jayden.dhaliwal@team2073.com",
 
     #thing
     #remove

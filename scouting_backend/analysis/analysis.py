@@ -36,11 +36,17 @@ CONST_AUTO_CROSS = [0, 2]
 comps = get_comps(CONST_HOME_TEAM, CONST_YEAR)
 
 def get_teams_at_event(event):
-    print(event)
     # elif event == "2022cacc":
     #     return (2288, 5430, 4698, 3598, 5274, 1662, 3189, 8060, 3257, 5458, 4643, 701, 1678, 6918, 3859, 2073, 9973, 5817, 2135, 841, 6662, 6884, 5940, 8048, 2643, 6059, 7777, 199, 1072, 114, 7419, 5924, 7528, 2551, 1671)
     return tuple(set(tuple(int(team['team_number']) for team in get_match_team(event))))
 
+def get_pitscouted_teams(event):
+    have_been_pitscouted = []
+    for team in get_teams_at_event(event):
+        pit = db.execute("SELECT * FROM pit_scouting_2023 WHERE team_number=:team AND comp_code=:comp", {"team": team, "comp": event}).fetchall()
+        if(len(pit) != 0):
+            have_been_pitscouted.append(int(team))
+    return have_been_pitscouted
 
 @analysis_bp.route("/team")
 @login_required
@@ -50,13 +56,16 @@ def team_navigation():
         all_teams = [i+1 for i in range(1)]
         team_and_image = []
         results = []
+        been_pitscouted = []
     # In case someone visited /team directly, which requires a query string code, for error catching
     elif comp is None:
         all_teams = []
+        been_pitscouted = []
         team_and_image = []
         results = []
     else:
         all_teams = get_teams_at_event(comp)
+        been_pitscouted = get_pitscouted_teams(comp)
         # team_names = []
         # for team in list(all_teams):
         #     team_names.append(get_team_name(team))
@@ -67,7 +76,7 @@ def team_navigation():
         #     teams=all_teams, comp=comp)).fetchall()
         # results = {team[0]: team[1] for team in team_and_image}
 
-    return render_template("teams_navigation.html", all_teams=all_teams, comps=comps) # all_teams=all_teams, comps=comps)
+    return render_template("teams_navigation.html", all_teams=all_teams, comps=comps, been_pitscouted=been_pitscouted) # all_teams=all_teams, comps=comps)
 
 
 # @analysis_bp.route("/team/<int:team>", methods=["GET"])
@@ -81,7 +90,6 @@ def view_team_data_2022(team):
     comp_code = request.args.get("code")
     matches = db.execute(
         "SELECT * FROM scouting WHERE team=:team AND comp_code=:comp ORDER BY matchnumber ASC", {"team": team, "comp": comp_code})
-    print(matches)
     pit = db.execute("SELECT * FROM PitEntry WHERE team=:team AND comp_code=:comp",
                      {"team": team, "comp": comp_code}).fetchall()
     matches_with_calculated_scores = []
@@ -139,12 +147,10 @@ def view_team_data_2023(team):
     pit = []
     pit = db.execute("SELECT * FROM pit_scouting_2023 WHERE team_number=:team AND comp_code=:comp", {"team": team, "comp": comp_code}).fetchall()
     
-    print(pit)
 
     if len(pit) == 0:
         pit = [["N/A" for i in range(12)]]
 
-    print(pit)
     return render_template("2023/team.html", matches=data, team=team, comps=comps, pit=pit, team_name=get_team_name(team))
 
 
@@ -188,7 +194,6 @@ def rankings_list_2022():
             for score_index in range(len(score_sum[:-1])):
                 score_sum[score_index] = (
                     round(score_sum[score_index] / score_sum[-1], 2))
-        print(dic_team_with_average)
     return render_template("rankings.html", calculated_averages=dic_team_with_average, comps=comps)
 
 @analysis_bp.route("/rankings", methods=['GET', 'POST'])
@@ -215,8 +220,6 @@ def rankings_list_2023():
                     unwanted_removed[match[1]] = [match]
                 else:
                     unwanted_removed[match[1]].append(match)
-            else:
-                print(match)
 
         for team_num in list(unwanted_removed.keys()):
             match_total = 0
@@ -266,14 +269,12 @@ def rankings_list_2023():
                 if match[10] > 0:
                     def_match += 1
 
-                print(team_num, def_match, defense)
     
             if match_count == 0:
                 match_count = 1
             if def_match == 0:
                 def_match = 1
 
-            print("AUTO AVG", auto, match_count)
             average[team_num] = [round(match_total / match_count, 2), round(auto / match_count, 2), round(teleop / match_count, 2), round(teleop_endgame / match_count, 2), round(driver / match_count, 2), round(defense / def_match, 2)]
 
     return render_template("2023/rankings.html", calculated_averages=average, comps=comps)
@@ -314,7 +315,6 @@ def rankings_list_2023_all():
 
             for match in data_sorted_by_team[team_num]:
                 auto_grid_score = grid_score(json.loads(match[3]), auto=True)
-                print(auto_grid_score, team_num)
                 teleop_grid_score = grid_score(json.loads(match[5]))
                 # auto_endgame TBD
                 
@@ -544,7 +544,6 @@ def un_strikethrough():
 @analysis_bp.route("/strikethrough-all")
 def strikethrough_all():
     json_data = []
-    print(request.args.get("comp"))
     results = db.execute("SELECT team FROM picklist WHERE comp_code=:comp", {
         "comp": request.args.get("comp")
     }).fetchall()
@@ -569,7 +568,6 @@ def picklist_2023():
     else:
         teams = sorted(get_teams_at_event(comp))
 
-    print(comp, teams)
 
     data = c.execute("SELECT * FROM picklist WHERE comp=:comp", {
         "comp": comp
@@ -579,14 +577,12 @@ def picklist_2023():
     if data != None:
         d = json.loads(data[1])
 
-    print("HELP MEEEEEEEEEEEEEEEEEEEEEEEEEEEEE LOGAN", data)
     
     return render_template("2023/picklist.html", comps=comps, teams=teams, data=d)
 
 @analysis_bp.route("/api/alliance/2023", methods=["GET", "POST"])
 def alliance_2023_api():
 
-    print(request.json)
 
     data = get_match_schedule(request.json["comp_code"], request.json["match_number"], test=True)
 
@@ -602,7 +598,6 @@ def alliance_2023_api():
     red_nums = [red_1, red_2, red_3]
     blue_nums = [blue_1, blue_2, blue_3]
 
-    print(red_nums, blue_nums)
 
     data = fetch("SELECT team_number, auto_grid, tele_grid FROM scouting_2023 WHERE match_number=:match AND comp_code=:comp", {
         "match": request.json["match_number"],
@@ -644,7 +639,6 @@ def alliance_2023_api():
                         blue_teleop[i][j] = json.loads(row[2])[i][j]
                         #blue_teleop_config[i][j] = row[0]
 
-    print(red_auto)
 
     return jsonify({"red_auto": red_auto, "red_teleop": red_teleop, "blue_auto": blue_auto, "blue_teleop": blue_teleop}) #  "red_auto_config": red_auto_config, "blue_auto_config": blue_auto_config, "red_teleop_config": red_teleop_config, "blue_teleop_config": blue_teleop_config
 
@@ -666,9 +660,8 @@ def two_people(lst):
             new_data.append(row)
             try:
                 new_data.append(match_to_data[100 + row[2] % 100])
-                print(match_to_data[100 + row[2] % 100])
             except Exception as e:
-                print(e)
+                print("e")
 
         if row[2] > 200:
             new_data.append(match_to_data[row[2]])
@@ -685,8 +678,7 @@ def two_people(lst):
 @analysis_bp.route("/api/2023/save", methods=["GET", "POST"])
 def save_picklist_2023():
     comp = request.json["comp"]
-    print(comp)
-    print(request.json)
+    
 
     c.execute("DELETE FROM picklist WHERE comp=:comp", {
         "comp": comp
