@@ -154,7 +154,21 @@ def grid_score(grid, auto=False):
         score += grid[0].count(2) * 5
         score += grid[1].count(2) * 3
         score += grid[2].count(2) * 2
-
+        score += grid[0].count(3) * 8
+        score += grid[1].count(3) * 6
+        score += grid[2].count(3) * 5
+        score += grid[0].count(4) * 8
+        score += grid[1].count(4) * 6
+        score += grid[2].count(4) * 5
+        score += grid[0].count(5) * 8
+        score += grid[1].count(5) * 6
+        score += grid[2].count(5) * 5
+        score += grid[0].count(6) * 5
+        score += grid[1].count(6) * 3
+        score += grid[2].count(6) * 2
+        score += grid[0].count(7) * 5
+        score += grid[1].count(7) * 3
+        score += grid[2].count(7) * 2
     return score
 
 
