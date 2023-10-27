@@ -54,16 +54,14 @@ PIT_SCOUT_EMAIL = [
 
     "austin.agamata@team2073.com",
 
-    "chelsea.ha@team2073.com",
-
-
     "emma.provins@team2073.com",
-    "cayden.granado@team2073.com",
 
     "jamie.stephenson@team2073.com",
+
     "hieuson.dang@team2073.com",
 
     "aaron.choi@team2073.com",
+
     "robert.choi@team2073.com",
 
     "cameron.fong@team2073.com"
