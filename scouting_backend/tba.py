@@ -2,14 +2,14 @@ import os
 import requests
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from constants import MADTOWN_2022_OFFSEASON_BOTS
+from constants import CAPITALCITY_OFFSEASON_BOTS
 
 engine = create_engine("postgresql://" + os.getenv("DATABASE_URL").split("://")[1])
 db = scoped_session(sessionmaker(bind=engine))
 conn = db()
 
 X_TBA_Auth_Key = os.getenv("TBA_AUTH_KEY")
-madtown_offseason_value = list(MADTOWN_2022_OFFSEASON_BOTS.values())
+ccc_offseason_value = list(CAPITALCITY_OFFSEASON_BOTS.values())
 
 def get_match_team(event_key, year=2023):
     t = []
@@ -32,8 +32,8 @@ def get_match_team(event_key, year=2023):
         if d[0] not in t:
             #t.append(d)
             j.append({"team_number": d[0]})
-    if event_key == "2022mttd":
-        for bot in madtown_offseason_value:
+    if event_key == "2023cacc":
+        for bot in ccc_offseason_value:
             if {"team_number": str(bot)} not in j:
                 j.append({"team_number": bot})
     return (j)
@@ -134,6 +134,14 @@ def get_offseason_bots(event_key):
     return sorted(set(off_season_bots))
 
 def get_team_name(team_num):
+    if team_num == 9919:
+        team_num = 7419
+    elif team_num == 9916:
+        team_num = 8016
+    elif team_num == 9940:
+        team_num = 5940
+    elif team_num == 9924:
+        team_num = 5924
     res = requests.get(f"https://www.thebluealliance.com/api/v3/team/frc{team_num}/simple", headers={
         "X-TBA-Auth-Key": X_TBA_Auth_Key  
     })
