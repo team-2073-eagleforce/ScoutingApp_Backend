@@ -80,7 +80,7 @@ def detect_scan_2022():
             "dep": QRData[9],
             "name": QRData[10],
             "co": QRData[11],
-            "comp": QRData[12],
+            "comp": "2023cacc",
         })
         conn.commit()
 
