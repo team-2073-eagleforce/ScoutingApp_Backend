@@ -26,7 +26,7 @@ def load_json(data):
     defense_ranking = data["defenseRanking"]
     name = data["name"]
     comment = data["comment"]
-    comp_code = data["compCode"]
+    comp_code = "2023cacc"
 
     results = c.execute("SELECT * FROM scouting_2023 WHERE team_number=:team AND match_number=:match AND comp_code=:comp AND name=:name", {
         "team": team_number,
