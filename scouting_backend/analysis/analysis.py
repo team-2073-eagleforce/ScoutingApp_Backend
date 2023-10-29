@@ -562,7 +562,7 @@ def get_offseason_bot():
 
 @analysis_bp.route("/picklist")
 def picklist_2023():
-    comp = request.args.get("code")
+    comp = "2023cacc"
 
     if comp == None or comp == "testing":
         teams = []
